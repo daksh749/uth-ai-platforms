@@ -1,0 +1,43 @@
+# MCP Client Configuration
+spring:
+  application:
+    name: mcp-client
+  profiles:
+    active: local
+
+# Server Configuration (different port from MCP server)
+server:
+  port: 8081
+  servlet:
+    context-path: /
+
+# MCP Server Configuration
+mcp:
+  server:
+    url: "http://localhost:8080/api/mcp"
+    timeout: 900000  # 15 minutes
+    retry-attempts: 3
+    heartbeat-interval: 900000  # 15 minutes
+
+# Ollama Configuration  
+ollama:
+  url: "http://localhost:11434"
+  model: "codellama"
+  timeout: 900000  # 15 minutes
+  temperature: 0.1
+  max-tokens: 1000
+
+# Chat Configuration
+chat:
+  max-history: 50
+  session-timeout: 3600000
+  default-response-size: 100
+
+# Logging Configuration
+logging:
+  level:
+    com.paytm.mcpclient: DEBUG
+    dev.langchain4j: INFO
+    okhttp3: INFO
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"

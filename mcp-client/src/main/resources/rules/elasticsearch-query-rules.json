@@ -1,0 +1,279 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "description": "Elasticsearch query generation rules for payment history data",
+    "last_updated": "2025-01-23"
+  },
+  
+  "field_mapping_rules": {
+    "rrn": {
+      "description": "Reference Number - search in multiple locations",
+      "search_fields": [
+        "searchFields.searchReferenceId",
+        "participants.bankData.rrn"
+      ],
+      "query_strategy": "bool_should",
+      "nested_required": ["participants"],
+      "example": "RRN ABC123 → search both searchFields.searchReferenceId and nested participants.bankData.rrn"
+    },
+    "mobile": {
+      "description": "Mobile number search",
+      "search_fields": [
+        "searchFields.searchMobileNumber", 
+        "participants.mobileData.mobileNumber"
+      ],
+      "query_strategy": "bool_should",
+      "nested_required": ["participants"]
+    },
+    "card_number": {
+      "description": "Card number search", 
+      "search_fields": ["participants.cardData.cardNum"],
+      "query_strategy": "nested_term",
+      "nested_required": ["participants"]
+    },
+    "account_number": {
+      "description": "Bank account number",
+      "search_fields": ["participants.bankData.accNumber"],
+      "query_strategy": "nested_term", 
+      "nested_required": ["participants"]
+    },
+    "vpa": {
+      "description": "UPI VPA search",
+      "search_fields": ["participants.upiData.vpa"],
+      "query_strategy": "nested_term",
+      "nested_required": ["participants"]
+    },
+    "ifsc": {
+      "description": "IFSC code search",
+      "search_fields": ["participants.bankData.ifsc"],
+      "query_strategy": "nested_term",
+      "nested_required": ["participants"]
+    },
+    "wallet_mobile": {
+      "description": "Wallet mobile number",
+      "search_fields": ["participants.walletData.walletMobileNumber"],
+      "query_strategy": "nested_term",
+      "nested_required": ["participants"]
+    }
+  },
+  
+  "date_handling_rules": {
+    "single_date": {
+      "description": "When user provides single date, create range from that date to current time",
+      "strategy": "range_query",
+      "field": "txnDate", 
+      "gte": "provided_date_epoch_millis",
+      "lte": "current_timestamp_epoch_millis",
+      "example": "1st Sept 2025 → gte: 1725148800000, lte: current_epoch"
+    },
+    "date_range": {
+      "description": "When user provides start and end dates",
+      "strategy": "range_query",
+      "field": "txnDate",
+      "gte": "start_date_epoch_millis", 
+      "lte": "end_date_epoch_millis",
+      "example": "1st Sept to 5th Sept 2025 → gte: 1725148800000, lte: 1725494400000"
+    },
+    "date_format_conversion": {
+      "input_formats": ["DD MMM YYYY", "DD/MM/YYYY", "YYYY-MM-DD", "DD-MM-YYYY"],
+      "output_format": "epoch_milliseconds",
+      "timezone": "UTC",
+      "examples": {
+        "1st Sept 2025": 1725148800000,
+        "5th Sept 2025": 1725494400000,
+        "01/09/2025": 1725148800000
+      }
+    }
+  },
+  
+  "field_value_rules": {
+    "status": {
+      "description": "Status field requires exact values, never interpret",
+      "field": "status",
+      "query_type": "term",
+      "value_handling": "exact_match",
+      "examples": {
+        "user_input_2": "use_exactly_2",
+        "user_input_success": "use_exactly_success",
+        "user_input_failed": "use_exactly_failed",
+        "user_input_pending": "use_exactly_pending"
+      }
+    },
+    "amount": {
+      "description": "Amount handling in paisa (smallest currency unit)",
+      "field": "amount", 
+      "query_type": "range_or_term",
+      "value_conversion": "rupees_to_paisa_multiply_100",
+      "examples": {
+        "100 rupees": "convert_to_10000_paisa",
+        "exact_amount": "use_term_query",
+        "amount_range": "use_range_query"
+      }
+    },
+    "entity_id": {
+      "description": "Entity ID exact match",
+      "field": "entityId",
+      "query_type": "term",
+      "value_handling": "exact_match"
+    },
+    "txn_id": {
+      "description": "Transaction ID exact match",
+      "field": "txnId",
+      "query_type": "term",
+      "value_handling": "exact_match"
+    },
+    "order_id": {
+      "description": "Order ID exact match",
+      "field": "orderId",
+      "query_type": "term",
+      "value_handling": "exact_match"
+    }
+  },
+  
+  "query_structure_rules": {
+    "nested_query_fields": {
+      "description": "Fields that require nested queries",
+      "nested_paths": {
+        "participants": [
+          "participants.entityId",
+          "participants.entityType",
+          "participants.amount",
+          "participants.status",
+          "participants.bankData.accNumber",
+          "participants.bankData.accRefNum",
+          "participants.bankData.ifsc",
+          "participants.bankData.rrn",
+          "participants.bankData.bankTxnId",
+          "participants.cardData.cardNum",
+          "participants.upiData.vpa",
+          "participants.mobileData.mobileNumber",
+          "participants.walletData.walletType",
+          "participants.walletData.walletUserId",
+          "participants.walletData.walletMobileNumber",
+          "participants.merchantData.mccCode",
+          "participants.merchantData.merchantType",
+          "participants.merchantData.uthCategory"
+        ]
+      }
+    },
+    "bool_query_combinations": {
+      "description": "How to combine multiple conditions",
+      "default_operator": "must",
+      "multi_field_search": "should",
+      "date_with_filters": "must",
+      "examples": {
+        "date_and_status": "Use bool/must to combine date range with status filter",
+        "multiple_identifiers": "Use bool/should to search across multiple identifier fields",
+        "nested_with_regular": "Combine nested queries with regular field queries using bool/must"
+      }
+    },
+    "default_query_settings": {
+      "size": 100,
+      "from": 0,
+      "sort": [{"txnDate": {"order": "desc"}}]
+    }
+  },
+  
+  "common_patterns": {
+    "transaction_search": {
+      "description": "Common transaction search patterns",
+      "patterns": {
+        "by_date_and_status": "Combine date range with status filter using bool/must",
+        "by_identifier": "Search across multiple identifier fields using bool/should", 
+        "by_amount_range": "Use range query on amount field",
+        "by_participant_data": "Use nested queries for participant information",
+        "by_multiple_criteria": "Use bool/must to combine multiple conditions"
+      }
+    },
+    "search_optimization": {
+      "description": "Query optimization guidelines",
+      "guidelines": {
+        "use_filters": "Use filter context for exact matches to improve performance",
+        "limit_wildcards": "Avoid leading wildcards in term queries",
+        "use_keyword_fields": "Use .keyword suffix for exact string matches where available",
+        "nested_performance": "Limit nested query complexity for better performance"
+      }
+    }
+  },
+  
+  "error_prevention": {
+    "common_mistakes": {
+      "status_interpretation": "Never convert status values (e.g., don't change '2' to 'success')",
+      "date_context_fields": "Never add extra fields like 'dateContext' that are not in the schema",
+      "nested_field_access": "Always use nested query structure for participants.* fields",
+      "case_sensitivity": "Use exact field names as defined in the Elasticsearch schema",
+      "missing_bool_wrapper": "When combining multiple conditions, always wrap in bool query",
+      "incorrect_data_types": "Respect field data types - use numbers for numeric fields, strings for text fields"
+    },
+    "validation_rules": {
+      "required_fields": "Ensure all referenced fields exist in the provided schema",
+      "query_structure": "Validate that nested queries are used for nested fields",
+      "date_format": "Ensure dates are converted to epoch milliseconds",
+      "value_types": "Match value types to field definitions in schema"
+    }
+  },
+  
+  "examples": {
+    "simple_queries": {
+      "status_filter": {
+        "user_query": "transactions with status 2",
+        "generated_query": {
+          "term": {"status": "2"}
+        }
+      },
+      "date_range": {
+        "user_query": "transactions between 1st Sept 2025 to 5th Sept 2025",
+        "generated_query": {
+          "range": {
+            "txnDate": {
+              "gte": 1725148800000,
+              "lte": 1725494400000
+            }
+          }
+        }
+      }
+    },
+    "complex_queries": {
+      "date_and_status": {
+        "user_query": "transactions between 1st Sept 2025 to 5th Sept 2025 with status 2",
+        "generated_query": {
+          "bool": {
+            "must": [
+              {
+                "range": {
+                  "txnDate": {
+                    "gte": 1725148800000,
+                    "lte": 1725494400000
+                  }
+                }
+              },
+              {
+                "term": {"status": "2"}
+              }
+            ]
+          }
+        }
+      },
+      "rrn_search": {
+        "user_query": "find transaction with RRN ABC123",
+        "generated_query": {
+          "bool": {
+            "should": [
+              {
+                "term": {"searchFields.searchReferenceId": "ABC123"}
+              },
+              {
+                "nested": {
+                  "path": "participants",
+                  "query": {
+                    "term": {"participants.bankData.rrn": "ABC123"}
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,68 @@
+2025-09-22 00:13:21 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - Starting McpServerApplication using Java 21.0.8 with PID 34402 (/Users/dakshgupta/IdeaProjects/uth-ai-platforms/mcp-server/target/classes started by dakshgupta in /Users/dakshgupta/IdeaProjects/uth-ai-platforms/mcp-server)
+2025-09-22 00:13:21 [restartedMain] DEBUG c.p.mcpserver.McpServerApplication - Running with Spring Boot v3.4.10, Spring v6.2.11
+2025-09-22 00:13:21 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - The following 1 profile is active: "local"
+2025-09-22 00:13:21 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-09-22 00:13:21 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-09-22 00:13:22 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-09-22 00:13:22 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-09-22 00:13:22 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.46]
+2025-09-22 00:13:22 [restartedMain] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+2025-09-22 00:13:22 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 880 ms
+2025-09-22 00:13:22 [restartedMain] INFO  c.p.m.mcp.registry.ToolRegistry - Initializing Tool Registry...
+2025-09-22 00:13:22 [restartedMain] INFO  c.p.m.mcp.registry.ToolRegistry - Tool Registry initialized with 3 tools: [es_host_search, es_search, es_schema]
+2025-09-22 00:13:22 [restartedMain] WARN  o.s.b.d.a.OptionalLiveReloadServer - Unable to start LiveReload server
+2025-09-22 00:13:22 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 4 endpoints beneath base path '/actuator'
+2025-09-22 00:13:22 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/api'
+2025-09-22 00:13:22 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - Started McpServerApplication in 1.785 seconds (process running for 2.028)
+2025-09-22 00:13:42 [SpringApplicationShutdownHook] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-09-22 00:13:42 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-09-22 00:25:53 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - Starting McpServerApplication using Java 21.0.8 with PID 36688 (/Users/dakshgupta/IdeaProjects/uth-ai-platforms/mcp-server/target/classes started by dakshgupta in /Users/dakshgupta/IdeaProjects/uth-ai-platforms/mcp-server)
+2025-09-22 00:25:53 [restartedMain] DEBUG c.p.mcpserver.McpServerApplication - Running with Spring Boot v3.4.10, Spring v6.2.11
+2025-09-22 00:25:53 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - The following 1 profile is active: "local"
+2025-09-22 00:25:53 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-09-22 00:25:53 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-09-22 00:25:54 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-09-22 00:25:54 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-09-22 00:25:54 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.46]
+2025-09-22 00:25:54 [restartedMain] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+2025-09-22 00:25:54 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 766 ms
+2025-09-22 00:25:54 [restartedMain] INFO  c.p.m.mcp.registry.ToolRegistry - Initializing Tool Registry...
+2025-09-22 00:25:54 [restartedMain] INFO  c.p.m.mcp.registry.ToolRegistry - Tool Registry initialized with 3 tools: [es_host_search, es_search, es_schema]
+2025-09-22 00:25:54 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-09-22 00:25:54 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 4 endpoints beneath base path '/actuator'
+2025-09-22 00:25:55 [restartedMain] WARN  o.s.b.w.s.c.AnnotationConfigServletWebServerApplicationContext - Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2025-09-22 00:25:55 [restartedMain] INFO  o.s.b.a.l.ConditionEvaluationReportLogger - 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2025-09-22 00:25:55 [restartedMain] ERROR o.s.b.d.LoggingFailureAnalysisReporter - 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8080 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8080 or configure this application to listen on another port.
+
+2025-09-22 00:36:45 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - Starting McpServerApplication using Java 21.0.8 with PID 39208 (/Users/dakshgupta/IdeaProjects/uth-ai-platforms/mcp-server/target/classes started by dakshgupta in /Users/dakshgupta/IdeaProjects/uth-ai-platforms/mcp-server)
+2025-09-22 00:36:45 [restartedMain] DEBUG c.p.mcpserver.McpServerApplication - Running with Spring Boot v3.4.10, Spring v6.2.11
+2025-09-22 00:36:45 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - The following 1 profile is active: "local"
+2025-09-22 00:36:45 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-09-22 00:36:45 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-09-22 00:36:46 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-09-22 00:36:46 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-09-22 00:36:46 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.46]
+2025-09-22 00:36:46 [restartedMain] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+2025-09-22 00:36:46 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1001 ms
+2025-09-22 00:36:46 [restartedMain] INFO  c.p.m.mcp.registry.ToolRegistry - Initializing Tool Registry...
+2025-09-22 00:36:46 [restartedMain] INFO  c.p.m.mcp.registry.ToolRegistry - Tool Registry initialized with 3 tools: [es_host_search, es_search, es_schema]
+2025-09-22 00:36:46 [restartedMain] WARN  o.s.b.d.a.OptionalLiveReloadServer - Unable to start LiveReload server
+2025-09-22 00:36:46 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 4 endpoints beneath base path '/actuator'
+2025-09-22 00:36:46 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/api'
+2025-09-22 00:36:46 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - Started McpServerApplication in 1.916 seconds (process running for 2.153)
+2025-09-22 00:37:02 [SpringApplicationShutdownHook] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-09-22 00:37:02 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete

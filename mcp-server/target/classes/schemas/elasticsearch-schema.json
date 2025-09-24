@@ -1,0 +1,430 @@
+{
+  "index_patterns": [
+    "payment-history-*"
+  ],
+  "settings": {
+    "number_of_shards": 18,
+    "index":{
+      "codec":"best_compression"
+    },
+    "analysis": {
+      "analyzer": {
+        "3ngram_analyzer": {
+          "filter": [
+            "lowercase",
+            "asciifolding",
+            "stopWords",
+            "unique"
+          ],
+          "tokenizer": "3ngram_tokenizer"
+        },
+        "5ngram_analyzer": {
+          "filter": [
+            "lowercase",
+            "asciifolding",
+            "stopWords",
+            "unique"
+          ],
+          "tokenizer": "5ngram_tokenizer"
+        },
+        "edge_ngram_analyzer_min3_max6": {
+          "type": "custom",
+          "tokenizer": "edge_ngram_tokenizer_min3_max6",
+          "filter": [
+            "lowercase",
+            "asciifolding",
+            "stopWords",
+            "unique"
+          ]
+        },
+        "edge_ngram_analyzer_min4_max6": {
+          "type": "custom",
+          "tokenizer": "edge_ngram_tokenizer_min4_max6",
+          "filter": [
+            "lowercase",
+            "asciifolding",
+            "stopWords",
+            "unique"
+          ]
+        },
+        "edge_ngram_analyzer_min8_max10": {
+          "type": "custom",
+          "tokenizer": "edge_ngram_tokenizer_min8_max10",
+          "filter": [
+            "lowercase",
+            "asciifolding",
+            "stopWords",
+            "unique"
+          ]
+        }
+      },
+      "filter": {
+        "stopWords": {
+          "type": "stop",
+          "stopwords": "_english_"
+        }
+      },
+      "tokenizer": {
+        "3ngram_tokenizer": {
+          "type": "nGram",
+          "min_gram": "3",
+          "max_gram": "3",
+          "token_chars": [
+            "letter",
+            "digit"
+          ]
+        },
+        "5ngram_tokenizer": {
+          "type": "nGram",
+          "min_gram": "5",
+          "max_gram": "5",
+          "token_chars": [
+            "letter",
+            "digit"
+          ]
+        },
+        "edge_ngram_tokenizer_min3_max6": {
+          "type": "edge_ngram",
+          "min_gram": 3,
+          "max_gram": 6,
+          "token_chars": [
+            "letter",
+            "digit"
+          ]
+        },
+        "edge_ngram_tokenizer_min4_max6": {
+          "type": "edge_ngram",
+          "min_gram": 4,
+          "max_gram": 6,
+          "token_chars": [
+            "letter",
+            "digit"
+          ]
+        },
+        "edge_ngram_tokenizer_min8_max10": {
+          "type": "edge_ngram",
+          "min_gram": 8,
+          "max_gram": 10,
+          "token_chars": [
+            "letter",
+            "digit"
+          ]
+        }
+      }
+    }
+  },
+  "mappings": {
+    "_doc": {
+      "_routing": {
+        "required": true
+      },
+      "dynamic": "false",
+      "properties": {
+        "entityId": {
+          "type": "keyword"
+        },
+        "otherPartyEntityId": {
+          "type": "keyword"
+        },
+        "groupId": {
+          "type": "keyword"
+        },
+        "orderId": {
+          "type": "keyword"
+        },
+        "streamSource": {
+          "type": "keyword"
+        },
+        "sourceSystem": {
+          "type": "keyword"
+        },
+        "showInListing": {
+          "type": "boolean"
+        },
+        "isVisible": {
+          "type": "boolean"
+        },
+        "amount": {
+          "type": "long"
+        },
+        "umn": {
+          "type": "keyword"
+        },
+        "txnType": {
+          "type": "keyword"
+        },
+        "txnIndicator": {
+          "type": "keyword"
+        },
+        "status": {
+          "type": "keyword"
+        },
+        "originalStatus": {
+          "type": "keyword"
+        },
+        "txnId": {
+          "type": "keyword"
+        },
+        "sourceTxnId": {
+          "type": "keyword"
+        },
+        "isHiddenTxn": {
+          "type": "boolean"
+        },
+        "contextMap": {
+          "type": "object",
+          "dynamic": "false",
+          "properties": {
+            "upiTxnCategory": {
+              "type": "keyword"
+            },
+            "reasonForNotVisible": {
+              "type": "keyword"
+            },
+            "backFillingIdentifier": {
+              "type": "keyword"
+            },
+            "isMergedDocument": {
+              "type": "keyword"
+            },
+            "rrn": {
+              "type": "keyword"
+            },
+            "ifr": {
+              "type": "keyword"
+            },
+            "txnPurpose": {
+              "type": "keyword"
+            }
+          }
+        },
+        "spendAnalyticsFields": {
+          "type": "object",
+          "dynamic": "false",
+          "properties": {
+            "txnCategory": {
+              "type": "keyword"
+            },
+            "storeId": {
+              "type": "keyword"
+            },
+            "txnType": {
+              "type": "keyword"
+            }
+          }
+        },
+        "searchFields": {
+          "type": "object",
+          "dynamic": "false",
+          "properties": {
+            "searchPaymentSystem": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword"
+                }
+              }
+            },
+            "searchRemarks": {
+              "type": "text"
+            },
+            "searchSelfAccTyp": {
+              "type": "text"
+            },
+            "searchWalletType": {
+              "type": "text"
+            },
+            "searchOrderId": {
+              "type": "text"
+            },
+            "searchReferenceId": {
+              "type": "text"
+            },
+            "searchOtherName": {
+              "type": "text",
+              "analyzer": "edge_ngram_analyzer_min4_max6",
+              "fields": {
+                "keyword": {
+                  "type": "keyword"
+                }
+              }
+            },
+            "searchOtherMobileNo": {
+              "type": "text",
+              "analyzer": "edge_ngram_analyzer_min8_max10",
+              "fields": {
+                "keyword": {
+                  "type": "keyword"
+                }
+              }
+            },
+            "searchOtherVpa": {
+              "type": "text"
+            },
+            "searchUthMerchantCategory": {
+              "type": "text"
+            },
+            "searchTags": {
+              "type": "text",
+              "analyzer": "edge_ngram_analyzer_min3_max6",
+              "fields": {
+                "keyword": {
+                  "type": "keyword"
+                }
+              }
+            },
+            "bankAcctId": {
+              "type": "keyword"
+            },
+            "searchKeywords": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword"
+                }
+              }
+            },
+            "searchChannelCode": {
+              "type": "keyword"
+            },
+            "emiStatus": {
+              "type": "keyword"
+            },
+            "verticalIds": {
+              "type": "keyword"
+            },
+            "txnIndicator": {
+              "type": "keyword"
+            }
+          }
+        },
+        "isNewDoc": {
+          "type": "boolean"
+        },
+        "docCreatedDate": {
+          "type": "date"
+        },
+        "docUpdatedDate": {
+          "type": "date"
+        },
+        "docEndStatusDate": {
+          "type": "date"
+        },
+        "txnDate": {
+          "type": "date"
+        },
+        "updatedDate": {
+          "type": "date"
+        },
+        "parentTxnId": {
+          "type": "keyword"
+        },
+        "searchAbleIdentifiers": {
+          "type": "keyword"
+        },
+        "participants": {
+          "type": "nested",
+          "properties": {
+            "entityId": {
+              "type": "keyword"
+            },
+            "entityType": {
+              "type": "keyword"
+            },
+            "amount": {
+              "type": "long"
+            },
+            "status": {
+              "type": "keyword"
+            },
+            "txnIndicator": {
+              "type": "keyword"
+            },
+            "paymentSystem": {
+              "type": "keyword"
+            },
+            "paymentTxnId": {
+              "type": "keyword"
+            },
+            "txnDate": {
+              "type": "long"
+            },
+            "updatedDate": {
+              "type": "long"
+            },
+            "merchantData": {
+              "properties": {
+                "mccCode": {
+                  "type": "keyword"
+                },
+                "merchantType": {
+                  "type": "keyword"
+                },
+                "uthCategory": {
+                  "type": "keyword"
+                }
+              }
+            },
+            "cardData": {
+              "properties": {
+                "cardNum": {
+                  "type": "keyword"
+                }
+              }
+            },
+            "bankData": {
+              "properties": {
+                "accNumber": {
+                  "type": "keyword"
+                },
+                "accRefNum": {
+                  "type": "keyword"
+                },
+                "ifsc": {
+                  "type": "keyword"
+                },
+                "rrn": {
+                  "type": "keyword"
+                },
+                "bankTxnId": {
+                  "type": "keyword"
+                }
+              }
+            },
+            "walletData": {
+              "properties": {
+                "walletType": {
+                  "type": "keyword"
+                },
+                "walletUserId": {
+                  "type": "keyword"
+                },
+                "walletMobileNumber": {
+                  "type": "keyword"
+                }
+              }
+            },
+            "upiData": {
+              "properties": {
+                "vpa": {
+                  "type": "keyword"
+                }
+              }
+            },
+            "mobileData": {
+              "properties": {
+                "mobileNumber": {
+                  "type": "keyword"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "aliases": {
+    "payment_history_alias": {
+    }
+  }
+}

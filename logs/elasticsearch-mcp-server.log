@@ -1,0 +1,1009 @@
+2025-09-24 00:00:02 [http-nio-8080-exec-10] DEBUG c.p.m.m.protocol.McpProtocolHandler - Routing MCP method 'tools/call' for connection client_1758651814046_1
+2025-09-24 00:00:02 [http-nio-8080-exec-10] DEBUG c.p.m.m.protocol.McpProtocolHandler - Handling tools/call request from connection client_1758651814046_1
+2025-09-24 00:00:09 [http-nio-8080-exec-10] DEBUG c.p.m.m.protocol.McpProtocolHandler - Tool call request - tool: 'es_search', args: [indices, esHost, searchSourceBuilder] from connection client_1758651814046_1
+2025-09-24 00:00:11 [http-nio-8080-exec-10] INFO  c.p.m.mcp.registry.ParameterMapper - ParameterMapper - Mapping parameters for tool 'es_search': [indices, esHost, searchSourceBuilder]
+2025-09-24 00:00:11 [http-nio-8080-exec-10] INFO  c.p.m.mcp.registry.ParameterMapper - Incoming parameter 'indices': type=ArrayList, value=[payment-history-*]
+2025-09-24 00:00:11 [http-nio-8080-exec-10] INFO  c.p.m.mcp.registry.ParameterMapper - Incoming parameter 'esHost': type=String, value=PRIMARY
+2025-09-24 00:00:11 [http-nio-8080-exec-10] INFO  c.p.m.mcp.registry.ParameterMapper - Incoming parameter 'searchSourceBuilder': type=String, value={"bool":{"filter":[{"range":{"txnDate":{"gte":1756060112866,"lte":1758652112866}}},{"term":{"status":2}}]}}
+2025-09-24 00:00:11 [http-nio-8080-exec-10] INFO  c.p.m.mcp.registry.ParameterMapper - Received SearchSourceBuilder as JSON string: {"bool":{"filter":[{"range":{"txnDate":{"gte":1756060112866,"lte":1758652112866}}},{"term":{"status":2}}]}}
+2025-09-24 00:00:11 [http-nio-8080-exec-10] INFO  c.p.m.mcp.registry.ParameterMapper - Parsing SearchSourceBuilder from JSON: {"bool":{"filter":[{"range":{"txnDate":{"gte":1756060112866,"lte":1758652112866}}},{"term":{"status":2}}]}}
+2025-09-24 00:00:11 [http-nio-8080-exec-10] INFO  c.p.m.mcp.registry.ParameterMapper - JSON root node type: OBJECT, isObject: true
+2025-09-24 00:00:11 [http-nio-8080-exec-10] INFO  c.p.m.mcp.registry.ParameterMapper - Available JSON fields: bool
+2025-09-24 00:00:11 [http-nio-8080-exec-10] WARN  c.p.m.mcp.registry.ParameterMapper - No 'query' field found in JSON, using match_all as fallback
+2025-09-24 00:00:11 [http-nio-8080-exec-10] INFO  c.p.m.mcp.registry.ParameterMapper - Successfully parsed SearchSourceBuilder - hasQuery: true, size: -1
+2025-09-24 00:00:11 [http-nio-8080-exec-10] DEBUG c.p.m.mcp.registry.ParameterMapper - Successfully mapped SearchSourceBuilder - hasQuery: true, size: -1
+2025-09-24 00:00:11 [http-nio-8080-exec-10] DEBUG c.p.m.mcp.registry.ParameterMapper - Mapped esHost: PRIMARY -> PRIMARY
+2025-09-24 00:00:11 [http-nio-8080-exec-10] DEBUG c.p.m.mcp.registry.ParameterMapper - Mapped es_search parameters: [indices, esHost, searchSourceBuilder]
+2025-09-24 00:00:27 [http-nio-8080-exec-10] DEBUG c.p.m.mcp.registry.ParameterMapper - Parameter validation passed for tool 'es_search'
+2025-09-24 00:00:28 [http-nio-8080-exec-10] DEBUG c.p.m.m.protocol.McpProtocolHandler - Executing tool 'es_search' with mapped parameters: [indices, esHost, searchSourceBuilder]
+2025-09-24 00:00:29 [http-nio-8080-exec-10] INFO  c.p.m.e.service.EsSearchService - EsSearchService.execute called with parameters: [indices, esHost, searchSourceBuilder]
+2025-09-24 00:00:29 [http-nio-8080-exec-10] INFO  c.p.m.e.service.EsSearchService - Parameter 'indices': type=ArrayList, value=[payment-history-*]
+2025-09-24 00:00:29 [http-nio-8080-exec-10] INFO  c.p.m.e.service.EsSearchService - Parameter 'esHost': type=EsHostType, value=PRIMARY
+2025-09-24 00:00:29 [http-nio-8080-exec-10] INFO  c.p.m.e.service.EsSearchService - Parameter 'searchSourceBuilder': type=SearchSourceBuilder, value={"query":{"match_all":{"boost":1.0}}}
+2025-09-24 00:00:29 [http-nio-8080-exec-10] INFO  c.p.m.e.service.EsSearchService - After extraction:
+2025-09-24 00:00:29 [http-nio-8080-exec-10] INFO  c.p.m.e.service.EsSearchService -   searchSourceBuilder: present
+2025-09-24 00:00:29 [http-nio-8080-exec-10] INFO  c.p.m.e.service.EsSearchService -   esHost: PRIMARY
+2025-09-24 00:00:29 [http-nio-8080-exec-10] INFO  c.p.m.e.service.EsSearchService -   indices: [payment-history-*]
+2025-09-24 00:00:29 [http-nio-8080-exec-10] INFO  c.p.m.e.service.EsSearchService -   SearchSourceBuilder details - hasQuery: true, query: {
+  "match_all" : {
+    "boost" : 1.0
+  }
+}, size: -1
+2025-09-24 00:00:29 [http-nio-8080-exec-10] DEBUG c.p.m.e.service.EsSearchService - Executing search on host: PRIMARY, indices: [payment-history-*]
+2025-09-24 00:00:29 [http-nio-8080-exec-10] DEBUG org.elasticsearch.client.RestClient - request [POST http://localhost:9200/payment-history-*/_search?typed_keys=true&max_concurrent_shard_requests=5&search_type=query_then_fetch&batched_reduce_size=512] returned [HTTP/1.1 200 OK]
+2025-09-24 00:00:29 [http-nio-8080-exec-10] WARN  org.elasticsearch.client.RestClient - request [POST http://localhost:9200/payment-history-*/_search?typed_keys=true&max_concurrent_shard_requests=5&search_type=query_then_fetch&batched_reduce_size=512] returned 1 warnings: [299 Elasticsearch-7.17.0-bee86328705acaa9a6daede7140defd4d9ec56bd "Elasticsearch built-in security features are not enabled. Without authentication, your cluster could be accessible to anyone. See https://www.elastic.co/guide/en/elasticsearch/reference/7.17/security-minimal-setup.html to enable security."]
+2025-09-24 00:00:29 [http-nio-8080-exec-10] DEBUG c.p.m.e.service.EsSearchService - Search completed in 374ms, found 31 results
+2025-09-24 00:00:31 [http-nio-8080-exec-10] DEBUG c.p.m.m.protocol.McpProtocolHandler - Tool 'es_search' executed successfully for connection client_1758651814046_1
+2025-09-24 00:00:35 [http-nio-8080-exec-10] DEBUG c.p.m.m.protocol.McpProtocolHandler - MCP message processed successfully for connection client_1758651814046_1, method: tools/call
+2025-09-24 00:00:35 [http-nio-8080-exec-10] DEBUG c.p.m.t.sse.SseConnectionManager - Attempting to send message to connection client_1758651814046_1: mcp-response
+2025-09-24 00:00:35 [http-nio-8080-exec-10] DEBUG c.p.m.t.sse.SseConnectionManager - Current active connections: [client_1758651814046_1]
+2025-09-24 00:00:35 [http-nio-8080-exec-10] DEBUG c.p.m.t.sse.SseConnectionManager - Sending SSE event to connection client_1758651814046_1: event=mcp-response, dataType=McpResponse
+2025-09-24 00:00:35 [http-nio-8080-exec-10] DEBUG c.p.m.t.sse.SseConnectionManager - Successfully sent message to connection client_1758651814046_1: mcp-response
+2025-09-24 00:00:35 [http-nio-8080-exec-10] DEBUG c.p.m.transport.sse.SseController - MCP response sent to connection client_1758651814046_1
+2025-09-24 00:04:40 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-09-24 00:04:40 [Thread-5] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-09-24 00:05:10 [Thread-5] INFO  o.s.c.s.DefaultLifecycleProcessor - Shutdown phase 2147482623 ends with 1 bean still running after timeout of 30000ms: [webServerGracefulShutdown]
+2025-09-24 00:05:10 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown aborted with one or more requests still active
+2025-09-24 00:05:13 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - Starting McpServerApplication using Java 21.0.8 with PID 3033 (/Users/dakshgupta/IdeaProjects/uth-ai-platforms/mcp-server/target/classes started by dakshgupta in /Users/dakshgupta/IdeaProjects/uth-ai-platforms)
+2025-09-24 00:05:13 [restartedMain] DEBUG c.p.mcpserver.McpServerApplication - Running with Spring Boot v3.4.10, Spring v6.2.11
+2025-09-24 00:05:13 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - The following 1 profile is active: "local"
+2025-09-24 00:05:13 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-09-24 00:05:13 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-09-24 00:05:13 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.46]
+2025-09-24 00:05:13 [restartedMain] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+2025-09-24 00:05:13 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 446 ms
+2025-09-24 00:05:13 [restartedMain] INFO  c.p.m.mcp.registry.ToolRegistry - Initializing Tool Registry...
+2025-09-24 00:05:13 [restartedMain] INFO  c.p.m.mcp.registry.ToolRegistry - Tool Registry initialized with 3 tools: [es_host_search, es_search, es_schema]
+2025-09-24 00:05:13 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-09-24 00:05:13 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 4 endpoints beneath base path '/actuator'
+2025-09-24 00:05:13 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/api'
+2025-09-24 00:05:13 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - Started McpServerApplication in 0.653 seconds (process running for 836.072)
+2025-09-24 00:05:13 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2025-09-24 00:05:15 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 2 class path changes (0 additions, 0 deletions, 2 modifications)
+2025-09-24 00:05:15 [Thread-7] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-09-24 00:05:17 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-09-24 00:05:17 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - Starting McpServerApplication using Java 21.0.8 with PID 3033 (/Users/dakshgupta/IdeaProjects/uth-ai-platforms/mcp-server/target/classes started by dakshgupta in /Users/dakshgupta/IdeaProjects/uth-ai-platforms)
+2025-09-24 00:05:17 [restartedMain] DEBUG c.p.mcpserver.McpServerApplication - Running with Spring Boot v3.4.10, Spring v6.2.11
+2025-09-24 00:05:17 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - The following 1 profile is active: "local"
+2025-09-24 00:05:17 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-09-24 00:05:17 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-09-24 00:05:17 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.46]
+2025-09-24 00:05:17 [restartedMain] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+2025-09-24 00:05:17 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 261 ms
+2025-09-24 00:05:17 [restartedMain] INFO  c.p.m.mcp.registry.ToolRegistry - Initializing Tool Registry...
+2025-09-24 00:05:17 [restartedMain] INFO  c.p.m.mcp.registry.ToolRegistry - Tool Registry initialized with 3 tools: [es_host_search, es_search, es_schema]
+2025-09-24 00:05:17 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-09-24 00:05:17 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 4 endpoints beneath base path '/actuator'
+2025-09-24 00:05:17 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/api'
+2025-09-24 00:05:17 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - Started McpServerApplication in 0.394 seconds (process running for 839.98)
+2025-09-24 00:05:17 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2025-09-24 00:05:56 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-09-24 00:05:56 [Thread-11] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-09-24 00:05:58 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-09-24 00:05:58 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - Starting McpServerApplication using Java 21.0.8 with PID 3033 (/Users/dakshgupta/IdeaProjects/uth-ai-platforms/mcp-server/target/classes started by dakshgupta in /Users/dakshgupta/IdeaProjects/uth-ai-platforms)
+2025-09-24 00:05:58 [restartedMain] DEBUG c.p.mcpserver.McpServerApplication - Running with Spring Boot v3.4.10, Spring v6.2.11
+2025-09-24 00:05:58 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - The following 1 profile is active: "local"
+2025-09-24 00:05:59 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-09-24 00:05:59 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-09-24 00:05:59 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.46]
+2025-09-24 00:05:59 [restartedMain] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+2025-09-24 00:05:59 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 348 ms
+2025-09-24 00:05:59 [restartedMain] INFO  c.p.m.mcp.registry.ToolRegistry - Initializing Tool Registry...
+2025-09-24 00:05:59 [restartedMain] INFO  c.p.m.mcp.registry.ToolRegistry - Tool Registry initialized with 3 tools: [es_host_search, es_search, es_schema]
+2025-09-24 00:05:59 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-09-24 00:05:59 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 4 endpoints beneath base path '/actuator'
+2025-09-24 00:05:59 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/api'
+2025-09-24 00:05:59 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - Started McpServerApplication in 0.513 seconds (process running for 881.773)
+2025-09-24 00:05:59 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2025-09-24 00:06:29 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-09-24 00:06:29 [Thread-15] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-09-24 00:06:30 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-09-24 00:06:30 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - Starting McpServerApplication using Java 21.0.8 with PID 3033 (/Users/dakshgupta/IdeaProjects/uth-ai-platforms/mcp-server/target/classes started by dakshgupta in /Users/dakshgupta/IdeaProjects/uth-ai-platforms)
+2025-09-24 00:06:30 [restartedMain] DEBUG c.p.mcpserver.McpServerApplication - Running with Spring Boot v3.4.10, Spring v6.2.11
+2025-09-24 00:06:30 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - The following 1 profile is active: "local"
+2025-09-24 00:06:30 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-09-24 00:06:30 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-09-24 00:06:30 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.46]
+2025-09-24 00:06:30 [restartedMain] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+2025-09-24 00:06:30 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 267 ms
+2025-09-24 00:06:30 [restartedMain] INFO  c.p.m.mcp.registry.ToolRegistry - Initializing Tool Registry...
+2025-09-24 00:06:30 [restartedMain] INFO  c.p.m.mcp.registry.ToolRegistry - Tool Registry initialized with 3 tools: [es_host_search, es_search, es_schema]
+2025-09-24 00:06:30 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-09-24 00:06:30 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 4 endpoints beneath base path '/actuator'
+2025-09-24 00:06:30 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/api'
+2025-09-24 00:06:30 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - Started McpServerApplication in 0.408 seconds (process running for 913.278)
+2025-09-24 00:06:30 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2025-09-24 00:08:20 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-09-24 00:08:20 [Thread-19] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-09-24 00:08:20 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-09-24 00:08:20 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - Starting McpServerApplication using Java 21.0.8 with PID 3033 (/Users/dakshgupta/IdeaProjects/uth-ai-platforms/mcp-server/target/classes started by dakshgupta in /Users/dakshgupta/IdeaProjects/uth-ai-platforms)
+2025-09-24 00:08:20 [restartedMain] DEBUG c.p.mcpserver.McpServerApplication - Running with Spring Boot v3.4.10, Spring v6.2.11
+2025-09-24 00:08:20 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - The following 1 profile is active: "local"
+2025-09-24 00:08:20 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-09-24 00:08:20 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-09-24 00:08:20 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.46]
+2025-09-24 00:08:20 [restartedMain] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+2025-09-24 00:08:20 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 313 ms
+2025-09-24 00:08:20 [restartedMain] INFO  c.p.m.mcp.registry.ToolRegistry - Initializing Tool Registry...
+2025-09-24 00:08:20 [restartedMain] INFO  c.p.m.mcp.registry.ToolRegistry - Tool Registry initialized with 3 tools: [es_host_search, es_search, es_schema]
+2025-09-24 00:08:21 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-09-24 00:08:21 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 4 endpoints beneath base path '/actuator'
+2025-09-24 00:08:21 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/api'
+2025-09-24 00:08:21 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - Started McpServerApplication in 0.452 seconds (process running for 1023.444)
+2025-09-24 00:08:21 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2025-09-24 00:17:58 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-09-24 00:17:58 [Thread-23] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-09-24 00:18:00 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-09-24 00:18:00 [http-nio-8080-Acceptor] ERROR org.apache.tomcat.util.net.Acceptor - Socket accept failed
+java.nio.channels.AsynchronousCloseException: null
+	at java.base/java.nio.channels.spi.AbstractInterruptibleChannel.end(AbstractInterruptibleChannel.java:203) ~[na:na]
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.end(ServerSocketChannelImpl.java:383) ~[na:na]
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.accept(ServerSocketChannelImpl.java:407) ~[na:na]
+	at org.apache.tomcat.util.net.NioEndpoint.serverSocketAccept(NioEndpoint.java:537) ~[tomcat-embed-core-10.1.46.jar:10.1.46]
+	at org.apache.tomcat.util.net.NioEndpoint.serverSocketAccept(NioEndpoint.java:72) ~[tomcat-embed-core-10.1.46.jar:10.1.46]
+	at org.apache.tomcat.util.net.Acceptor.run(Acceptor.java:127) ~[tomcat-embed-core-10.1.46.jar:10.1.46]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+2025-09-24 00:18:00 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - Starting McpServerApplication using Java 21.0.8 with PID 3033 (/Users/dakshgupta/IdeaProjects/uth-ai-platforms/mcp-server/target/classes started by dakshgupta in /Users/dakshgupta/IdeaProjects/uth-ai-platforms)
+2025-09-24 00:18:00 [restartedMain] DEBUG c.p.mcpserver.McpServerApplication - Running with Spring Boot v3.4.10, Spring v6.2.11
+2025-09-24 00:18:00 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - The following 1 profile is active: "local"
+2025-09-24 00:18:00 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-09-24 00:18:00 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-09-24 00:18:00 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.46]
+2025-09-24 00:18:00 [restartedMain] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+2025-09-24 00:18:00 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 205 ms
+2025-09-24 00:18:00 [restartedMain] INFO  c.p.m.mcp.registry.ToolRegistry - Initializing Tool Registry...
+2025-09-24 00:18:00 [restartedMain] INFO  c.p.m.mcp.registry.ToolRegistry - Tool Registry initialized with 3 tools: [es_host_search, es_search, es_schema]
+2025-09-24 00:18:00 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-09-24 00:18:00 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 4 endpoints beneath base path '/actuator'
+2025-09-24 00:18:00 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/api'
+2025-09-24 00:18:00 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - Started McpServerApplication in 0.316 seconds (process running for 1603.027)
+2025-09-24 00:18:00 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2025-09-24 00:18:03 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-09-24 00:18:03 [Thread-27] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-09-24 00:18:03 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-09-24 00:18:03 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - Starting McpServerApplication using Java 21.0.8 with PID 3033 (/Users/dakshgupta/IdeaProjects/uth-ai-platforms/mcp-server/target/classes started by dakshgupta in /Users/dakshgupta/IdeaProjects/uth-ai-platforms)
+2025-09-24 00:18:03 [restartedMain] DEBUG c.p.mcpserver.McpServerApplication - Running with Spring Boot v3.4.10, Spring v6.2.11
+2025-09-24 00:18:03 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - The following 1 profile is active: "local"
+2025-09-24 00:18:03 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-09-24 00:18:03 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-09-24 00:18:03 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.46]
+2025-09-24 00:18:03 [restartedMain] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+2025-09-24 00:18:03 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 193 ms
+2025-09-24 00:18:03 [restartedMain] INFO  c.p.m.mcp.registry.ToolRegistry - Initializing Tool Registry...
+2025-09-24 00:18:03 [restartedMain] INFO  c.p.m.mcp.registry.ToolRegistry - Tool Registry initialized with 3 tools: [es_host_search, es_search, es_schema]
+2025-09-24 00:18:03 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-09-24 00:18:03 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 4 endpoints beneath base path '/actuator'
+2025-09-24 00:18:03 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/api'
+2025-09-24 00:18:03 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - Started McpServerApplication in 0.306 seconds (process running for 1606.065)
+2025-09-24 00:18:03 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2025-09-24 00:18:13 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-09-24 00:18:13 [Thread-31] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-09-24 00:18:14 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-09-24 00:18:14 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - Starting McpServerApplication using Java 21.0.8 with PID 3033 (/Users/dakshgupta/IdeaProjects/uth-ai-platforms/mcp-server/target/classes started by dakshgupta in /Users/dakshgupta/IdeaProjects/uth-ai-platforms)
+2025-09-24 00:18:14 [restartedMain] DEBUG c.p.mcpserver.McpServerApplication - Running with Spring Boot v3.4.10, Spring v6.2.11
+2025-09-24 00:18:14 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - The following 1 profile is active: "local"
+2025-09-24 00:18:14 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-09-24 00:18:14 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-09-24 00:18:14 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.46]
+2025-09-24 00:18:14 [restartedMain] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+2025-09-24 00:18:14 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 276 ms
+2025-09-24 00:18:14 [restartedMain] INFO  c.p.m.mcp.registry.ToolRegistry - Initializing Tool Registry...
+2025-09-24 00:18:14 [restartedMain] INFO  c.p.m.mcp.registry.ToolRegistry - Tool Registry initialized with 3 tools: [es_host_search, es_search, es_schema]
+2025-09-24 00:18:14 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-09-24 00:18:14 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 4 endpoints beneath base path '/actuator'
+2025-09-24 00:18:14 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/api'
+2025-09-24 00:18:14 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - Started McpServerApplication in 0.374 seconds (process running for 1617.101)
+2025-09-24 00:18:14 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2025-09-24 00:21:37 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-09-24 00:21:37 [Thread-35] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-09-24 00:21:38 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-09-24 00:21:38 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - Starting McpServerApplication using Java 21.0.8 with PID 3033 (/Users/dakshgupta/IdeaProjects/uth-ai-platforms/mcp-server/target/classes started by dakshgupta in /Users/dakshgupta/IdeaProjects/uth-ai-platforms)
+2025-09-24 00:21:38 [restartedMain] DEBUG c.p.mcpserver.McpServerApplication - Running with Spring Boot v3.4.10, Spring v6.2.11
+2025-09-24 00:21:38 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - The following 1 profile is active: "local"
+2025-09-24 00:21:39 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-09-24 00:21:39 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-09-24 00:21:39 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.46]
+2025-09-24 00:21:39 [restartedMain] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+2025-09-24 00:21:39 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 205 ms
+2025-09-24 00:21:39 [restartedMain] INFO  c.p.m.mcp.registry.ToolRegistry - Initializing Tool Registry...
+2025-09-24 00:21:39 [restartedMain] INFO  c.p.m.mcp.registry.ToolRegistry - Tool Registry initialized with 3 tools: [es_host_search, es_search, es_schema]
+2025-09-24 00:21:39 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-09-24 00:21:39 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 4 endpoints beneath base path '/actuator'
+2025-09-24 00:21:39 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/api'
+2025-09-24 00:21:39 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - Started McpServerApplication in 0.299 seconds (process running for 1821.71)
+2025-09-24 00:21:39 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2025-09-24 00:21:40 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-09-24 00:21:40 [Thread-39] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-09-24 00:21:40 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-09-24 00:21:40 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - Starting McpServerApplication using Java 21.0.8 with PID 3033 (/Users/dakshgupta/IdeaProjects/uth-ai-platforms/mcp-server/target/classes started by dakshgupta in /Users/dakshgupta/IdeaProjects/uth-ai-platforms)
+2025-09-24 00:21:40 [restartedMain] DEBUG c.p.mcpserver.McpServerApplication - Running with Spring Boot v3.4.10, Spring v6.2.11
+2025-09-24 00:21:40 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - The following 1 profile is active: "local"
+2025-09-24 00:21:41 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-09-24 00:21:41 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-09-24 00:21:41 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.46]
+2025-09-24 00:21:41 [restartedMain] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+2025-09-24 00:21:41 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 163 ms
+2025-09-24 00:21:41 [restartedMain] INFO  c.p.m.mcp.registry.ToolRegistry - Initializing Tool Registry...
+2025-09-24 00:21:41 [restartedMain] INFO  c.p.m.mcp.registry.ToolRegistry - Tool Registry initialized with 3 tools: [es_host_search, es_search, es_schema]
+2025-09-24 00:21:41 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-09-24 00:21:41 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 4 endpoints beneath base path '/actuator'
+2025-09-24 00:21:41 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/api'
+2025-09-24 00:21:41 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - Started McpServerApplication in 0.248 seconds (process running for 1823.539)
+2025-09-24 00:21:41 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2025-09-24 00:22:58 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-09-24 00:22:58 [Thread-43] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-09-24 00:22:58 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-09-24 00:22:58 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - Starting McpServerApplication using Java 21.0.8 with PID 3033 (/Users/dakshgupta/IdeaProjects/uth-ai-platforms/mcp-server/target/classes started by dakshgupta in /Users/dakshgupta/IdeaProjects/uth-ai-platforms)
+2025-09-24 00:22:58 [restartedMain] DEBUG c.p.mcpserver.McpServerApplication - Running with Spring Boot v3.4.10, Spring v6.2.11
+2025-09-24 00:22:58 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - The following 1 profile is active: "local"
+2025-09-24 00:22:58 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-09-24 00:22:58 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-09-24 00:22:58 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.46]
+2025-09-24 00:22:58 [restartedMain] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+2025-09-24 00:22:58 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 209 ms
+2025-09-24 00:22:58 [restartedMain] INFO  c.p.m.mcp.registry.ToolRegistry - Initializing Tool Registry...
+2025-09-24 00:22:58 [restartedMain] INFO  c.p.m.mcp.registry.ToolRegistry - Tool Registry initialized with 3 tools: [es_host_search, es_search, es_schema]
+2025-09-24 00:22:58 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-09-24 00:22:58 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 4 endpoints beneath base path '/actuator'
+2025-09-24 00:22:58 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/api'
+2025-09-24 00:22:58 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - Started McpServerApplication in 0.308 seconds (process running for 1901.049)
+2025-09-24 00:22:58 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2025-09-24 00:23:25 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-09-24 00:23:25 [Thread-47] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-09-24 00:23:27 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-09-24 00:23:27 [http-nio-8080-Acceptor] ERROR org.apache.tomcat.util.net.Acceptor - Socket accept failed
+java.nio.channels.AsynchronousCloseException: null
+	at java.base/java.nio.channels.spi.AbstractInterruptibleChannel.end(AbstractInterruptibleChannel.java:203) ~[na:na]
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.end(ServerSocketChannelImpl.java:383) ~[na:na]
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.accept(ServerSocketChannelImpl.java:407) ~[na:na]
+	at org.apache.tomcat.util.net.NioEndpoint.serverSocketAccept(NioEndpoint.java:537) ~[tomcat-embed-core-10.1.46.jar:10.1.46]
+	at org.apache.tomcat.util.net.NioEndpoint.serverSocketAccept(NioEndpoint.java:72) ~[tomcat-embed-core-10.1.46.jar:10.1.46]
+	at org.apache.tomcat.util.net.Acceptor.run(Acceptor.java:127) ~[tomcat-embed-core-10.1.46.jar:10.1.46]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+2025-09-24 00:23:27 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - Starting McpServerApplication using Java 21.0.8 with PID 3033 (/Users/dakshgupta/IdeaProjects/uth-ai-platforms/mcp-server/target/classes started by dakshgupta in /Users/dakshgupta/IdeaProjects/uth-ai-platforms)
+2025-09-24 00:23:27 [restartedMain] DEBUG c.p.mcpserver.McpServerApplication - Running with Spring Boot v3.4.10, Spring v6.2.11
+2025-09-24 00:23:27 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - The following 1 profile is active: "local"
+2025-09-24 00:23:27 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-09-24 00:23:27 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-09-24 00:23:27 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.46]
+2025-09-24 00:23:27 [restartedMain] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+2025-09-24 00:23:27 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 207 ms
+2025-09-24 00:23:27 [restartedMain] INFO  c.p.m.mcp.registry.ToolRegistry - Initializing Tool Registry...
+2025-09-24 00:23:27 [restartedMain] INFO  c.p.m.mcp.registry.ToolRegistry - Tool Registry initialized with 3 tools: [es_host_search, es_search, es_schema]
+2025-09-24 00:23:27 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-09-24 00:23:27 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 4 endpoints beneath base path '/actuator'
+2025-09-24 00:23:27 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/api'
+2025-09-24 00:23:27 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - Started McpServerApplication in 0.312 seconds (process running for 1930.299)
+2025-09-24 00:23:27 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2025-09-24 00:23:44 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-09-24 00:23:44 [Thread-51] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-09-24 00:23:45 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-09-24 00:23:45 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - Starting McpServerApplication using Java 21.0.8 with PID 3033 (/Users/dakshgupta/IdeaProjects/uth-ai-platforms/mcp-server/target/classes started by dakshgupta in /Users/dakshgupta/IdeaProjects/uth-ai-platforms)
+2025-09-24 00:23:45 [restartedMain] DEBUG c.p.mcpserver.McpServerApplication - Running with Spring Boot v3.4.10, Spring v6.2.11
+2025-09-24 00:23:45 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - The following 1 profile is active: "local"
+2025-09-24 00:23:46 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-09-24 00:23:46 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-09-24 00:23:46 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.46]
+2025-09-24 00:23:46 [restartedMain] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+2025-09-24 00:23:46 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 169 ms
+2025-09-24 00:23:46 [restartedMain] INFO  c.p.m.mcp.registry.ToolRegistry - Initializing Tool Registry...
+2025-09-24 00:23:46 [restartedMain] INFO  c.p.m.mcp.registry.ToolRegistry - Tool Registry initialized with 3 tools: [es_host_search, es_search, es_schema]
+2025-09-24 00:23:46 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-09-24 00:23:46 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 4 endpoints beneath base path '/actuator'
+2025-09-24 00:23:46 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/api'
+2025-09-24 00:23:46 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - Started McpServerApplication in 0.25 seconds (process running for 1948.354)
+2025-09-24 00:23:46 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2025-09-24 00:24:46 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-09-24 00:24:46 [Thread-55] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-09-24 00:24:47 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-09-24 00:24:47 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - Starting McpServerApplication using Java 21.0.8 with PID 3033 (/Users/dakshgupta/IdeaProjects/uth-ai-platforms/mcp-server/target/classes started by dakshgupta in /Users/dakshgupta/IdeaProjects/uth-ai-platforms)
+2025-09-24 00:24:47 [restartedMain] DEBUG c.p.mcpserver.McpServerApplication - Running with Spring Boot v3.4.10, Spring v6.2.11
+2025-09-24 00:24:47 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - The following 1 profile is active: "local"
+2025-09-24 00:24:48 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-09-24 00:24:48 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-09-24 00:24:48 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.46]
+2025-09-24 00:24:48 [restartedMain] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+2025-09-24 00:24:48 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 201 ms
+2025-09-24 00:24:48 [restartedMain] INFO  c.p.m.mcp.registry.ToolRegistry - Initializing Tool Registry...
+2025-09-24 00:24:48 [restartedMain] INFO  c.p.m.mcp.registry.ToolRegistry - Tool Registry initialized with 3 tools: [es_host_search, es_search, es_schema]
+2025-09-24 00:24:48 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-09-24 00:24:48 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 4 endpoints beneath base path '/actuator'
+2025-09-24 00:24:48 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/api'
+2025-09-24 00:24:48 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - Started McpServerApplication in 0.302 seconds (process running for 2010.43)
+2025-09-24 00:24:48 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2025-09-24 00:24:49 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-09-24 00:24:49 [Thread-59] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-09-24 00:24:50 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-09-24 00:24:50 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - Starting McpServerApplication using Java 21.0.8 with PID 3033 (/Users/dakshgupta/IdeaProjects/uth-ai-platforms/mcp-server/target/classes started by dakshgupta in /Users/dakshgupta/IdeaProjects/uth-ai-platforms)
+2025-09-24 00:24:50 [restartedMain] DEBUG c.p.mcpserver.McpServerApplication - Running with Spring Boot v3.4.10, Spring v6.2.11
+2025-09-24 00:24:50 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - The following 1 profile is active: "local"
+2025-09-24 00:24:50 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-09-24 00:24:50 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-09-24 00:24:50 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.46]
+2025-09-24 00:24:50 [restartedMain] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+2025-09-24 00:24:50 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 188 ms
+2025-09-24 00:24:50 [restartedMain] INFO  c.p.m.mcp.registry.ToolRegistry - Initializing Tool Registry...
+2025-09-24 00:24:50 [restartedMain] INFO  c.p.m.mcp.registry.ToolRegistry - Tool Registry initialized with 3 tools: [es_host_search, es_search, es_schema]
+2025-09-24 00:24:51 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-09-24 00:24:51 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 4 endpoints beneath base path '/actuator'
+2025-09-24 00:24:51 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/api'
+2025-09-24 00:24:51 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - Started McpServerApplication in 0.285 seconds (process running for 2013.244)
+2025-09-24 00:24:51 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2025-09-24 00:24:54 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-09-24 00:24:54 [Thread-63] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-09-24 00:24:54 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-09-24 00:24:54 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - Starting McpServerApplication using Java 21.0.8 with PID 3033 (/Users/dakshgupta/IdeaProjects/uth-ai-platforms/mcp-server/target/classes started by dakshgupta in /Users/dakshgupta/IdeaProjects/uth-ai-platforms)
+2025-09-24 00:24:54 [restartedMain] DEBUG c.p.mcpserver.McpServerApplication - Running with Spring Boot v3.4.10, Spring v6.2.11
+2025-09-24 00:24:54 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - The following 1 profile is active: "local"
+2025-09-24 00:24:54 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-09-24 00:24:54 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-09-24 00:24:54 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.46]
+2025-09-24 00:24:54 [restartedMain] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+2025-09-24 00:24:54 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 199 ms
+2025-09-24 00:24:54 [restartedMain] INFO  c.p.m.mcp.registry.ToolRegistry - Initializing Tool Registry...
+2025-09-24 00:24:54 [restartedMain] INFO  c.p.m.mcp.registry.ToolRegistry - Tool Registry initialized with 3 tools: [es_host_search, es_search, es_schema]
+2025-09-24 00:24:54 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-09-24 00:24:54 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 4 endpoints beneath base path '/actuator'
+2025-09-24 00:24:54 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/api'
+2025-09-24 00:24:54 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - Started McpServerApplication in 0.303 seconds (process running for 2017.142)
+2025-09-24 00:24:54 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2025-09-24 00:25:00 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-09-24 00:25:00 [Thread-67] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-09-24 00:25:01 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-09-24 00:25:01 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - Starting McpServerApplication using Java 21.0.8 with PID 3033 (/Users/dakshgupta/IdeaProjects/uth-ai-platforms/mcp-server/target/classes started by dakshgupta in /Users/dakshgupta/IdeaProjects/uth-ai-platforms)
+2025-09-24 00:25:01 [restartedMain] DEBUG c.p.mcpserver.McpServerApplication - Running with Spring Boot v3.4.10, Spring v6.2.11
+2025-09-24 00:25:01 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - The following 1 profile is active: "local"
+2025-09-24 00:25:01 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-09-24 00:25:01 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-09-24 00:25:01 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.46]
+2025-09-24 00:25:01 [restartedMain] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+2025-09-24 00:25:01 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 168 ms
+2025-09-24 00:25:01 [restartedMain] INFO  c.p.m.mcp.registry.ToolRegistry - Initializing Tool Registry...
+2025-09-24 00:25:01 [restartedMain] INFO  c.p.m.mcp.registry.ToolRegistry - Tool Registry initialized with 3 tools: [es_host_search, es_search, es_schema]
+2025-09-24 00:25:01 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-09-24 00:25:01 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 4 endpoints beneath base path '/actuator'
+2025-09-24 00:25:01 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/api'
+2025-09-24 00:25:01 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - Started McpServerApplication in 0.277 seconds (process running for 2024.04)
+2025-09-24 00:25:01 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2025-09-24 00:25:20 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-09-24 00:25:20 [Thread-71] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-09-24 00:25:22 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-09-24 00:25:22 [http-nio-8080-Acceptor] ERROR org.apache.tomcat.util.net.Acceptor - Socket accept failed
+java.nio.channels.AsynchronousCloseException: null
+	at java.base/java.nio.channels.spi.AbstractInterruptibleChannel.end(AbstractInterruptibleChannel.java:203) ~[na:na]
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.end(ServerSocketChannelImpl.java:383) ~[na:na]
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.accept(ServerSocketChannelImpl.java:407) ~[na:na]
+	at org.apache.tomcat.util.net.NioEndpoint.serverSocketAccept(NioEndpoint.java:537) ~[tomcat-embed-core-10.1.46.jar:10.1.46]
+	at org.apache.tomcat.util.net.NioEndpoint.serverSocketAccept(NioEndpoint.java:72) ~[tomcat-embed-core-10.1.46.jar:10.1.46]
+	at org.apache.tomcat.util.net.Acceptor.run(Acceptor.java:127) ~[tomcat-embed-core-10.1.46.jar:10.1.46]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+2025-09-24 00:25:22 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - Starting McpServerApplication using Java 21.0.8 with PID 3033 (/Users/dakshgupta/IdeaProjects/uth-ai-platforms/mcp-server/target/classes started by dakshgupta in /Users/dakshgupta/IdeaProjects/uth-ai-platforms)
+2025-09-24 00:25:22 [restartedMain] DEBUG c.p.mcpserver.McpServerApplication - Running with Spring Boot v3.4.10, Spring v6.2.11
+2025-09-24 00:25:22 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - The following 1 profile is active: "local"
+2025-09-24 00:25:22 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-09-24 00:25:22 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-09-24 00:25:22 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.46]
+2025-09-24 00:25:22 [restartedMain] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+2025-09-24 00:25:22 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 168 ms
+2025-09-24 00:25:22 [restartedMain] INFO  c.p.m.mcp.registry.ToolRegistry - Initializing Tool Registry...
+2025-09-24 00:25:22 [restartedMain] INFO  c.p.m.mcp.registry.ToolRegistry - Tool Registry initialized with 3 tools: [es_host_search, es_search, es_schema]
+2025-09-24 00:25:22 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-09-24 00:25:22 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 4 endpoints beneath base path '/actuator'
+2025-09-24 00:25:22 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/api'
+2025-09-24 00:25:22 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - Started McpServerApplication in 0.26 seconds (process running for 2045.147)
+2025-09-24 00:25:22 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2025-09-24 00:25:25 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-09-24 00:25:25 [Thread-75] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-09-24 00:25:25 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-09-24 00:25:25 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - Starting McpServerApplication using Java 21.0.8 with PID 3033 (/Users/dakshgupta/IdeaProjects/uth-ai-platforms/mcp-server/target/classes started by dakshgupta in /Users/dakshgupta/IdeaProjects/uth-ai-platforms)
+2025-09-24 00:25:25 [restartedMain] DEBUG c.p.mcpserver.McpServerApplication - Running with Spring Boot v3.4.10, Spring v6.2.11
+2025-09-24 00:25:25 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - The following 1 profile is active: "local"
+2025-09-24 00:25:25 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-09-24 00:25:25 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-09-24 00:25:25 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.46]
+2025-09-24 00:25:25 [restartedMain] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+2025-09-24 00:25:25 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 243 ms
+2025-09-24 00:25:25 [restartedMain] INFO  c.p.m.mcp.registry.ToolRegistry - Initializing Tool Registry...
+2025-09-24 00:25:25 [restartedMain] INFO  c.p.m.mcp.registry.ToolRegistry - Tool Registry initialized with 3 tools: [es_host_search, es_search, es_schema]
+2025-09-24 00:25:25 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-09-24 00:25:25 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 4 endpoints beneath base path '/actuator'
+2025-09-24 00:25:25 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/api'
+2025-09-24 00:25:25 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - Started McpServerApplication in 0.387 seconds (process running for 2048.06)
+2025-09-24 00:25:25 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2025-09-24 00:25:38 [File Watcher] INFO  o.s.b.d.a.LocalDevToolsAutoConfiguration$RestartingClassPathChangeChangedEventListener - Restarting due to 1 class path change (0 additions, 0 deletions, 1 modification)
+2025-09-24 00:25:38 [Thread-79] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-09-24 00:25:40 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-09-24 00:25:40 [http-nio-8080-Acceptor] ERROR org.apache.tomcat.util.net.Acceptor - Socket accept failed
+java.nio.channels.AsynchronousCloseException: null
+	at java.base/java.nio.channels.spi.AbstractInterruptibleChannel.end(AbstractInterruptibleChannel.java:203) ~[na:na]
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.end(ServerSocketChannelImpl.java:383) ~[na:na]
+	at java.base/sun.nio.ch.ServerSocketChannelImpl.accept(ServerSocketChannelImpl.java:407) ~[na:na]
+	at org.apache.tomcat.util.net.NioEndpoint.serverSocketAccept(NioEndpoint.java:537) ~[tomcat-embed-core-10.1.46.jar:10.1.46]
+	at org.apache.tomcat.util.net.NioEndpoint.serverSocketAccept(NioEndpoint.java:72) ~[tomcat-embed-core-10.1.46.jar:10.1.46]
+	at org.apache.tomcat.util.net.Acceptor.run(Acceptor.java:127) ~[tomcat-embed-core-10.1.46.jar:10.1.46]
+	at java.base/java.lang.Thread.run(Thread.java:1583) ~[na:na]
+2025-09-24 00:25:40 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - Starting McpServerApplication using Java 21.0.8 with PID 3033 (/Users/dakshgupta/IdeaProjects/uth-ai-platforms/mcp-server/target/classes started by dakshgupta in /Users/dakshgupta/IdeaProjects/uth-ai-platforms)
+2025-09-24 00:25:40 [restartedMain] DEBUG c.p.mcpserver.McpServerApplication - Running with Spring Boot v3.4.10, Spring v6.2.11
+2025-09-24 00:25:40 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - The following 1 profile is active: "local"
+2025-09-24 00:25:40 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-09-24 00:25:40 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-09-24 00:25:40 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.46]
+2025-09-24 00:25:40 [restartedMain] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+2025-09-24 00:25:40 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 192 ms
+2025-09-24 00:25:40 [restartedMain] INFO  c.p.m.mcp.registry.ToolRegistry - Initializing Tool Registry...
+2025-09-24 00:25:40 [restartedMain] INFO  c.p.m.mcp.registry.ToolRegistry - Tool Registry initialized with 3 tools: [es_host_search, es_search, es_schema]
+2025-09-24 00:25:40 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-09-24 00:25:40 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 4 endpoints beneath base path '/actuator'
+2025-09-24 00:25:40 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/api'
+2025-09-24 00:25:40 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - Started McpServerApplication in 0.351 seconds (process running for 2063.217)
+2025-09-24 00:25:40 [restartedMain] INFO  o.s.b.d.a.ConditionEvaluationDeltaLoggingListener - Condition evaluation unchanged
+2025-09-24 00:25:45 [SpringApplicationShutdownHook] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-09-24 00:25:47 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown complete
+2025-09-24 00:26:29 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - Starting McpServerApplication using Java 21.0.8 with PID 5533 (/Users/dakshgupta/IdeaProjects/uth-ai-platforms/mcp-server/target/classes started by dakshgupta in /Users/dakshgupta/IdeaProjects/uth-ai-platforms)
+2025-09-24 00:26:29 [restartedMain] DEBUG c.p.mcpserver.McpServerApplication - Running with Spring Boot v3.4.10, Spring v6.2.11
+2025-09-24 00:26:29 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - The following 1 profile is active: "local"
+2025-09-24 00:26:29 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-09-24 00:26:29 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-09-24 00:26:30 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-09-24 00:26:30 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-09-24 00:26:30 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.46]
+2025-09-24 00:26:30 [restartedMain] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+2025-09-24 00:26:30 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1117 ms
+2025-09-24 00:26:30 [restartedMain] INFO  c.p.m.mcp.registry.ToolRegistry - Initializing Tool Registry...
+2025-09-24 00:26:30 [restartedMain] INFO  c.p.m.mcp.registry.ToolRegistry - Tool Registry initialized with 3 tools: [es_host_search, es_search, es_schema]
+2025-09-24 00:26:31 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-09-24 00:26:31 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 4 endpoints beneath base path '/actuator'
+2025-09-24 00:26:31 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/api'
+2025-09-24 00:26:31 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - Started McpServerApplication in 2.166 seconds (process running for 2.575)
+2025-09-24 00:27:12 [http-nio-8080-exec-1] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-09-24 00:27:12 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-09-24 00:27:12 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2025-09-24 00:27:12 [http-nio-8080-exec-1] INFO  c.p.m.transport.sse.SseController - New SSE connection request from client: null
+2025-09-24 00:27:12 [http-nio-8080-exec-1] INFO  c.p.m.t.sse.SseConnectionManager - Registered SSE connection: client_1758653832282_1 (client: null, total active: 1)
+2025-09-24 00:27:12 [http-nio-8080-exec-1] DEBUG c.p.m.transport.sse.SseController - Sent connection ID to client: client_1758653832282_1
+2025-09-24 00:27:12 [http-nio-8080-exec-1] INFO  c.p.m.transport.sse.SseController - SSE connection established with ID: client_1758653832282_1
+2025-09-24 00:27:58 [http-nio-8080-exec-2] INFO  c.p.m.transport.sse.SseController - Received MCP message from connection client_1758653832282_1: {"jsonrpc":"2.0","id":"23ef9758-4749-4615-aade-1cc78e81a941","method":"tools/call","params":{"name":"es_schema","arguments":{}}}
+2025-09-24 00:27:59 [http-nio-8080-exec-2] DEBUG c.p.m.m.protocol.McpProtocolHandler - Processing MCP message from connection client_1758653832282_1: {"jsonrpc":"2.0","id":"23ef9758-4749-4615-aade-1cc78e81a941","method":"tools/call","params":{"name":"es_schema","arguments":{}}}
+2025-09-24 00:27:59 [http-nio-8080-exec-2] DEBUG c.p.m.m.protocol.McpProtocolHandler - Routing MCP method 'tools/call' for connection client_1758653832282_1
+2025-09-24 00:27:59 [http-nio-8080-exec-2] DEBUG c.p.m.m.protocol.McpProtocolHandler - Handling tools/call request from connection client_1758653832282_1
+2025-09-24 00:27:59 [http-nio-8080-exec-2] DEBUG c.p.m.m.protocol.McpProtocolHandler - Tool call request - tool: 'es_schema', args: [] from connection client_1758653832282_1
+2025-09-24 00:27:59 [http-nio-8080-exec-2] INFO  c.p.m.mcp.registry.ParameterMapper - ParameterMapper - Mapping parameters for tool 'es_schema': []
+2025-09-24 00:27:59 [http-nio-8080-exec-2] DEBUG c.p.m.mcp.registry.ParameterMapper - Parameter validation passed for tool 'es_schema'
+2025-09-24 00:27:59 [http-nio-8080-exec-2] DEBUG c.p.m.m.protocol.McpProtocolHandler - Executing tool 'es_schema' with mapped parameters: []
+2025-09-24 00:27:59 [http-nio-8080-exec-2] DEBUG c.p.m.e.service.EsSchemaService - Loading raw ES schema from JSON file: schemas/elasticsearch-schema.json
+2025-09-24 00:27:59 [http-nio-8080-exec-2] DEBUG c.p.m.e.service.EsSchemaService - Schema loaded from file successfully
+2025-09-24 00:27:59 [http-nio-8080-exec-2] DEBUG c.p.m.e.service.EsSchemaService - Raw schema loaded successfully in 11ms
+2025-09-24 00:27:59 [http-nio-8080-exec-2] DEBUG c.p.m.m.protocol.McpProtocolHandler - Tool 'es_schema' executed successfully for connection client_1758653832282_1
+2025-09-24 00:27:59 [http-nio-8080-exec-2] DEBUG c.p.m.m.protocol.McpProtocolHandler - MCP message processed successfully for connection client_1758653832282_1, method: tools/call
+2025-09-24 00:27:59 [http-nio-8080-exec-2] DEBUG c.p.m.t.sse.SseConnectionManager - Attempting to send message to connection client_1758653832282_1: mcp-response
+2025-09-24 00:27:59 [http-nio-8080-exec-2] DEBUG c.p.m.t.sse.SseConnectionManager - Current active connections: [client_1758653832282_1]
+2025-09-24 00:27:59 [http-nio-8080-exec-2] DEBUG c.p.m.t.sse.SseConnectionManager - Sending SSE event to connection client_1758653832282_1: event=mcp-response, dataType=McpResponse
+2025-09-24 00:27:59 [http-nio-8080-exec-2] DEBUG c.p.m.t.sse.SseConnectionManager - Successfully sent message to connection client_1758653832282_1: mcp-response
+2025-09-24 00:27:59 [http-nio-8080-exec-2] DEBUG c.p.m.transport.sse.SseController - MCP response sent to connection client_1758653832282_1
+2025-09-24 00:29:29 [http-nio-8080-exec-4] INFO  c.p.m.transport.sse.SseController - Received MCP message from connection client_1758653832282_1: {"jsonrpc":"2.0","id":"e579acd1-245c-47a0-8f19-31514b97e9ba","method":"tools/call","params":{"name":"es_host_search","arguments":{"searchSourceBuilder":"now-30d","esHost":"now"}}}
+2025-09-24 00:29:32 [http-nio-8080-exec-4] DEBUG c.p.m.m.protocol.McpProtocolHandler - Processing MCP message from connection client_1758653832282_1: {"jsonrpc":"2.0","id":"e579acd1-245c-47a0-8f19-31514b97e9ba","method":"tools/call","params":{"name":"es_host_search","arguments":{"searchSourceBuilder":"now-30d","esHost":"now"}}}
+2025-09-24 00:29:32 [http-nio-8080-exec-4] DEBUG c.p.m.m.protocol.McpProtocolHandler - Routing MCP method 'tools/call' for connection client_1758653832282_1
+2025-09-24 00:29:32 [http-nio-8080-exec-4] DEBUG c.p.m.m.protocol.McpProtocolHandler - Handling tools/call request from connection client_1758653832282_1
+2025-09-24 00:29:32 [http-nio-8080-exec-4] DEBUG c.p.m.m.protocol.McpProtocolHandler - Tool call request - tool: 'es_host_search', args: [searchSourceBuilder, esHost] from connection client_1758653832282_1
+2025-09-24 00:29:32 [http-nio-8080-exec-4] INFO  c.p.m.mcp.registry.ParameterMapper - ParameterMapper - Mapping parameters for tool 'es_host_search': [searchSourceBuilder, esHost]
+2025-09-24 00:29:32 [http-nio-8080-exec-4] INFO  c.p.m.mcp.registry.ParameterMapper - Incoming parameter 'searchSourceBuilder': type=String, value=now-30d
+2025-09-24 00:29:32 [http-nio-8080-exec-4] INFO  c.p.m.mcp.registry.ParameterMapper - Incoming parameter 'esHost': type=String, value=now
+2025-09-24 00:29:32 [http-nio-8080-exec-4] DEBUG c.p.m.mcp.registry.ParameterMapper - Parameter validation passed for tool 'es_host_search'
+2025-09-24 00:29:32 [http-nio-8080-exec-4] DEBUG c.p.m.m.protocol.McpProtocolHandler - Executing tool 'es_host_search' with mapped parameters: []
+2025-09-24 00:29:32 [http-nio-8080-exec-4] DEBUG c.p.m.e.service.EsHostSearchService - Executing host search with startDate: null, endDate: null
+2025-09-24 00:29:32 [http-nio-8080-exec-4] DEBUG c.p.m.e.service.EsHostSearchService - No date provided, returning PRIMARY host
+2025-09-24 00:29:32 [http-nio-8080-exec-4] DEBUG c.p.m.m.protocol.McpProtocolHandler - Tool 'es_host_search' executed successfully for connection client_1758653832282_1
+2025-09-24 00:29:32 [http-nio-8080-exec-4] DEBUG c.p.m.m.protocol.McpProtocolHandler - MCP message processed successfully for connection client_1758653832282_1, method: tools/call
+2025-09-24 00:29:32 [http-nio-8080-exec-4] DEBUG c.p.m.t.sse.SseConnectionManager - Attempting to send message to connection client_1758653832282_1: mcp-response
+2025-09-24 00:29:32 [http-nio-8080-exec-4] DEBUG c.p.m.t.sse.SseConnectionManager - Current active connections: [client_1758653832282_1]
+2025-09-24 00:29:32 [http-nio-8080-exec-4] DEBUG c.p.m.t.sse.SseConnectionManager - Sending SSE event to connection client_1758653832282_1: event=mcp-response, dataType=McpResponse
+2025-09-24 00:29:32 [http-nio-8080-exec-4] DEBUG c.p.m.t.sse.SseConnectionManager - Successfully sent message to connection client_1758653832282_1: mcp-response
+2025-09-24 00:29:32 [http-nio-8080-exec-4] DEBUG c.p.m.transport.sse.SseController - MCP response sent to connection client_1758653832282_1
+2025-09-24 00:29:35 [http-nio-8080-exec-5] INFO  c.p.m.transport.sse.SseController - Received MCP message from connection client_1758653832282_1: {"jsonrpc":"2.0","id":"7cf307a4-3030-4922-8c3c-c9291212da33","method":"tools/call","params":{"name":"es_search","arguments":{"indices":["payment-history-*"],"searchSourceBuilder":"{\"bool\":{\"filter\":[{\"range\":{\"txnDate\":{\"gte\":1756061880094,\"lte\":1758653880094}}},{\"term\":{\"status\":2}}]}}","esHost":"PRIMARY"}}}
+2025-09-24 00:29:36 [http-nio-8080-exec-5] DEBUG c.p.m.m.protocol.McpProtocolHandler - Processing MCP message from connection client_1758653832282_1: {"jsonrpc":"2.0","id":"7cf307a4-3030-4922-8c3c-c9291212da33","method":"tools/call","params":{"name":"es_search","arguments":{"indices":["payment-history-*"],"searchSourceBuilder":"{\"bool\":{\"filter\":[{\"range\":{\"txnDate\":{\"gte\":1756061880094,\"lte\":1758653880094}}},{\"term\":{\"status\":2}}]}}","esHost":"PRIMARY"}}}
+2025-09-24 00:29:36 [http-nio-8080-exec-5] DEBUG c.p.m.m.protocol.McpProtocolHandler - Routing MCP method 'tools/call' for connection client_1758653832282_1
+2025-09-24 00:29:36 [http-nio-8080-exec-5] DEBUG c.p.m.m.protocol.McpProtocolHandler - Handling tools/call request from connection client_1758653832282_1
+2025-09-24 00:29:36 [http-nio-8080-exec-5] DEBUG c.p.m.m.protocol.McpProtocolHandler - Tool call request - tool: 'es_search', args: [indices, searchSourceBuilder, esHost] from connection client_1758653832282_1
+2025-09-24 00:29:36 [http-nio-8080-exec-5] INFO  c.p.m.mcp.registry.ParameterMapper - ParameterMapper - Mapping parameters for tool 'es_search': [indices, searchSourceBuilder, esHost]
+2025-09-24 00:29:36 [http-nio-8080-exec-5] INFO  c.p.m.mcp.registry.ParameterMapper - Incoming parameter 'indices': type=ArrayList, value=[payment-history-*]
+2025-09-24 00:29:36 [http-nio-8080-exec-5] INFO  c.p.m.mcp.registry.ParameterMapper - Incoming parameter 'searchSourceBuilder': type=String, value={"bool":{"filter":[{"range":{"txnDate":{"gte":1756061880094,"lte":1758653880094}}},{"term":{"status":2}}]}}
+2025-09-24 00:29:36 [http-nio-8080-exec-5] INFO  c.p.m.mcp.registry.ParameterMapper - Incoming parameter 'esHost': type=String, value=PRIMARY
+2025-09-24 00:29:36 [http-nio-8080-exec-5] INFO  c.p.m.mcp.registry.ParameterMapper - Received SearchSourceBuilder as JSON string: {"bool":{"filter":[{"range":{"txnDate":{"gte":1756061880094,"lte":1758653880094}}},{"term":{"status":2}}]}}
+2025-09-24 00:29:36 [http-nio-8080-exec-5] INFO  c.p.m.mcp.registry.ParameterMapper - Parsing SearchSourceBuilder from JSON: {"bool":{"filter":[{"range":{"txnDate":{"gte":1756061880094,"lte":1758653880094}}},{"term":{"status":2}}]}}
+2025-09-24 00:29:36 [http-nio-8080-exec-5] INFO  c.p.m.mcp.registry.ParameterMapper - JSON root node type: OBJECT, isObject: true
+2025-09-24 00:29:36 [http-nio-8080-exec-5] INFO  c.p.m.mcp.registry.ParameterMapper - Available JSON fields: bool
+2025-09-24 00:29:36 [http-nio-8080-exec-5] WARN  c.p.m.mcp.registry.ParameterMapper - No 'query' field found in JSON, using match_all as fallback
+2025-09-24 00:29:36 [http-nio-8080-exec-5] INFO  c.p.m.mcp.registry.ParameterMapper - Successfully parsed SearchSourceBuilder - hasQuery: true, size: -1
+2025-09-24 00:29:36 [http-nio-8080-exec-5] DEBUG c.p.m.mcp.registry.ParameterMapper - Successfully mapped SearchSourceBuilder - hasQuery: true, size: -1
+2025-09-24 00:29:36 [http-nio-8080-exec-5] DEBUG c.p.m.mcp.registry.ParameterMapper - Mapped esHost: PRIMARY -> PRIMARY
+2025-09-24 00:29:36 [http-nio-8080-exec-5] DEBUG c.p.m.mcp.registry.ParameterMapper - Mapped es_search parameters: [indices, esHost, searchSourceBuilder]
+2025-09-24 00:29:36 [http-nio-8080-exec-5] DEBUG c.p.m.mcp.registry.ParameterMapper - Parameter validation passed for tool 'es_search'
+2025-09-24 00:29:36 [http-nio-8080-exec-5] DEBUG c.p.m.m.protocol.McpProtocolHandler - Executing tool 'es_search' with mapped parameters: [indices, esHost, searchSourceBuilder]
+2025-09-24 00:29:36 [http-nio-8080-exec-5] INFO  c.p.m.e.service.EsSearchService - EsSearchService.execute called with parameters: [indices, esHost, searchSourceBuilder]
+2025-09-24 00:29:36 [http-nio-8080-exec-5] INFO  c.p.m.e.service.EsSearchService - Parameter 'indices': type=ArrayList, value=[payment-history-*]
+2025-09-24 00:29:36 [http-nio-8080-exec-5] INFO  c.p.m.e.service.EsSearchService - Parameter 'esHost': type=EsHostType, value=PRIMARY
+2025-09-24 00:29:36 [http-nio-8080-exec-5] INFO  c.p.m.e.service.EsSearchService - Parameter 'searchSourceBuilder': type=SearchSourceBuilder, value={"query":{"match_all":{"boost":1.0}}}
+2025-09-24 00:29:36 [http-nio-8080-exec-5] INFO  c.p.m.e.service.EsSearchService - After extraction:
+2025-09-24 00:29:36 [http-nio-8080-exec-5] INFO  c.p.m.e.service.EsSearchService -   searchSourceBuilder: present
+2025-09-24 00:29:36 [http-nio-8080-exec-5] INFO  c.p.m.e.service.EsSearchService -   esHost: PRIMARY
+2025-09-24 00:29:36 [http-nio-8080-exec-5] INFO  c.p.m.e.service.EsSearchService -   indices: [payment-history-*]
+2025-09-24 00:29:36 [http-nio-8080-exec-5] INFO  c.p.m.e.service.EsSearchService -   SearchSourceBuilder details - hasQuery: true, query: {
+  "match_all" : {
+    "boost" : 1.0
+  }
+}, size: -1
+2025-09-24 00:29:36 [http-nio-8080-exec-5] DEBUG c.p.m.e.service.EsSearchService - Executing search on host: PRIMARY, indices: [payment-history-*]
+2025-09-24 00:29:37 [elasticsearch-rest-client-0-thread-2] DEBUG org.elasticsearch.client.RestClient - request [GET http://localhost:9200/] returned [HTTP/1.1 200 OK]
+2025-09-24 00:29:37 [elasticsearch-rest-client-0-thread-2] WARN  org.elasticsearch.client.RestClient - request [GET http://localhost:9200/] returned 1 warnings: [299 Elasticsearch-7.17.0-bee86328705acaa9a6daede7140defd4d9ec56bd "Elasticsearch built-in security features are not enabled. Without authentication, your cluster could be accessible to anyone. See https://www.elastic.co/guide/en/elasticsearch/reference/7.17/security-minimal-setup.html to enable security."]
+2025-09-24 00:29:37 [http-nio-8080-exec-5] DEBUG org.elasticsearch.client.RestClient - request [POST http://localhost:9200/payment-history-*/_search?typed_keys=true&max_concurrent_shard_requests=5&search_type=query_then_fetch&batched_reduce_size=512] returned [HTTP/1.1 200 OK]
+2025-09-24 00:29:37 [http-nio-8080-exec-5] WARN  org.elasticsearch.client.RestClient - request [POST http://localhost:9200/payment-history-*/_search?typed_keys=true&max_concurrent_shard_requests=5&search_type=query_then_fetch&batched_reduce_size=512] returned 1 warnings: [299 Elasticsearch-7.17.0-bee86328705acaa9a6daede7140defd4d9ec56bd "Elasticsearch built-in security features are not enabled. Without authentication, your cluster could be accessible to anyone. See https://www.elastic.co/guide/en/elasticsearch/reference/7.17/security-minimal-setup.html to enable security."]
+2025-09-24 00:29:37 [http-nio-8080-exec-5] DEBUG c.p.m.e.service.EsSearchService - Search completed in 706ms, found 31 results
+2025-09-24 00:29:37 [http-nio-8080-exec-5] DEBUG c.p.m.m.protocol.McpProtocolHandler - Tool 'es_search' executed successfully for connection client_1758653832282_1
+2025-09-24 00:29:37 [http-nio-8080-exec-5] DEBUG c.p.m.m.protocol.McpProtocolHandler - MCP message processed successfully for connection client_1758653832282_1, method: tools/call
+2025-09-24 00:29:37 [http-nio-8080-exec-5] DEBUG c.p.m.t.sse.SseConnectionManager - Attempting to send message to connection client_1758653832282_1: mcp-response
+2025-09-24 00:29:37 [http-nio-8080-exec-5] DEBUG c.p.m.t.sse.SseConnectionManager - Current active connections: [client_1758653832282_1]
+2025-09-24 00:29:37 [http-nio-8080-exec-5] DEBUG c.p.m.t.sse.SseConnectionManager - Sending SSE event to connection client_1758653832282_1: event=mcp-response, dataType=McpResponse
+2025-09-24 00:29:37 [http-nio-8080-exec-5] DEBUG c.p.m.t.sse.SseConnectionManager - Successfully sent message to connection client_1758653832282_1: mcp-response
+2025-09-24 00:29:38 [http-nio-8080-exec-5] DEBUG c.p.m.transport.sse.SseController - MCP response sent to connection client_1758653832282_1
+2025-09-24 00:32:45 [http-nio-8080-exec-7] INFO  c.p.m.transport.sse.SseController - New SSE connection request from client: null
+2025-09-24 00:32:45 [http-nio-8080-exec-7] INFO  c.p.m.t.sse.SseConnectionManager - Registered SSE connection: client_1758654165360_2 (client: null, total active: 2)
+2025-09-24 00:32:45 [http-nio-8080-exec-7] DEBUG c.p.m.transport.sse.SseController - Sent connection ID to client: client_1758654165360_2
+2025-09-24 00:32:45 [http-nio-8080-exec-7] INFO  c.p.m.transport.sse.SseController - SSE connection established with ID: client_1758654165360_2
+2025-09-24 00:32:53 [http-nio-8080-exec-8] INFO  c.p.m.transport.sse.SseController - New SSE connection request from client: null
+2025-09-24 00:32:53 [http-nio-8080-exec-8] INFO  c.p.m.t.sse.SseConnectionManager - Registered SSE connection: client_1758654173425_3 (client: null, total active: 3)
+2025-09-24 00:32:53 [http-nio-8080-exec-8] DEBUG c.p.m.transport.sse.SseController - Sent connection ID to client: client_1758654173425_3
+2025-09-24 00:32:53 [http-nio-8080-exec-8] INFO  c.p.m.transport.sse.SseController - SSE connection established with ID: client_1758654173425_3
+2025-09-24 00:34:31 [http-nio-8080-exec-9] INFO  c.p.m.transport.sse.SseController - New SSE connection request from client: null
+2025-09-24 00:34:31 [http-nio-8080-exec-9] INFO  c.p.m.t.sse.SseConnectionManager - Registered SSE connection: client_1758654271480_4 (client: null, total active: 4)
+2025-09-24 00:34:31 [http-nio-8080-exec-9] DEBUG c.p.m.transport.sse.SseController - Sent connection ID to client: client_1758654271480_4
+2025-09-24 00:34:31 [http-nio-8080-exec-9] INFO  c.p.m.transport.sse.SseController - SSE connection established with ID: client_1758654271480_4
+2025-09-24 00:34:40 [http-nio-8080-exec-10] INFO  c.p.m.transport.sse.SseController - New SSE connection request from client: null
+2025-09-24 00:34:40 [http-nio-8080-exec-10] INFO  c.p.m.t.sse.SseConnectionManager - Registered SSE connection: client_1758654280472_5 (client: null, total active: 5)
+2025-09-24 00:34:40 [http-nio-8080-exec-10] DEBUG c.p.m.transport.sse.SseController - Sent connection ID to client: client_1758654280472_5
+2025-09-24 00:34:40 [http-nio-8080-exec-10] INFO  c.p.m.transport.sse.SseController - SSE connection established with ID: client_1758654280472_5
+2025-09-24 00:35:52 [http-nio-8080-exec-1] INFO  c.p.m.transport.sse.SseController - New SSE connection request from client: null
+2025-09-24 00:35:52 [http-nio-8080-exec-1] INFO  c.p.m.t.sse.SseConnectionManager - Registered SSE connection: client_1758654352788_6 (client: null, total active: 6)
+2025-09-24 00:35:52 [http-nio-8080-exec-1] DEBUG c.p.m.transport.sse.SseController - Sent connection ID to client: client_1758654352788_6
+2025-09-24 00:35:52 [http-nio-8080-exec-1] INFO  c.p.m.transport.sse.SseController - SSE connection established with ID: client_1758654352788_6
+2025-09-24 00:36:09 [http-nio-8080-exec-2] INFO  c.p.m.transport.sse.SseController - New SSE connection request from client: null
+2025-09-24 00:36:09 [http-nio-8080-exec-2] INFO  c.p.m.t.sse.SseConnectionManager - Registered SSE connection: client_1758654369931_7 (client: null, total active: 7)
+2025-09-24 00:36:09 [http-nio-8080-exec-2] DEBUG c.p.m.transport.sse.SseController - Sent connection ID to client: client_1758654369931_7
+2025-09-24 00:36:09 [http-nio-8080-exec-2] INFO  c.p.m.transport.sse.SseController - SSE connection established with ID: client_1758654369931_7
+2025-09-24 00:36:15 [http-nio-8080-exec-3] INFO  c.p.m.transport.sse.SseController - New SSE connection request from client: null
+2025-09-24 00:36:15 [http-nio-8080-exec-3] INFO  c.p.m.t.sse.SseConnectionManager - Registered SSE connection: client_1758654375205_8 (client: null, total active: 8)
+2025-09-24 00:36:15 [http-nio-8080-exec-3] DEBUG c.p.m.transport.sse.SseController - Sent connection ID to client: client_1758654375205_8
+2025-09-24 00:36:15 [http-nio-8080-exec-3] INFO  c.p.m.transport.sse.SseController - SSE connection established with ID: client_1758654375205_8
+2025-09-24 00:36:17 [SpringApplicationShutdownHook] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-09-24 00:36:48 [SpringApplicationShutdownHook] INFO  o.s.c.s.DefaultLifecycleProcessor - Shutdown phase 2147482623 ends with 1 bean still running after timeout of 30000ms: [webServerGracefulShutdown]
+2025-09-24 00:36:48 [http-nio-8080-exec-4] WARN  c.p.m.transport.sse.SseController - SSE connection timed out: client_1758654173425_3
+2025-09-24 00:36:48 [tomcat-shutdown] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Graceful shutdown aborted with one or more requests still active
+2025-09-24 00:36:48 [http-nio-8080-exec-4] INFO  c.p.m.t.sse.SseConnectionManager - Removed SSE connection: client_1758654173425_3 (client: null, remaining active: 7)
+2025-09-24 00:36:48 [http-nio-8080-exec-4] INFO  c.p.m.transport.sse.SseController - SSE connection completed normally: client_1758654173425_3
+2025-09-24 00:36:52 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - Starting McpServerApplication using Java 21.0.8 with PID 6443 (/Users/dakshgupta/IdeaProjects/uth-ai-platforms/mcp-server/target/classes started by dakshgupta in /Users/dakshgupta/IdeaProjects/uth-ai-platforms)
+2025-09-24 00:36:52 [restartedMain] DEBUG c.p.mcpserver.McpServerApplication - Running with Spring Boot v3.4.10, Spring v6.2.11
+2025-09-24 00:36:52 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - The following 1 profile is active: "local"
+2025-09-24 00:36:52 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-09-24 00:36:52 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-09-24 00:36:54 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-09-24 00:36:54 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-09-24 00:36:54 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.46]
+2025-09-24 00:36:54 [restartedMain] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+2025-09-24 00:36:54 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1115 ms
+2025-09-24 00:36:54 [restartedMain] INFO  c.p.m.mcp.registry.ToolRegistry - Initializing Tool Registry...
+2025-09-24 00:36:54 [restartedMain] INFO  c.p.m.mcp.registry.ToolRegistry - Tool Registry initialized with 3 tools: [es_host_search, es_search, es_schema]
+2025-09-24 00:36:54 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-09-24 00:36:54 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 4 endpoints beneath base path '/actuator'
+2025-09-24 00:36:54 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/api'
+2025-09-24 00:36:54 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - Started McpServerApplication in 2.303 seconds (process running for 2.829)
+2025-09-24 00:37:54 [http-nio-8080-exec-1] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-09-24 00:37:54 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-09-24 00:37:54 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2025-09-24 00:37:54 [http-nio-8080-exec-1] INFO  c.p.m.transport.sse.SseController - New SSE connection request from client: null
+2025-09-24 00:37:54 [http-nio-8080-exec-1] INFO  c.p.m.t.sse.SseConnectionManager - Registered SSE connection: client_1758654474853_1 (client: null, total active: 1)
+2025-09-24 00:37:54 [http-nio-8080-exec-1] DEBUG c.p.m.transport.sse.SseController - Sent connection ID to client: client_1758654474853_1
+2025-09-24 00:37:54 [http-nio-8080-exec-1] INFO  c.p.m.transport.sse.SseController - SSE connection established with ID: client_1758654474853_1
+2025-09-24 00:38:27 [http-nio-8080-exec-2] INFO  c.p.m.transport.sse.SseController - Received MCP message from connection client_1758654474853_1: {"jsonrpc":"2.0","id":"a2f20274-a647-4fb0-ba63-ee054d27492f","method":"tools/call","params":{"arguments":{},"name":"es_schema"}}
+2025-09-24 00:38:27 [http-nio-8080-exec-2] DEBUG c.p.m.m.protocol.McpProtocolHandler - Processing MCP message from connection client_1758654474853_1: {"jsonrpc":"2.0","id":"a2f20274-a647-4fb0-ba63-ee054d27492f","method":"tools/call","params":{"arguments":{},"name":"es_schema"}}
+2025-09-24 00:38:27 [http-nio-8080-exec-2] DEBUG c.p.m.m.protocol.McpProtocolHandler - Routing MCP method 'tools/call' for connection client_1758654474853_1
+2025-09-24 00:38:27 [http-nio-8080-exec-2] DEBUG c.p.m.m.protocol.McpProtocolHandler - Handling tools/call request from connection client_1758654474853_1
+2025-09-24 00:38:27 [http-nio-8080-exec-2] DEBUG c.p.m.m.protocol.McpProtocolHandler - Tool call request - tool: 'es_schema', args: [] from connection client_1758654474853_1
+2025-09-24 00:38:27 [http-nio-8080-exec-2] INFO  c.p.m.mcp.registry.ParameterMapper - ParameterMapper - Mapping parameters for tool 'es_schema': []
+2025-09-24 00:38:27 [http-nio-8080-exec-2] DEBUG c.p.m.mcp.registry.ParameterMapper - Parameter validation passed for tool 'es_schema'
+2025-09-24 00:38:27 [http-nio-8080-exec-2] DEBUG c.p.m.m.protocol.McpProtocolHandler - Executing tool 'es_schema' with mapped parameters: []
+2025-09-24 00:38:27 [http-nio-8080-exec-2] DEBUG c.p.m.e.service.EsSchemaService - Loading raw ES schema from JSON file: schemas/elasticsearch-schema.json
+2025-09-24 00:38:27 [http-nio-8080-exec-2] DEBUG c.p.m.e.service.EsSchemaService - Schema loaded from file successfully
+2025-09-24 00:38:27 [http-nio-8080-exec-2] DEBUG c.p.m.e.service.EsSchemaService - Raw schema loaded successfully in 15ms
+2025-09-24 00:38:27 [http-nio-8080-exec-2] DEBUG c.p.m.m.protocol.McpProtocolHandler - Tool 'es_schema' executed successfully for connection client_1758654474853_1
+2025-09-24 00:38:27 [http-nio-8080-exec-2] DEBUG c.p.m.m.protocol.McpProtocolHandler - MCP message processed successfully for connection client_1758654474853_1, method: tools/call
+2025-09-24 00:38:27 [http-nio-8080-exec-2] DEBUG c.p.m.t.sse.SseConnectionManager - Attempting to send message to connection client_1758654474853_1: mcp-response
+2025-09-24 00:38:27 [http-nio-8080-exec-2] DEBUG c.p.m.t.sse.SseConnectionManager - Current active connections: [client_1758654474853_1]
+2025-09-24 00:38:27 [http-nio-8080-exec-2] DEBUG c.p.m.t.sse.SseConnectionManager - Sending SSE event to connection client_1758654474853_1: event=mcp-response, dataType=McpResponse
+2025-09-24 00:38:27 [http-nio-8080-exec-2] DEBUG c.p.m.t.sse.SseConnectionManager - Successfully sent message to connection client_1758654474853_1: mcp-response
+2025-09-24 00:38:27 [http-nio-8080-exec-2] DEBUG c.p.m.transport.sse.SseController - MCP response sent to connection client_1758654474853_1
+2025-09-24 00:39:37 [http-nio-8080-exec-4] INFO  c.p.m.transport.sse.SseController - Received MCP message from connection client_1758654474853_1: {"jsonrpc":"2.0","id":"7218df57-3b76-4885-9d03-01543d7c69f6","method":"tools/call","params":{"arguments":{"esHost":"now","searchSourceBuilder":"now-30d"},"name":"es_host_search"}}
+2025-09-24 00:39:39 [http-nio-8080-exec-4] DEBUG c.p.m.m.protocol.McpProtocolHandler - Processing MCP message from connection client_1758654474853_1: {"jsonrpc":"2.0","id":"7218df57-3b76-4885-9d03-01543d7c69f6","method":"tools/call","params":{"arguments":{"esHost":"now","searchSourceBuilder":"now-30d"},"name":"es_host_search"}}
+2025-09-24 00:39:39 [http-nio-8080-exec-4] DEBUG c.p.m.m.protocol.McpProtocolHandler - Routing MCP method 'tools/call' for connection client_1758654474853_1
+2025-09-24 00:39:39 [http-nio-8080-exec-4] DEBUG c.p.m.m.protocol.McpProtocolHandler - Handling tools/call request from connection client_1758654474853_1
+2025-09-24 00:39:39 [http-nio-8080-exec-4] DEBUG c.p.m.m.protocol.McpProtocolHandler - Tool call request - tool: 'es_host_search', args: [esHost, searchSourceBuilder] from connection client_1758654474853_1
+2025-09-24 00:39:39 [http-nio-8080-exec-4] INFO  c.p.m.mcp.registry.ParameterMapper - ParameterMapper - Mapping parameters for tool 'es_host_search': [esHost, searchSourceBuilder]
+2025-09-24 00:39:39 [http-nio-8080-exec-4] INFO  c.p.m.mcp.registry.ParameterMapper - Incoming parameter 'esHost': type=String, value=now
+2025-09-24 00:39:39 [http-nio-8080-exec-4] INFO  c.p.m.mcp.registry.ParameterMapper - Incoming parameter 'searchSourceBuilder': type=String, value=now-30d
+2025-09-24 00:39:39 [http-nio-8080-exec-4] DEBUG c.p.m.mcp.registry.ParameterMapper - Parameter validation passed for tool 'es_host_search'
+2025-09-24 00:39:39 [http-nio-8080-exec-4] DEBUG c.p.m.m.protocol.McpProtocolHandler - Executing tool 'es_host_search' with mapped parameters: []
+2025-09-24 00:39:39 [http-nio-8080-exec-4] DEBUG c.p.m.e.service.EsHostSearchService - Executing host search with startDate: null, endDate: null
+2025-09-24 00:39:39 [http-nio-8080-exec-4] DEBUG c.p.m.e.service.EsHostSearchService - No date provided, returning PRIMARY host
+2025-09-24 00:39:39 [http-nio-8080-exec-4] DEBUG c.p.m.m.protocol.McpProtocolHandler - Tool 'es_host_search' executed successfully for connection client_1758654474853_1
+2025-09-24 00:39:39 [http-nio-8080-exec-4] DEBUG c.p.m.m.protocol.McpProtocolHandler - MCP message processed successfully for connection client_1758654474853_1, method: tools/call
+2025-09-24 00:39:39 [http-nio-8080-exec-4] DEBUG c.p.m.t.sse.SseConnectionManager - Attempting to send message to connection client_1758654474853_1: mcp-response
+2025-09-24 00:39:39 [http-nio-8080-exec-4] DEBUG c.p.m.t.sse.SseConnectionManager - Current active connections: [client_1758654474853_1]
+2025-09-24 00:39:39 [http-nio-8080-exec-4] DEBUG c.p.m.t.sse.SseConnectionManager - Sending SSE event to connection client_1758654474853_1: event=mcp-response, dataType=McpResponse
+2025-09-24 00:39:39 [http-nio-8080-exec-4] DEBUG c.p.m.t.sse.SseConnectionManager - Successfully sent message to connection client_1758654474853_1: mcp-response
+2025-09-24 00:39:39 [http-nio-8080-exec-4] DEBUG c.p.m.transport.sse.SseController - MCP response sent to connection client_1758654474853_1
+2025-09-24 00:39:43 [http-nio-8080-exec-5] INFO  c.p.m.transport.sse.SseController - Received MCP message from connection client_1758654474853_1: {"jsonrpc":"2.0","id":"e65b3622-1736-4335-80f5-b39ecd0e2ae0","method":"tools/call","params":{"arguments":{"searchSourceBuilder":"{\"bool\":{\"filter\":[{\"range\":{\"txnDate\":{\"gte\":1756062507974,\"lte\":1758654507974}}},{\"term\":{\"status\":2}}]}}","esHost":"PRIMARY","indices":["payment-history-*"]},"name":"es_search"}}
+2025-09-24 00:39:43 [http-nio-8080-exec-5] DEBUG c.p.m.m.protocol.McpProtocolHandler - Processing MCP message from connection client_1758654474853_1: {"jsonrpc":"2.0","id":"e65b3622-1736-4335-80f5-b39ecd0e2ae0","method":"tools/call","params":{"arguments":{"searchSourceBuilder":"{\"bool\":{\"filter\":[{\"range\":{\"txnDate\":{\"gte\":1756062507974,\"lte\":1758654507974}}},{\"term\":{\"status\":2}}]}}","esHost":"PRIMARY","indices":["payment-history-*"]},"name":"es_search"}}
+2025-09-24 00:39:43 [http-nio-8080-exec-5] DEBUG c.p.m.m.protocol.McpProtocolHandler - Routing MCP method 'tools/call' for connection client_1758654474853_1
+2025-09-24 00:39:43 [http-nio-8080-exec-5] DEBUG c.p.m.m.protocol.McpProtocolHandler - Handling tools/call request from connection client_1758654474853_1
+2025-09-24 00:39:43 [http-nio-8080-exec-5] DEBUG c.p.m.m.protocol.McpProtocolHandler - Tool call request - tool: 'es_search', args: [searchSourceBuilder, esHost, indices] from connection client_1758654474853_1
+2025-09-24 00:39:43 [http-nio-8080-exec-5] INFO  c.p.m.mcp.registry.ParameterMapper - ParameterMapper - Mapping parameters for tool 'es_search': [searchSourceBuilder, esHost, indices]
+2025-09-24 00:39:43 [http-nio-8080-exec-5] INFO  c.p.m.mcp.registry.ParameterMapper - Incoming parameter 'searchSourceBuilder': type=String, value={"bool":{"filter":[{"range":{"txnDate":{"gte":1756062507974,"lte":1758654507974}}},{"term":{"status":2}}]}}
+2025-09-24 00:39:43 [http-nio-8080-exec-5] INFO  c.p.m.mcp.registry.ParameterMapper - Incoming parameter 'esHost': type=String, value=PRIMARY
+2025-09-24 00:39:43 [http-nio-8080-exec-5] INFO  c.p.m.mcp.registry.ParameterMapper - Incoming parameter 'indices': type=ArrayList, value=[payment-history-*]
+2025-09-24 00:39:43 [http-nio-8080-exec-5] INFO  c.p.m.mcp.registry.ParameterMapper - Received SearchSourceBuilder as JSON string: {"bool":{"filter":[{"range":{"txnDate":{"gte":1756062507974,"lte":1758654507974}}},{"term":{"status":2}}]}}
+2025-09-24 00:39:43 [http-nio-8080-exec-5] INFO  c.p.m.mcp.registry.ParameterMapper - Parsing SearchSourceBuilder from JSON: {"bool":{"filter":[{"range":{"txnDate":{"gte":1756062507974,"lte":1758654507974}}},{"term":{"status":2}}]}}
+2025-09-24 00:39:43 [http-nio-8080-exec-5] INFO  c.p.m.mcp.registry.ParameterMapper - JSON root node type: OBJECT, isObject: true
+2025-09-24 00:39:43 [http-nio-8080-exec-5] INFO  c.p.m.mcp.registry.ParameterMapper - Available JSON fields: bool
+2025-09-24 00:39:43 [http-nio-8080-exec-5] WARN  c.p.m.mcp.registry.ParameterMapper - No 'query' field found in JSON, using match_all as fallback
+2025-09-24 00:39:43 [http-nio-8080-exec-5] INFO  c.p.m.mcp.registry.ParameterMapper - Successfully parsed SearchSourceBuilder - hasQuery: true, size: -1
+2025-09-24 00:39:43 [http-nio-8080-exec-5] DEBUG c.p.m.mcp.registry.ParameterMapper - Successfully mapped SearchSourceBuilder - hasQuery: true, size: -1
+2025-09-24 00:39:43 [http-nio-8080-exec-5] DEBUG c.p.m.mcp.registry.ParameterMapper - Mapped esHost: PRIMARY -> PRIMARY
+2025-09-24 00:39:43 [http-nio-8080-exec-5] DEBUG c.p.m.mcp.registry.ParameterMapper - Mapped es_search parameters: [indices, esHost, searchSourceBuilder]
+2025-09-24 00:39:43 [http-nio-8080-exec-5] DEBUG c.p.m.mcp.registry.ParameterMapper - Parameter validation passed for tool 'es_search'
+2025-09-24 00:39:43 [http-nio-8080-exec-5] DEBUG c.p.m.m.protocol.McpProtocolHandler - Executing tool 'es_search' with mapped parameters: [indices, esHost, searchSourceBuilder]
+2025-09-24 00:39:43 [http-nio-8080-exec-5] INFO  c.p.m.e.service.EsSearchService - EsSearchService.execute called with parameters: [indices, esHost, searchSourceBuilder]
+2025-09-24 00:39:43 [http-nio-8080-exec-5] INFO  c.p.m.e.service.EsSearchService - Parameter 'indices': type=ArrayList, value=[payment-history-*]
+2025-09-24 00:39:43 [http-nio-8080-exec-5] INFO  c.p.m.e.service.EsSearchService - Parameter 'esHost': type=EsHostType, value=PRIMARY
+2025-09-24 00:39:43 [http-nio-8080-exec-5] INFO  c.p.m.e.service.EsSearchService - Parameter 'searchSourceBuilder': type=SearchSourceBuilder, value={"query":{"match_all":{"boost":1.0}}}
+2025-09-24 00:39:44 [http-nio-8080-exec-5] INFO  c.p.m.e.service.EsSearchService - After extraction:
+2025-09-24 00:39:44 [http-nio-8080-exec-5] INFO  c.p.m.e.service.EsSearchService -   searchSourceBuilder: present
+2025-09-24 00:39:44 [http-nio-8080-exec-5] INFO  c.p.m.e.service.EsSearchService -   esHost: PRIMARY
+2025-09-24 00:39:44 [http-nio-8080-exec-5] INFO  c.p.m.e.service.EsSearchService -   indices: [payment-history-*]
+2025-09-24 00:39:44 [http-nio-8080-exec-5] INFO  c.p.m.e.service.EsSearchService -   SearchSourceBuilder details - hasQuery: true, query: {
+  "match_all" : {
+    "boost" : 1.0
+  }
+}, size: -1
+2025-09-24 00:39:44 [http-nio-8080-exec-5] DEBUG c.p.m.e.service.EsSearchService - Executing search on host: PRIMARY, indices: [payment-history-*]
+2025-09-24 00:39:44 [elasticsearch-rest-client-0-thread-2] DEBUG org.elasticsearch.client.RestClient - request [GET http://localhost:9200/] returned [HTTP/1.1 200 OK]
+2025-09-24 00:39:44 [elasticsearch-rest-client-0-thread-2] WARN  org.elasticsearch.client.RestClient - request [GET http://localhost:9200/] returned 1 warnings: [299 Elasticsearch-7.17.0-bee86328705acaa9a6daede7140defd4d9ec56bd "Elasticsearch built-in security features are not enabled. Without authentication, your cluster could be accessible to anyone. See https://www.elastic.co/guide/en/elasticsearch/reference/7.17/security-minimal-setup.html to enable security."]
+2025-09-24 00:39:44 [http-nio-8080-exec-5] DEBUG org.elasticsearch.client.RestClient - request [POST http://localhost:9200/payment-history-*/_search?typed_keys=true&max_concurrent_shard_requests=5&search_type=query_then_fetch&batched_reduce_size=512] returned [HTTP/1.1 200 OK]
+2025-09-24 00:39:44 [http-nio-8080-exec-5] WARN  org.elasticsearch.client.RestClient - request [POST http://localhost:9200/payment-history-*/_search?typed_keys=true&max_concurrent_shard_requests=5&search_type=query_then_fetch&batched_reduce_size=512] returned 1 warnings: [299 Elasticsearch-7.17.0-bee86328705acaa9a6daede7140defd4d9ec56bd "Elasticsearch built-in security features are not enabled. Without authentication, your cluster could be accessible to anyone. See https://www.elastic.co/guide/en/elasticsearch/reference/7.17/security-minimal-setup.html to enable security."]
+2025-09-24 00:39:44 [http-nio-8080-exec-5] DEBUG c.p.m.e.service.EsSearchService - Search completed in 315ms, found 31 results
+2025-09-24 00:39:44 [http-nio-8080-exec-5] DEBUG c.p.m.m.protocol.McpProtocolHandler - Tool 'es_search' executed successfully for connection client_1758654474853_1
+2025-09-24 00:39:44 [http-nio-8080-exec-5] DEBUG c.p.m.m.protocol.McpProtocolHandler - MCP message processed successfully for connection client_1758654474853_1, method: tools/call
+2025-09-24 00:39:44 [http-nio-8080-exec-5] DEBUG c.p.m.t.sse.SseConnectionManager - Attempting to send message to connection client_1758654474853_1: mcp-response
+2025-09-24 00:39:44 [http-nio-8080-exec-5] DEBUG c.p.m.t.sse.SseConnectionManager - Current active connections: [client_1758654474853_1]
+2025-09-24 00:39:44 [http-nio-8080-exec-5] DEBUG c.p.m.t.sse.SseConnectionManager - Sending SSE event to connection client_1758654474853_1: event=mcp-response, dataType=McpResponse
+2025-09-24 00:39:44 [http-nio-8080-exec-5] DEBUG c.p.m.t.sse.SseConnectionManager - Successfully sent message to connection client_1758654474853_1: mcp-response
+2025-09-24 00:39:44 [http-nio-8080-exec-5] DEBUG c.p.m.transport.sse.SseController - MCP response sent to connection client_1758654474853_1
+2025-09-24 00:52:54 [http-nio-8080-exec-7] INFO  c.p.m.transport.sse.SseController - New SSE connection request from client: null
+2025-09-24 00:52:54 [http-nio-8080-exec-7] INFO  c.p.m.t.sse.SseConnectionManager - Registered SSE connection: client_1758655374329_2 (client: null, total active: 2)
+2025-09-24 00:52:54 [http-nio-8080-exec-7] DEBUG c.p.m.transport.sse.SseController - Sent connection ID to client: client_1758655374329_2
+2025-09-24 00:52:54 [http-nio-8080-exec-7] INFO  c.p.m.transport.sse.SseController - SSE connection established with ID: client_1758655374329_2
+2025-09-24 00:52:56 [http-nio-8080-exec-8] INFO  c.p.m.transport.sse.SseController - New SSE connection request from client: null
+2025-09-24 00:52:56 [http-nio-8080-exec-8] INFO  c.p.m.t.sse.SseConnectionManager - Registered SSE connection: client_1758655376192_3 (client: null, total active: 3)
+2025-09-24 00:52:56 [http-nio-8080-exec-8] DEBUG c.p.m.transport.sse.SseController - Sent connection ID to client: client_1758655376192_3
+2025-09-24 00:52:56 [http-nio-8080-exec-8] INFO  c.p.m.transport.sse.SseController - SSE connection established with ID: client_1758655376192_3
+2025-09-24 00:53:12 [http-nio-8080-exec-9] INFO  c.p.m.transport.sse.SseController - New SSE connection request from client: null
+2025-09-24 00:53:12 [http-nio-8080-exec-9] INFO  c.p.m.t.sse.SseConnectionManager - Registered SSE connection: client_1758655392245_4 (client: null, total active: 4)
+2025-09-24 00:53:12 [http-nio-8080-exec-9] DEBUG c.p.m.transport.sse.SseController - Sent connection ID to client: client_1758655392245_4
+2025-09-24 00:53:12 [http-nio-8080-exec-9] INFO  c.p.m.transport.sse.SseController - SSE connection established with ID: client_1758655392245_4
+2025-09-24 00:53:43 [http-nio-8080-exec-10] INFO  c.p.m.transport.sse.SseController - New SSE connection request from client: null
+2025-09-24 00:53:43 [http-nio-8080-exec-10] INFO  c.p.m.t.sse.SseConnectionManager - Registered SSE connection: client_1758655423615_5 (client: null, total active: 5)
+2025-09-24 00:53:43 [http-nio-8080-exec-10] DEBUG c.p.m.transport.sse.SseController - Sent connection ID to client: client_1758655423615_5
+2025-09-24 00:53:43 [http-nio-8080-exec-10] INFO  c.p.m.transport.sse.SseController - SSE connection established with ID: client_1758655423615_5
+2025-09-24 00:53:57 [SpringApplicationShutdownHook] INFO  o.s.b.w.e.tomcat.GracefulShutdown - Commencing graceful shutdown. Waiting for active requests to complete
+2025-09-24 00:54:02 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - Starting McpServerApplication using Java 21.0.8 with PID 7690 (/Users/dakshgupta/IdeaProjects/uth-ai-platforms/mcp-server/target/classes started by dakshgupta in /Users/dakshgupta/IdeaProjects/uth-ai-platforms)
+2025-09-24 00:54:02 [restartedMain] DEBUG c.p.mcpserver.McpServerApplication - Running with Spring Boot v3.4.10, Spring v6.2.11
+2025-09-24 00:54:02 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - The following 1 profile is active: "local"
+2025-09-24 00:54:02 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2025-09-24 00:54:02 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2025-09-24 00:54:03 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-09-24 00:54:03 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-09-24 00:54:03 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.46]
+2025-09-24 00:54:03 [restartedMain] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring embedded WebApplicationContext
+2025-09-24 00:54:03 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 821 ms
+2025-09-24 00:54:04 [restartedMain] INFO  c.p.m.mcp.registry.ToolRegistry - Initializing Tool Registry...
+2025-09-24 00:54:04 [restartedMain] INFO  c.p.m.mcp.registry.ToolRegistry - Tool Registry initialized with 3 tools: [es_host_search, es_search, es_schema]
+2025-09-24 00:54:04 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2025-09-24 00:54:04 [restartedMain] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 4 endpoints beneath base path '/actuator'
+2025-09-24 00:54:04 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/api'
+2025-09-24 00:54:04 [restartedMain] INFO  c.p.mcpserver.McpServerApplication - Started McpServerApplication in 1.851 seconds (process running for 2.299)
+2025-09-24 00:54:55 [http-nio-8080-exec-1] INFO  o.a.c.c.C.[.[localhost].[/api] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-09-24 00:54:55 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-09-24 00:54:55 [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
+2025-09-24 00:54:55 [http-nio-8080-exec-1] INFO  c.p.m.transport.sse.SseController - New SSE connection request from client: null
+2025-09-24 00:54:55 [http-nio-8080-exec-1] INFO  c.p.m.t.sse.SseConnectionManager - Registered SSE connection: client_1758655495121_1 (client: null, total active: 1)
+2025-09-24 00:54:55 [http-nio-8080-exec-1] DEBUG c.p.m.transport.sse.SseController - Sent connection ID to client: client_1758655495121_1
+2025-09-24 00:54:55 [http-nio-8080-exec-1] INFO  c.p.m.transport.sse.SseController - SSE connection established with ID: client_1758655495121_1
+2025-09-24 00:55:24 [http-nio-8080-exec-2] INFO  c.p.m.transport.sse.SseController - Received MCP message from connection client_1758655495121_1: {"jsonrpc":"2.0","id":"f04f496c-b0e0-436f-b36f-5dcbb3aa2047","method":"tools/call","params":{"name":"es_schema","arguments":{}}}
+2025-09-24 00:55:24 [http-nio-8080-exec-2] DEBUG c.p.m.m.protocol.McpProtocolHandler - Processing MCP message from connection client_1758655495121_1: {"jsonrpc":"2.0","id":"f04f496c-b0e0-436f-b36f-5dcbb3aa2047","method":"tools/call","params":{"name":"es_schema","arguments":{}}}
+2025-09-24 00:55:24 [http-nio-8080-exec-2] DEBUG c.p.m.m.protocol.McpProtocolHandler - Routing MCP method 'tools/call' for connection client_1758655495121_1
+2025-09-24 00:55:24 [http-nio-8080-exec-2] DEBUG c.p.m.m.protocol.McpProtocolHandler - Handling tools/call request from connection client_1758655495121_1
+2025-09-24 00:55:24 [http-nio-8080-exec-2] DEBUG c.p.m.m.protocol.McpProtocolHandler - Tool call request - tool: 'es_schema', args: [] from connection client_1758655495121_1
+2025-09-24 00:55:24 [http-nio-8080-exec-2] INFO  c.p.m.mcp.registry.ParameterMapper - ParameterMapper - Mapping parameters for tool 'es_schema': []
+2025-09-24 00:55:24 [http-nio-8080-exec-2] DEBUG c.p.m.mcp.registry.ParameterMapper - Parameter validation passed for tool 'es_schema'
+2025-09-24 00:55:24 [http-nio-8080-exec-2] DEBUG c.p.m.m.protocol.McpProtocolHandler - Executing tool 'es_schema' with mapped parameters: []
+2025-09-24 00:55:24 [http-nio-8080-exec-2] DEBUG c.p.m.e.service.EsSchemaService - Loading raw ES schema from JSON file: schemas/elasticsearch-schema.json
+2025-09-24 00:55:24 [http-nio-8080-exec-2] DEBUG c.p.m.e.service.EsSchemaService - Schema loaded from file successfully
+2025-09-24 00:55:24 [http-nio-8080-exec-2] DEBUG c.p.m.e.service.EsSchemaService - Raw schema loaded successfully in 10ms
+2025-09-24 00:55:24 [http-nio-8080-exec-2] DEBUG c.p.m.m.protocol.McpProtocolHandler - Tool 'es_schema' executed successfully for connection client_1758655495121_1
+2025-09-24 00:55:24 [http-nio-8080-exec-2] DEBUG c.p.m.m.protocol.McpProtocolHandler - MCP message processed successfully for connection client_1758655495121_1, method: tools/call
+2025-09-24 00:55:24 [http-nio-8080-exec-2] DEBUG c.p.m.t.sse.SseConnectionManager - Attempting to send message to connection client_1758655495121_1: mcp-response
+2025-09-24 00:55:24 [http-nio-8080-exec-2] DEBUG c.p.m.t.sse.SseConnectionManager - Current active connections: [client_1758655495121_1]
+2025-09-24 00:55:24 [http-nio-8080-exec-2] DEBUG c.p.m.t.sse.SseConnectionManager - Sending SSE event to connection client_1758655495121_1: event=mcp-response, dataType=McpResponse
+2025-09-24 00:55:24 [http-nio-8080-exec-2] DEBUG c.p.m.t.sse.SseConnectionManager - Successfully sent message to connection client_1758655495121_1: mcp-response
+2025-09-24 00:55:24 [http-nio-8080-exec-2] DEBUG c.p.m.transport.sse.SseController - MCP response sent to connection client_1758655495121_1
+2025-09-24 00:56:12 [http-nio-8080-exec-3] INFO  c.p.m.transport.sse.SseController - Received MCP message from connection client_1758655495121_1: {"jsonrpc":"2.0","id":"7508f87d-9ef2-43d2-8a2d-b5bf2e437d04","method":"tools/call","params":{"name":"es_host_search","arguments":{"searchSourceBuilder":"now-30d","esHost":"now"}}}
+2025-09-24 00:56:12 [http-nio-8080-exec-3] DEBUG c.p.m.m.protocol.McpProtocolHandler - Processing MCP message from connection client_1758655495121_1: {"jsonrpc":"2.0","id":"7508f87d-9ef2-43d2-8a2d-b5bf2e437d04","method":"tools/call","params":{"name":"es_host_search","arguments":{"searchSourceBuilder":"now-30d","esHost":"now"}}}
+2025-09-24 00:56:12 [http-nio-8080-exec-3] DEBUG c.p.m.m.protocol.McpProtocolHandler - Routing MCP method 'tools/call' for connection client_1758655495121_1
+2025-09-24 00:56:12 [http-nio-8080-exec-3] DEBUG c.p.m.m.protocol.McpProtocolHandler - Handling tools/call request from connection client_1758655495121_1
+2025-09-24 00:56:12 [http-nio-8080-exec-3] DEBUG c.p.m.m.protocol.McpProtocolHandler - Tool call request - tool: 'es_host_search', args: [searchSourceBuilder, esHost] from connection client_1758655495121_1
+2025-09-24 00:56:12 [http-nio-8080-exec-3] INFO  c.p.m.mcp.registry.ParameterMapper - ParameterMapper - Mapping parameters for tool 'es_host_search': [searchSourceBuilder, esHost]
+2025-09-24 00:56:12 [http-nio-8080-exec-3] INFO  c.p.m.mcp.registry.ParameterMapper - Incoming parameter 'searchSourceBuilder': type=String, value=now-30d
+2025-09-24 00:56:12 [http-nio-8080-exec-3] INFO  c.p.m.mcp.registry.ParameterMapper - Incoming parameter 'esHost': type=String, value=now
+2025-09-24 00:56:12 [http-nio-8080-exec-3] DEBUG c.p.m.mcp.registry.ParameterMapper - Parameter validation passed for tool 'es_host_search'
+2025-09-24 00:56:12 [http-nio-8080-exec-3] DEBUG c.p.m.m.protocol.McpProtocolHandler - Executing tool 'es_host_search' with mapped parameters: []
+2025-09-24 00:56:12 [http-nio-8080-exec-3] DEBUG c.p.m.e.service.EsHostSearchService - Executing host search with startDate: null, endDate: null
+2025-09-24 00:56:12 [http-nio-8080-exec-3] DEBUG c.p.m.e.service.EsHostSearchService - No date provided, returning PRIMARY host
+2025-09-24 00:56:12 [http-nio-8080-exec-3] DEBUG c.p.m.m.protocol.McpProtocolHandler - Tool 'es_host_search' executed successfully for connection client_1758655495121_1
+2025-09-24 00:56:12 [http-nio-8080-exec-3] DEBUG c.p.m.m.protocol.McpProtocolHandler - MCP message processed successfully for connection client_1758655495121_1, method: tools/call
+2025-09-24 00:56:12 [http-nio-8080-exec-3] DEBUG c.p.m.t.sse.SseConnectionManager - Attempting to send message to connection client_1758655495121_1: mcp-response
+2025-09-24 00:56:12 [http-nio-8080-exec-3] DEBUG c.p.m.t.sse.SseConnectionManager - Current active connections: [client_1758655495121_1]
+2025-09-24 00:56:12 [http-nio-8080-exec-3] DEBUG c.p.m.t.sse.SseConnectionManager - Sending SSE event to connection client_1758655495121_1: event=mcp-response, dataType=McpResponse
+2025-09-24 00:56:12 [http-nio-8080-exec-3] DEBUG c.p.m.t.sse.SseConnectionManager - Successfully sent message to connection client_1758655495121_1: mcp-response
+2025-09-24 00:56:12 [http-nio-8080-exec-3] DEBUG c.p.m.transport.sse.SseController - MCP response sent to connection client_1758655495121_1
+2025-09-24 00:56:12 [http-nio-8080-exec-4] INFO  c.p.m.transport.sse.SseController - Received MCP message from connection client_1758655495121_1: {"jsonrpc":"2.0","id":"0d1b1f6a-3942-463d-bcf4-3057ad46a6f9","method":"tools/call","params":{"name":"es_search","arguments":{"searchSourceBuilder":"{\"bool\":{\"filter\":[{\"range\":{\"txnDate\":{\"gte\":1756063524707,\"lte\":1758655524707}}},{\"term\":{\"status\":2}}]}}","indices":["payment-history-*"],"esHost":"PRIMARY"}}}
+2025-09-24 00:56:12 [http-nio-8080-exec-4] DEBUG c.p.m.m.protocol.McpProtocolHandler - Processing MCP message from connection client_1758655495121_1: {"jsonrpc":"2.0","id":"0d1b1f6a-3942-463d-bcf4-3057ad46a6f9","method":"tools/call","params":{"name":"es_search","arguments":{"searchSourceBuilder":"{\"bool\":{\"filter\":[{\"range\":{\"txnDate\":{\"gte\":1756063524707,\"lte\":1758655524707}}},{\"term\":{\"status\":2}}]}}","indices":["payment-history-*"],"esHost":"PRIMARY"}}}
+2025-09-24 00:56:12 [http-nio-8080-exec-4] DEBUG c.p.m.m.protocol.McpProtocolHandler - Routing MCP method 'tools/call' for connection client_1758655495121_1
+2025-09-24 00:56:12 [http-nio-8080-exec-4] DEBUG c.p.m.m.protocol.McpProtocolHandler - Handling tools/call request from connection client_1758655495121_1
+2025-09-24 00:56:12 [http-nio-8080-exec-4] DEBUG c.p.m.m.protocol.McpProtocolHandler - Tool call request - tool: 'es_search', args: [searchSourceBuilder, indices, esHost] from connection client_1758655495121_1
+2025-09-24 00:56:12 [http-nio-8080-exec-4] INFO  c.p.m.mcp.registry.ParameterMapper - ParameterMapper - Mapping parameters for tool 'es_search': [searchSourceBuilder, indices, esHost]
+2025-09-24 00:56:12 [http-nio-8080-exec-4] INFO  c.p.m.mcp.registry.ParameterMapper - Incoming parameter 'searchSourceBuilder': type=String, value={"bool":{"filter":[{"range":{"txnDate":{"gte":1756063524707,"lte":1758655524707}}},{"term":{"status":2}}]}}
+2025-09-24 00:56:12 [http-nio-8080-exec-4] INFO  c.p.m.mcp.registry.ParameterMapper - Incoming parameter 'indices': type=ArrayList, value=[payment-history-*]
+2025-09-24 00:56:12 [http-nio-8080-exec-4] INFO  c.p.m.mcp.registry.ParameterMapper - Incoming parameter 'esHost': type=String, value=PRIMARY
+2025-09-24 00:56:12 [http-nio-8080-exec-4] INFO  c.p.m.mcp.registry.ParameterMapper - Received SearchSourceBuilder as JSON string: {"bool":{"filter":[{"range":{"txnDate":{"gte":1756063524707,"lte":1758655524707}}},{"term":{"status":2}}]}}
+2025-09-24 00:56:12 [http-nio-8080-exec-4] INFO  c.p.m.mcp.registry.ParameterMapper - Parsing SearchSourceBuilder from JSON: {"bool":{"filter":[{"range":{"txnDate":{"gte":1756063524707,"lte":1758655524707}}},{"term":{"status":2}}]}}
+2025-09-24 00:56:12 [http-nio-8080-exec-4] INFO  c.p.m.mcp.registry.ParameterMapper - JSON root node type: OBJECT, isObject: true
+2025-09-24 00:56:12 [http-nio-8080-exec-4] INFO  c.p.m.mcp.registry.ParameterMapper - Available JSON fields: bool
+2025-09-24 00:56:12 [http-nio-8080-exec-4] WARN  c.p.m.mcp.registry.ParameterMapper - No 'query' field found in JSON, using match_all as fallback
+2025-09-24 00:56:12 [http-nio-8080-exec-4] INFO  c.p.m.mcp.registry.ParameterMapper - Successfully parsed SearchSourceBuilder - hasQuery: true, size: -1
+2025-09-24 00:56:12 [http-nio-8080-exec-4] DEBUG c.p.m.mcp.registry.ParameterMapper - Successfully mapped SearchSourceBuilder - hasQuery: true, size: -1
+2025-09-24 00:56:12 [http-nio-8080-exec-4] DEBUG c.p.m.mcp.registry.ParameterMapper - Mapped esHost: PRIMARY -> PRIMARY
+2025-09-24 00:56:12 [http-nio-8080-exec-4] DEBUG c.p.m.mcp.registry.ParameterMapper - Mapped es_search parameters: [indices, esHost, searchSourceBuilder]
+2025-09-24 00:56:12 [http-nio-8080-exec-4] DEBUG c.p.m.mcp.registry.ParameterMapper - Parameter validation passed for tool 'es_search'
+2025-09-24 00:56:12 [http-nio-8080-exec-4] DEBUG c.p.m.m.protocol.McpProtocolHandler - Executing tool 'es_search' with mapped parameters: [indices, esHost, searchSourceBuilder]
+2025-09-24 00:56:12 [http-nio-8080-exec-4] INFO  c.p.m.e.service.EsSearchService - EsSearchService.execute called with parameters: [indices, esHost, searchSourceBuilder]
+2025-09-24 00:56:12 [http-nio-8080-exec-4] INFO  c.p.m.e.service.EsSearchService - Parameter 'indices': type=ArrayList, value=[payment-history-*]
+2025-09-24 00:56:12 [http-nio-8080-exec-4] INFO  c.p.m.e.service.EsSearchService - Parameter 'esHost': type=EsHostType, value=PRIMARY
+2025-09-24 00:56:12 [http-nio-8080-exec-4] INFO  c.p.m.e.service.EsSearchService - Parameter 'searchSourceBuilder': type=SearchSourceBuilder, value={"query":{"match_all":{"boost":1.0}}}
+2025-09-24 00:56:12 [http-nio-8080-exec-4] INFO  c.p.m.e.service.EsSearchService - After extraction:
+2025-09-24 00:56:12 [http-nio-8080-exec-4] INFO  c.p.m.e.service.EsSearchService -   searchSourceBuilder: present
+2025-09-24 00:56:12 [http-nio-8080-exec-4] INFO  c.p.m.e.service.EsSearchService -   esHost: PRIMARY
+2025-09-24 00:56:12 [http-nio-8080-exec-4] INFO  c.p.m.e.service.EsSearchService -   indices: [payment-history-*]
+2025-09-24 00:56:12 [http-nio-8080-exec-4] INFO  c.p.m.e.service.EsSearchService -   SearchSourceBuilder details - hasQuery: true, query: {
+  "match_all" : {
+    "boost" : 1.0
+  }
+}, size: -1
+2025-09-24 00:56:12 [http-nio-8080-exec-4] DEBUG c.p.m.e.service.EsSearchService - Executing search on host: PRIMARY, indices: [payment-history-*]
+2025-09-24 00:56:12 [elasticsearch-rest-client-0-thread-2] DEBUG org.elasticsearch.client.RestClient - request [GET http://localhost:9200/] returned [HTTP/1.1 200 OK]
+2025-09-24 00:56:12 [elasticsearch-rest-client-0-thread-2] WARN  org.elasticsearch.client.RestClient - request [GET http://localhost:9200/] returned 1 warnings: [299 Elasticsearch-7.17.0-bee86328705acaa9a6daede7140defd4d9ec56bd "Elasticsearch built-in security features are not enabled. Without authentication, your cluster could be accessible to anyone. See https://www.elastic.co/guide/en/elasticsearch/reference/7.17/security-minimal-setup.html to enable security."]
+2025-09-24 00:56:12 [http-nio-8080-exec-4] DEBUG org.elasticsearch.client.RestClient - request [POST http://localhost:9200/payment-history-*/_search?typed_keys=true&max_concurrent_shard_requests=5&search_type=query_then_fetch&batched_reduce_size=512] returned [HTTP/1.1 200 OK]
+2025-09-24 00:56:12 [http-nio-8080-exec-4] WARN  org.elasticsearch.client.RestClient - request [POST http://localhost:9200/payment-history-*/_search?typed_keys=true&max_concurrent_shard_requests=5&search_type=query_then_fetch&batched_reduce_size=512] returned 1 warnings: [299 Elasticsearch-7.17.0-bee86328705acaa9a6daede7140defd4d9ec56bd "Elasticsearch built-in security features are not enabled. Without authentication, your cluster could be accessible to anyone. See https://www.elastic.co/guide/en/elasticsearch/reference/7.17/security-minimal-setup.html to enable security."]
+2025-09-24 00:56:12 [http-nio-8080-exec-4] DEBUG c.p.m.e.service.EsSearchService - Search completed in 243ms, found 31 results
+2025-09-24 00:56:12 [http-nio-8080-exec-4] DEBUG c.p.m.m.protocol.McpProtocolHandler - Tool 'es_search' executed successfully for connection client_1758655495121_1
+2025-09-24 00:56:12 [http-nio-8080-exec-4] DEBUG c.p.m.m.protocol.McpProtocolHandler - MCP message processed successfully for connection client_1758655495121_1, method: tools/call
+2025-09-24 00:56:12 [http-nio-8080-exec-4] DEBUG c.p.m.t.sse.SseConnectionManager - Attempting to send message to connection client_1758655495121_1: mcp-response
+2025-09-24 00:56:12 [http-nio-8080-exec-4] DEBUG c.p.m.t.sse.SseConnectionManager - Current active connections: [client_1758655495121_1]
+2025-09-24 00:56:12 [http-nio-8080-exec-4] DEBUG c.p.m.t.sse.SseConnectionManager - Sending SSE event to connection client_1758655495121_1: event=mcp-response, dataType=McpResponse
+2025-09-24 00:56:12 [http-nio-8080-exec-4] DEBUG c.p.m.t.sse.SseConnectionManager - Successfully sent message to connection client_1758655495121_1: mcp-response
+2025-09-24 00:56:12 [http-nio-8080-exec-4] DEBUG c.p.m.transport.sse.SseController - MCP response sent to connection client_1758655495121_1
+2025-09-24 01:06:13 [http-nio-8080-exec-6] INFO  c.p.m.transport.sse.SseController - New SSE connection request from client: null
+2025-09-24 01:06:13 [http-nio-8080-exec-6] INFO  c.p.m.t.sse.SseConnectionManager - Registered SSE connection: client_1758656173366_2 (client: null, total active: 2)
+2025-09-24 01:06:13 [http-nio-8080-exec-6] DEBUG c.p.m.transport.sse.SseController - Sent connection ID to client: client_1758656173366_2
+2025-09-24 01:06:13 [http-nio-8080-exec-6] INFO  c.p.m.transport.sse.SseController - SSE connection established with ID: client_1758656173366_2
+2025-09-24 01:06:41 [http-nio-8080-exec-7] INFO  c.p.m.transport.sse.SseController - New SSE connection request from client: null
+2025-09-24 01:06:41 [http-nio-8080-exec-7] INFO  c.p.m.t.sse.SseConnectionManager - Registered SSE connection: client_1758656201611_3 (client: null, total active: 3)
+2025-09-24 01:06:41 [http-nio-8080-exec-7] DEBUG c.p.m.transport.sse.SseController - Sent connection ID to client: client_1758656201611_3
+2025-09-24 01:06:41 [http-nio-8080-exec-7] INFO  c.p.m.transport.sse.SseController - SSE connection established with ID: client_1758656201611_3
+2025-09-24 01:07:16 [http-nio-8080-exec-8] INFO  c.p.m.transport.sse.SseController - New SSE connection request from client: null
+2025-09-24 01:07:16 [http-nio-8080-exec-8] INFO  c.p.m.t.sse.SseConnectionManager - Registered SSE connection: client_1758656236902_4 (client: null, total active: 4)
+2025-09-24 01:07:16 [http-nio-8080-exec-8] DEBUG c.p.m.transport.sse.SseController - Sent connection ID to client: client_1758656236902_4
+2025-09-24 01:07:16 [http-nio-8080-exec-8] INFO  c.p.m.transport.sse.SseController - SSE connection established with ID: client_1758656236902_4
+2025-09-24 01:07:22 [http-nio-8080-exec-9] INFO  c.p.m.transport.sse.SseController - New SSE connection request from client: null
+2025-09-24 01:07:22 [http-nio-8080-exec-9] INFO  c.p.m.t.sse.SseConnectionManager - Registered SSE connection: client_1758656242727_5 (client: null, total active: 5)
+2025-09-24 01:07:22 [http-nio-8080-exec-9] DEBUG c.p.m.transport.sse.SseController - Sent connection ID to client: client_1758656242727_5
+2025-09-24 01:07:22 [http-nio-8080-exec-9] INFO  c.p.m.transport.sse.SseController - SSE connection established with ID: client_1758656242727_5
+2025-09-24 01:07:33 [http-nio-8080-exec-10] INFO  c.p.m.transport.sse.SseController - New SSE connection request from client: null
+2025-09-24 01:07:33 [http-nio-8080-exec-10] INFO  c.p.m.t.sse.SseConnectionManager - Registered SSE connection: client_1758656253540_6 (client: null, total active: 6)
+2025-09-24 01:07:33 [http-nio-8080-exec-10] DEBUG c.p.m.transport.sse.SseController - Sent connection ID to client: client_1758656253540_6
+2025-09-24 01:07:33 [http-nio-8080-exec-10] INFO  c.p.m.transport.sse.SseController - SSE connection established with ID: client_1758656253540_6
+2025-09-24 01:07:59 [http-nio-8080-exec-1] INFO  c.p.m.transport.sse.SseController - New SSE connection request from client: null
+2025-09-24 01:07:59 [http-nio-8080-exec-1] INFO  c.p.m.t.sse.SseConnectionManager - Registered SSE connection: client_1758656279799_7 (client: null, total active: 7)
+2025-09-24 01:07:59 [http-nio-8080-exec-1] DEBUG c.p.m.transport.sse.SseController - Sent connection ID to client: client_1758656279799_7
+2025-09-24 01:07:59 [http-nio-8080-exec-1] INFO  c.p.m.transport.sse.SseController - SSE connection established with ID: client_1758656279799_7
+2025-09-24 01:08:28 [http-nio-8080-exec-2] INFO  c.p.m.transport.sse.SseController - New SSE connection request from client: null
+2025-09-24 01:08:28 [http-nio-8080-exec-2] INFO  c.p.m.t.sse.SseConnectionManager - Registered SSE connection: client_1758656308238_8 (client: null, total active: 8)
+2025-09-24 01:08:28 [http-nio-8080-exec-2] DEBUG c.p.m.transport.sse.SseController - Sent connection ID to client: client_1758656308238_8
+2025-09-24 01:08:28 [http-nio-8080-exec-2] INFO  c.p.m.transport.sse.SseController - SSE connection established with ID: client_1758656308238_8
+2025-09-24 01:08:35 [http-nio-8080-exec-3] INFO  c.p.m.transport.sse.SseController - New SSE connection request from client: null
+2025-09-24 01:08:35 [http-nio-8080-exec-3] INFO  c.p.m.t.sse.SseConnectionManager - Registered SSE connection: client_1758656315980_9 (client: null, total active: 9)
+2025-09-24 01:08:35 [http-nio-8080-exec-3] DEBUG c.p.m.transport.sse.SseController - Sent connection ID to client: client_1758656315980_9
+2025-09-24 01:08:35 [http-nio-8080-exec-3] INFO  c.p.m.transport.sse.SseController - SSE connection established with ID: client_1758656315980_9
+2025-09-24 01:09:08 [http-nio-8080-exec-4] INFO  c.p.m.transport.sse.SseController - New SSE connection request from client: null
+2025-09-24 01:09:08 [http-nio-8080-exec-4] INFO  c.p.m.t.sse.SseConnectionManager - Registered SSE connection: client_1758656348995_10 (client: null, total active: 10)
+2025-09-24 01:09:08 [http-nio-8080-exec-4] DEBUG c.p.m.transport.sse.SseController - Sent connection ID to client: client_1758656348995_10
+2025-09-24 01:09:08 [http-nio-8080-exec-4] INFO  c.p.m.transport.sse.SseController - SSE connection established with ID: client_1758656348995_10
+2025-09-24 01:09:57 [http-nio-8080-exec-5] INFO  c.p.m.transport.sse.SseController - New SSE connection request from client: null
+2025-09-24 01:09:57 [http-nio-8080-exec-5] INFO  c.p.m.t.sse.SseConnectionManager - Registered SSE connection: client_1758656397764_11 (client: null, total active: 11)
+2025-09-24 01:09:57 [http-nio-8080-exec-5] DEBUG c.p.m.transport.sse.SseController - Sent connection ID to client: client_1758656397764_11
+2025-09-24 01:09:57 [http-nio-8080-exec-5] INFO  c.p.m.transport.sse.SseController - SSE connection established with ID: client_1758656397764_11
+2025-09-24 01:13:05 [http-nio-8080-exec-6] INFO  c.p.m.transport.sse.SseController - New SSE connection request from client: null
+2025-09-24 01:13:05 [http-nio-8080-exec-6] INFO  c.p.m.t.sse.SseConnectionManager - Registered SSE connection: client_1758656585971_12 (client: null, total active: 12)
+2025-09-24 01:13:05 [http-nio-8080-exec-6] DEBUG c.p.m.transport.sse.SseController - Sent connection ID to client: client_1758656585971_12
+2025-09-24 01:13:05 [http-nio-8080-exec-6] INFO  c.p.m.transport.sse.SseController - SSE connection established with ID: client_1758656585971_12
+2025-09-24 01:16:19 [http-nio-8080-exec-7] INFO  c.p.m.transport.sse.SseController - New SSE connection request from client: null
+2025-09-24 01:16:19 [http-nio-8080-exec-7] INFO  c.p.m.t.sse.SseConnectionManager - Registered SSE connection: client_1758656779607_13 (client: null, total active: 13)
+2025-09-24 01:16:19 [http-nio-8080-exec-7] DEBUG c.p.m.transport.sse.SseController - Sent connection ID to client: client_1758656779607_13
+2025-09-24 01:16:19 [http-nio-8080-exec-7] INFO  c.p.m.transport.sse.SseController - SSE connection established with ID: client_1758656779607_13
+2025-09-24 01:16:46 [http-nio-8080-exec-8] INFO  c.p.m.transport.sse.SseController - New SSE connection request from client: null
+2025-09-24 01:16:46 [http-nio-8080-exec-8] INFO  c.p.m.t.sse.SseConnectionManager - Registered SSE connection: client_1758656806046_14 (client: null, total active: 14)
+2025-09-24 01:16:46 [http-nio-8080-exec-8] DEBUG c.p.m.transport.sse.SseController - Sent connection ID to client: client_1758656806046_14
+2025-09-24 01:16:46 [http-nio-8080-exec-8] INFO  c.p.m.transport.sse.SseController - SSE connection established with ID: client_1758656806046_14
+2025-09-24 01:17:05 [http-nio-8080-exec-9] INFO  c.p.m.transport.sse.SseController - New SSE connection request from client: null
+2025-09-24 01:17:05 [http-nio-8080-exec-9] INFO  c.p.m.t.sse.SseConnectionManager - Registered SSE connection: client_1758656825267_15 (client: null, total active: 15)
+2025-09-24 01:17:05 [http-nio-8080-exec-9] DEBUG c.p.m.transport.sse.SseController - Sent connection ID to client: client_1758656825267_15
+2025-09-24 01:17:05 [http-nio-8080-exec-9] INFO  c.p.m.transport.sse.SseController - SSE connection established with ID: client_1758656825267_15
+2025-09-24 01:17:21 [http-nio-8080-exec-10] INFO  c.p.m.transport.sse.SseController - New SSE connection request from client: null
+2025-09-24 01:17:21 [http-nio-8080-exec-10] INFO  c.p.m.t.sse.SseConnectionManager - Registered SSE connection: client_1758656841136_16 (client: null, total active: 16)
+2025-09-24 01:17:21 [http-nio-8080-exec-10] DEBUG c.p.m.transport.sse.SseController - Sent connection ID to client: client_1758656841136_16
+2025-09-24 01:17:21 [http-nio-8080-exec-10] INFO  c.p.m.transport.sse.SseController - SSE connection established with ID: client_1758656841136_16
+2025-09-24 01:17:29 [http-nio-8080-exec-1] INFO  c.p.m.transport.sse.SseController - New SSE connection request from client: null
+2025-09-24 01:17:29 [http-nio-8080-exec-1] INFO  c.p.m.t.sse.SseConnectionManager - Registered SSE connection: client_1758656849026_17 (client: null, total active: 17)
+2025-09-24 01:17:29 [http-nio-8080-exec-1] DEBUG c.p.m.transport.sse.SseController - Sent connection ID to client: client_1758656849026_17
+2025-09-24 01:17:29 [http-nio-8080-exec-1] INFO  c.p.m.transport.sse.SseController - SSE connection established with ID: client_1758656849026_17
+2025-09-24 01:18:07 [http-nio-8080-exec-2] INFO  c.p.m.transport.sse.SseController - New SSE connection request from client: null
+2025-09-24 01:18:07 [http-nio-8080-exec-2] INFO  c.p.m.t.sse.SseConnectionManager - Registered SSE connection: client_1758656887464_18 (client: null, total active: 18)
+2025-09-24 01:18:07 [http-nio-8080-exec-2] DEBUG c.p.m.transport.sse.SseController - Sent connection ID to client: client_1758656887464_18
+2025-09-24 01:18:07 [http-nio-8080-exec-2] INFO  c.p.m.transport.sse.SseController - SSE connection established with ID: client_1758656887464_18
+2025-09-24 01:18:47 [http-nio-8080-exec-3] INFO  c.p.m.transport.sse.SseController - New SSE connection request from client: null
+2025-09-24 01:18:47 [http-nio-8080-exec-3] INFO  c.p.m.t.sse.SseConnectionManager - Registered SSE connection: client_1758656927946_19 (client: null, total active: 19)
+2025-09-24 01:18:47 [http-nio-8080-exec-3] DEBUG c.p.m.transport.sse.SseController - Sent connection ID to client: client_1758656927946_19
+2025-09-24 01:18:47 [http-nio-8080-exec-3] INFO  c.p.m.transport.sse.SseController - SSE connection established with ID: client_1758656927946_19
+2025-09-24 01:22:52 [http-nio-8080-exec-4] INFO  c.p.m.transport.sse.SseController - New SSE connection request from client: null
+2025-09-24 01:22:52 [http-nio-8080-exec-4] INFO  c.p.m.t.sse.SseConnectionManager - Registered SSE connection: client_1758657172231_20 (client: null, total active: 20)
+2025-09-24 01:22:52 [http-nio-8080-exec-4] DEBUG c.p.m.transport.sse.SseController - Sent connection ID to client: client_1758657172231_20
+2025-09-24 01:22:52 [http-nio-8080-exec-4] INFO  c.p.m.transport.sse.SseController - SSE connection established with ID: client_1758657172231_20
+2025-09-24 01:22:55 [http-nio-8080-exec-5] INFO  c.p.m.transport.sse.SseController - New SSE connection request from client: null
+2025-09-24 01:22:55 [http-nio-8080-exec-5] INFO  c.p.m.t.sse.SseConnectionManager - Registered SSE connection: client_1758657175878_21 (client: null, total active: 21)
+2025-09-24 01:22:55 [http-nio-8080-exec-5] DEBUG c.p.m.transport.sse.SseController - Sent connection ID to client: client_1758657175878_21
+2025-09-24 01:22:55 [http-nio-8080-exec-5] INFO  c.p.m.transport.sse.SseController - SSE connection established with ID: client_1758657175878_21
+2025-09-24 01:22:59 [http-nio-8080-exec-6] INFO  c.p.m.transport.sse.SseController - New SSE connection request from client: null
+2025-09-24 01:22:59 [http-nio-8080-exec-6] INFO  c.p.m.t.sse.SseConnectionManager - Registered SSE connection: client_1758657179083_22 (client: null, total active: 22)
+2025-09-24 01:22:59 [http-nio-8080-exec-6] DEBUG c.p.m.transport.sse.SseController - Sent connection ID to client: client_1758657179083_22
+2025-09-24 01:22:59 [http-nio-8080-exec-6] INFO  c.p.m.transport.sse.SseController - SSE connection established with ID: client_1758657179083_22
+2025-09-24 01:23:32 [http-nio-8080-exec-7] INFO  c.p.m.transport.sse.SseController - New SSE connection request from client: null
+2025-09-24 01:23:32 [http-nio-8080-exec-7] INFO  c.p.m.t.sse.SseConnectionManager - Registered SSE connection: client_1758657212314_23 (client: null, total active: 23)
+2025-09-24 01:23:32 [http-nio-8080-exec-7] DEBUG c.p.m.transport.sse.SseController - Sent connection ID to client: client_1758657212314_23
+2025-09-24 01:23:32 [http-nio-8080-exec-7] INFO  c.p.m.transport.sse.SseController - SSE connection established with ID: client_1758657212314_23
+2025-09-24 01:24:55 [http-nio-8080-exec-8] WARN  c.p.m.transport.sse.SseController - SSE connection timed out: client_1758655495121_1
+2025-09-24 01:24:55 [http-nio-8080-exec-8] INFO  c.p.m.t.sse.SseConnectionManager - Removed SSE connection: client_1758655495121_1 (client: null, remaining active: 22)
+2025-09-24 01:24:55 [http-nio-8080-exec-8] INFO  c.p.m.transport.sse.SseController - SSE connection completed normally: client_1758655495121_1
+2025-09-24 01:25:11 [http-nio-8080-exec-9] INFO  c.p.m.transport.sse.SseController - New SSE connection request from client: null
+2025-09-24 01:25:11 [http-nio-8080-exec-9] INFO  c.p.m.t.sse.SseConnectionManager - Registered SSE connection: client_1758657311981_24 (client: null, total active: 23)
+2025-09-24 01:25:11 [http-nio-8080-exec-9] DEBUG c.p.m.transport.sse.SseController - Sent connection ID to client: client_1758657311981_24
+2025-09-24 01:25:11 [http-nio-8080-exec-9] INFO  c.p.m.transport.sse.SseController - SSE connection established with ID: client_1758657311981_24
+2025-09-24 01:25:24 [http-nio-8080-exec-10] INFO  c.p.m.transport.sse.SseController - New SSE connection request from client: null
+2025-09-24 01:25:24 [http-nio-8080-exec-10] INFO  c.p.m.t.sse.SseConnectionManager - Registered SSE connection: client_1758657324900_25 (client: null, total active: 24)
+2025-09-24 01:25:24 [http-nio-8080-exec-10] DEBUG c.p.m.transport.sse.SseController - Sent connection ID to client: client_1758657324900_25
+2025-09-24 01:25:24 [http-nio-8080-exec-10] INFO  c.p.m.transport.sse.SseController - SSE connection established with ID: client_1758657324900_25
+2025-09-24 01:25:39 [http-nio-8080-exec-1] INFO  c.p.m.transport.sse.SseController - New SSE connection request from client: null
+2025-09-24 01:25:39 [http-nio-8080-exec-1] INFO  c.p.m.t.sse.SseConnectionManager - Registered SSE connection: client_1758657339773_26 (client: null, total active: 25)
+2025-09-24 01:25:39 [http-nio-8080-exec-1] DEBUG c.p.m.transport.sse.SseController - Sent connection ID to client: client_1758657339773_26
+2025-09-24 01:25:39 [http-nio-8080-exec-1] INFO  c.p.m.transport.sse.SseController - SSE connection established with ID: client_1758657339773_26
+2025-09-24 01:25:54 [http-nio-8080-exec-2] INFO  c.p.m.transport.sse.SseController - New SSE connection request from client: null
+2025-09-24 01:25:54 [http-nio-8080-exec-2] INFO  c.p.m.t.sse.SseConnectionManager - Registered SSE connection: client_1758657354657_27 (client: null, total active: 26)
+2025-09-24 01:25:54 [http-nio-8080-exec-2] DEBUG c.p.m.transport.sse.SseController - Sent connection ID to client: client_1758657354657_27
+2025-09-24 01:25:54 [http-nio-8080-exec-2] INFO  c.p.m.transport.sse.SseController - SSE connection established with ID: client_1758657354657_27
+2025-09-24 01:32:46 [http-nio-8080-exec-3] INFO  c.p.m.transport.sse.SseController - New SSE connection request from client: null
+2025-09-24 01:32:46 [http-nio-8080-exec-3] INFO  c.p.m.t.sse.SseConnectionManager - Registered SSE connection: client_1758657766938_28 (client: null, total active: 27)
+2025-09-24 01:32:46 [http-nio-8080-exec-3] DEBUG c.p.m.transport.sse.SseController - Sent connection ID to client: client_1758657766938_28
+2025-09-24 01:32:46 [http-nio-8080-exec-3] INFO  c.p.m.transport.sse.SseController - SSE connection established with ID: client_1758657766938_28
+2025-09-24 01:33:03 [http-nio-8080-exec-4] INFO  c.p.m.transport.sse.SseController - New SSE connection request from client: null
+2025-09-24 01:33:03 [http-nio-8080-exec-4] INFO  c.p.m.t.sse.SseConnectionManager - Registered SSE connection: client_1758657783887_29 (client: null, total active: 28)
+2025-09-24 01:33:03 [http-nio-8080-exec-4] DEBUG c.p.m.transport.sse.SseController - Sent connection ID to client: client_1758657783887_29
+2025-09-24 01:33:03 [http-nio-8080-exec-4] INFO  c.p.m.transport.sse.SseController - SSE connection established with ID: client_1758657783887_29
+2025-09-24 01:36:13 [http-nio-8080-exec-5] WARN  c.p.m.transport.sse.SseController - SSE connection timed out: client_1758656173366_2
+2025-09-24 01:36:13 [http-nio-8080-exec-5] INFO  c.p.m.t.sse.SseConnectionManager - Removed SSE connection: client_1758656173366_2 (client: null, remaining active: 27)
+2025-09-24 01:36:13 [http-nio-8080-exec-5] INFO  c.p.m.transport.sse.SseController - SSE connection completed normally: client_1758656173366_2
+2025-09-24 01:36:42 [http-nio-8080-exec-6] WARN  c.p.m.transport.sse.SseController - SSE connection timed out: client_1758656201611_3
+2025-09-24 01:36:42 [http-nio-8080-exec-6] INFO  c.p.m.t.sse.SseConnectionManager - Removed SSE connection: client_1758656201611_3 (client: null, remaining active: 26)
+2025-09-24 01:36:42 [http-nio-8080-exec-6] INFO  c.p.m.transport.sse.SseController - SSE connection completed normally: client_1758656201611_3
+2025-09-24 01:37:17 [http-nio-8080-exec-7] WARN  c.p.m.transport.sse.SseController - SSE connection timed out: client_1758656236902_4
+2025-09-24 01:37:17 [http-nio-8080-exec-7] INFO  c.p.m.t.sse.SseConnectionManager - Removed SSE connection: client_1758656236902_4 (client: null, remaining active: 25)
+2025-09-24 01:37:17 [http-nio-8080-exec-7] INFO  c.p.m.transport.sse.SseController - SSE connection completed normally: client_1758656236902_4
+2025-09-24 01:37:23 [http-nio-8080-exec-8] WARN  c.p.m.transport.sse.SseController - SSE connection timed out: client_1758656242727_5
+2025-09-24 01:37:23 [http-nio-8080-exec-8] INFO  c.p.m.t.sse.SseConnectionManager - Removed SSE connection: client_1758656242727_5 (client: null, remaining active: 24)
+2025-09-24 01:37:23 [http-nio-8080-exec-8] INFO  c.p.m.transport.sse.SseController - SSE connection completed normally: client_1758656242727_5
+2025-09-24 01:37:34 [http-nio-8080-exec-9] WARN  c.p.m.transport.sse.SseController - SSE connection timed out: client_1758656253540_6
+2025-09-24 01:37:34 [http-nio-8080-exec-9] INFO  c.p.m.t.sse.SseConnectionManager - Removed SSE connection: client_1758656253540_6 (client: null, remaining active: 23)
+2025-09-24 01:37:34 [http-nio-8080-exec-9] INFO  c.p.m.transport.sse.SseController - SSE connection completed normally: client_1758656253540_6
+2025-09-24 01:38:00 [http-nio-8080-exec-10] WARN  c.p.m.transport.sse.SseController - SSE connection timed out: client_1758656279799_7
+2025-09-24 01:38:00 [http-nio-8080-exec-10] INFO  c.p.m.t.sse.SseConnectionManager - Removed SSE connection: client_1758656279799_7 (client: null, remaining active: 22)
+2025-09-24 01:38:00 [http-nio-8080-exec-10] INFO  c.p.m.transport.sse.SseController - SSE connection completed normally: client_1758656279799_7
+2025-09-24 01:38:28 [http-nio-8080-exec-1] WARN  c.p.m.transport.sse.SseController - SSE connection timed out: client_1758656308238_8
+2025-09-24 01:38:28 [http-nio-8080-exec-1] INFO  c.p.m.t.sse.SseConnectionManager - Removed SSE connection: client_1758656308238_8 (client: null, remaining active: 21)
+2025-09-24 01:38:28 [http-nio-8080-exec-1] INFO  c.p.m.transport.sse.SseController - SSE connection completed normally: client_1758656308238_8
+2025-09-24 01:38:36 [http-nio-8080-exec-2] WARN  c.p.m.transport.sse.SseController - SSE connection timed out: client_1758656315980_9
+2025-09-24 01:38:36 [http-nio-8080-exec-2] INFO  c.p.m.t.sse.SseConnectionManager - Removed SSE connection: client_1758656315980_9 (client: null, remaining active: 20)
+2025-09-24 01:38:36 [http-nio-8080-exec-2] INFO  c.p.m.transport.sse.SseController - SSE connection completed normally: client_1758656315980_9
+2025-09-24 01:39:09 [http-nio-8080-exec-3] WARN  c.p.m.transport.sse.SseController - SSE connection timed out: client_1758656348995_10
+2025-09-24 01:39:09 [http-nio-8080-exec-3] INFO  c.p.m.t.sse.SseConnectionManager - Removed SSE connection: client_1758656348995_10 (client: null, remaining active: 19)
+2025-09-24 01:39:09 [http-nio-8080-exec-3] INFO  c.p.m.transport.sse.SseController - SSE connection completed normally: client_1758656348995_10
+2025-09-24 01:55:34 [http-nio-8080-exec-8] WARN  c.p.m.transport.sse.SseController - SSE connection timed out: client_1758657175878_21
+2025-09-24 01:55:34 [http-nio-8080-exec-9] WARN  c.p.m.transport.sse.SseController - SSE connection timed out: client_1758657212314_23
+2025-09-24 01:55:34 [http-nio-8080-exec-7] WARN  c.p.m.transport.sse.SseController - SSE connection timed out: client_1758656397764_11
+2025-09-24 01:55:34 [http-nio-8080-exec-1] WARN  c.p.m.transport.sse.SseController - SSE connection timed out: client_1758657179083_22
+2025-09-24 01:55:34 [http-nio-8080-exec-11] WARN  c.p.m.transport.sse.SseController - SSE connection timed out: client_1758656887464_18
+2025-09-24 01:55:34 [http-nio-8080-exec-11] INFO  c.p.m.t.sse.SseConnectionManager - Removed SSE connection: client_1758656887464_18 (client: null, remaining active: 14)
+2025-09-24 01:55:34 [http-nio-8080-exec-8] INFO  c.p.m.t.sse.SseConnectionManager - Removed SSE connection: client_1758657175878_21 (client: null, remaining active: 14)
+2025-09-24 01:55:34 [http-nio-8080-exec-1] INFO  c.p.m.t.sse.SseConnectionManager - Removed SSE connection: client_1758657179083_22 (client: null, remaining active: 14)
+2025-09-24 01:55:34 [http-nio-8080-exec-3] WARN  c.p.m.transport.sse.SseController - SSE connection timed out: client_1758656841136_16
+2025-09-24 01:55:34 [http-nio-8080-exec-9] INFO  c.p.m.t.sse.SseConnectionManager - Removed SSE connection: client_1758657212314_23 (client: null, remaining active: 15)
+2025-09-24 01:55:34 [http-nio-8080-exec-4] WARN  c.p.m.transport.sse.SseController - SSE connection timed out: client_1758657311981_24
+2025-09-24 01:55:34 [http-nio-8080-exec-4] INFO  c.p.m.t.sse.SseConnectionManager - Removed SSE connection: client_1758657311981_24 (client: null, remaining active: 12)
+2025-09-24 01:55:34 [http-nio-8080-exec-14] WARN  c.p.m.transport.sse.SseController - SSE connection timed out: client_1758656825267_15
+2025-09-24 01:55:34 [http-nio-8080-exec-7] INFO  c.p.m.t.sse.SseConnectionManager - Removed SSE connection: client_1758656397764_11 (client: null, remaining active: 15)
+2025-09-24 01:55:34 [http-nio-8080-exec-6] WARN  c.p.m.transport.sse.SseController - SSE connection timed out: client_1758656927946_19
+2025-09-24 01:55:34 [http-nio-8080-exec-6] INFO  c.p.m.t.sse.SseConnectionManager - Removed SSE connection: client_1758656927946_19 (client: null, remaining active: 10)
+2025-09-24 01:55:34 [http-nio-8080-exec-7] INFO  c.p.m.transport.sse.SseController - SSE connection completed normally: client_1758656397764_11
+2025-09-24 01:55:34 [http-nio-8080-exec-11] INFO  c.p.m.transport.sse.SseController - SSE connection completed normally: client_1758656887464_18
+2025-09-24 01:55:34 [http-nio-8080-exec-6] INFO  c.p.m.transport.sse.SseController - SSE connection completed normally: client_1758656927946_19
+2025-09-24 01:55:34 [http-nio-8080-exec-2] WARN  c.p.m.transport.sse.SseController - SSE connection timed out: client_1758656849026_17
+2025-09-24 01:55:34 [http-nio-8080-exec-2] INFO  c.p.m.t.sse.SseConnectionManager - Removed SSE connection: client_1758656849026_17 (client: null, remaining active: 9)
+2025-09-24 01:55:34 [http-nio-8080-exec-8] INFO  c.p.m.transport.sse.SseController - SSE connection completed normally: client_1758657175878_21
+2025-09-24 01:55:34 [http-nio-8080-exec-15] WARN  c.p.m.transport.sse.SseController - SSE connection timed out: client_1758657324900_25
+2025-09-24 01:55:34 [http-nio-8080-exec-15] INFO  c.p.m.t.sse.SseConnectionManager - Removed SSE connection: client_1758657324900_25 (client: null, remaining active: 8)
+2025-09-24 01:55:34 [http-nio-8080-exec-2] INFO  c.p.m.transport.sse.SseController - SSE connection completed normally: client_1758656849026_17
+2025-09-24 01:55:34 [http-nio-8080-exec-9] INFO  c.p.m.transport.sse.SseController - SSE connection completed normally: client_1758657212314_23
+2025-09-24 01:55:34 [http-nio-8080-exec-5] WARN  c.p.m.transport.sse.SseController - SSE connection timed out: client_1758657172231_20
+2025-09-24 01:55:34 [http-nio-8080-exec-14] INFO  c.p.m.t.sse.SseConnectionManager - Removed SSE connection: client_1758656825267_15 (client: null, remaining active: 8)
+2025-09-24 01:55:34 [http-nio-8080-exec-5] INFO  c.p.m.t.sse.SseConnectionManager - Removed SSE connection: client_1758657172231_20 (client: null, remaining active: 7)
+2025-09-24 01:55:34 [http-nio-8080-exec-5] INFO  c.p.m.transport.sse.SseController - SSE connection completed normally: client_1758657172231_20
+2025-09-24 01:55:34 [http-nio-8080-exec-14] INFO  c.p.m.transport.sse.SseController - SSE connection completed normally: client_1758656825267_15
+2025-09-24 01:55:34 [http-nio-8080-exec-12] WARN  c.p.m.transport.sse.SseController - SSE connection timed out: client_1758656779607_13
+2025-09-24 01:55:34 [http-nio-8080-exec-12] INFO  c.p.m.t.sse.SseConnectionManager - Removed SSE connection: client_1758656779607_13 (client: null, remaining active: 6)
+2025-09-24 01:55:34 [http-nio-8080-exec-13] WARN  c.p.m.transport.sse.SseController - SSE connection timed out: client_1758656585971_12
+2025-09-24 01:55:34 [http-nio-8080-exec-15] INFO  c.p.m.transport.sse.SseController - SSE connection completed normally: client_1758657324900_25
+2025-09-24 01:55:34 [http-nio-8080-exec-3] INFO  c.p.m.t.sse.SseConnectionManager - Removed SSE connection: client_1758656841136_16 (client: null, remaining active: 13)
+2025-09-24 01:55:34 [http-nio-8080-exec-13] INFO  c.p.m.t.sse.SseConnectionManager - Removed SSE connection: client_1758656585971_12 (client: null, remaining active: 5)
+2025-09-24 01:55:34 [http-nio-8080-exec-10] WARN  c.p.m.transport.sse.SseController - SSE connection timed out: client_1758656806046_14
+2025-09-24 01:55:34 [http-nio-8080-exec-12] INFO  c.p.m.transport.sse.SseController - SSE connection completed normally: client_1758656779607_13
+2025-09-24 01:55:34 [http-nio-8080-exec-13] INFO  c.p.m.transport.sse.SseController - SSE connection completed normally: client_1758656585971_12
+2025-09-24 01:55:34 [http-nio-8080-exec-3] INFO  c.p.m.transport.sse.SseController - SSE connection completed normally: client_1758656841136_16
+2025-09-24 01:55:34 [http-nio-8080-exec-1] INFO  c.p.m.transport.sse.SseController - SSE connection completed normally: client_1758657179083_22
+2025-09-24 01:55:34 [http-nio-8080-exec-4] INFO  c.p.m.transport.sse.SseController - SSE connection completed normally: client_1758657311981_24
+2025-09-24 01:55:34 [http-nio-8080-exec-10] INFO  c.p.m.t.sse.SseConnectionManager - Removed SSE connection: client_1758656806046_14 (client: null, remaining active: 4)
+2025-09-24 01:55:34 [http-nio-8080-exec-10] INFO  c.p.m.transport.sse.SseController - SSE connection completed normally: client_1758656806046_14
+2025-09-24 01:55:40 [http-nio-8080-exec-7] WARN  c.p.m.transport.sse.SseController - SSE connection timed out: client_1758657339773_26
+2025-09-24 01:55:40 [http-nio-8080-exec-7] INFO  c.p.m.t.sse.SseConnectionManager - Removed SSE connection: client_1758657339773_26 (client: null, remaining active: 3)
+2025-09-24 01:55:40 [http-nio-8080-exec-7] INFO  c.p.m.transport.sse.SseController - SSE connection completed normally: client_1758657339773_26
+2025-09-24 01:55:55 [http-nio-8080-exec-11] WARN  c.p.m.transport.sse.SseController - SSE connection timed out: client_1758657354657_27
+2025-09-24 01:55:55 [http-nio-8080-exec-11] INFO  c.p.m.t.sse.SseConnectionManager - Removed SSE connection: client_1758657354657_27 (client: null, remaining active: 2)
+2025-09-24 01:55:55 [http-nio-8080-exec-11] INFO  c.p.m.transport.sse.SseController - SSE connection completed normally: client_1758657354657_27
+2025-09-24 02:13:20 [http-nio-8080-exec-8] WARN  c.p.m.transport.sse.SseController - SSE connection timed out: client_1758657766938_28
+2025-09-24 02:13:20 [http-nio-8080-exec-6] WARN  c.p.m.transport.sse.SseController - SSE connection timed out: client_1758657783887_29
+2025-09-24 02:13:20 [http-nio-8080-exec-8] INFO  c.p.m.t.sse.SseConnectionManager - Removed SSE connection: client_1758657766938_28 (client: null, remaining active: 1)
+2025-09-24 02:13:20 [http-nio-8080-exec-6] INFO  c.p.m.t.sse.SseConnectionManager - Removed SSE connection: client_1758657783887_29 (client: null, remaining active: 0)
+2025-09-24 02:13:20 [http-nio-8080-exec-6] INFO  c.p.m.transport.sse.SseController - SSE connection completed normally: client_1758657783887_29
+2025-09-24 02:13:20 [http-nio-8080-exec-8] INFO  c.p.m.transport.sse.SseController - SSE connection completed normally: client_1758657766938_28

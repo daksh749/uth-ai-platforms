@@ -1,0 +1,17 @@
+/Users/dakshgupta/IdeaProjects/uth-ai-platforms/mcp-client/src/main/java/com/paytm/mcpclient/McpClientApplication.java
+/Users/dakshgupta/IdeaProjects/uth-ai-platforms/mcp-client/src/main/java/com/paytm/mcpclient/config/LangChainConfig.java
+/Users/dakshgupta/IdeaProjects/uth-ai-platforms/mcp-client/src/main/java/com/paytm/mcpclient/config/properties/McpClientProperties.java
+/Users/dakshgupta/IdeaProjects/uth-ai-platforms/mcp-client/src/main/java/com/paytm/mcpclient/config/properties/OllamaProperties.java
+/Users/dakshgupta/IdeaProjects/uth-ai-platforms/mcp-client/src/main/java/com/paytm/mcpclient/controller/ChatTestController.java
+/Users/dakshgupta/IdeaProjects/uth-ai-platforms/mcp-client/src/main/java/com/paytm/mcpclient/controller/EsTestController.java
+/Users/dakshgupta/IdeaProjects/uth-ai-platforms/mcp-client/src/main/java/com/paytm/mcpclient/controller/HealthController.java
+/Users/dakshgupta/IdeaProjects/uth-ai-platforms/mcp-client/src/main/java/com/paytm/mcpclient/controller/LlmTestController.java
+/Users/dakshgupta/IdeaProjects/uth-ai-platforms/mcp-client/src/main/java/com/paytm/mcpclient/controller/McpTestController.java
+/Users/dakshgupta/IdeaProjects/uth-ai-platforms/mcp-client/src/main/java/com/paytm/mcpclient/elasticsearch/model/EsQueryRequest.java
+/Users/dakshgupta/IdeaProjects/uth-ai-platforms/mcp-client/src/main/java/com/paytm/mcpclient/elasticsearch/service/EsQueryBuilderService.java
+/Users/dakshgupta/IdeaProjects/uth-ai-platforms/mcp-client/src/main/java/com/paytm/mcpclient/elasticsearch/service/EsSearchService.java
+/Users/dakshgupta/IdeaProjects/uth-ai-platforms/mcp-client/src/main/java/com/paytm/mcpclient/llm/model/QueryIntent.java
+/Users/dakshgupta/IdeaProjects/uth-ai-platforms/mcp-client/src/main/java/com/paytm/mcpclient/llm/service/LlmService.java
+/Users/dakshgupta/IdeaProjects/uth-ai-platforms/mcp-client/src/main/java/com/paytm/mcpclient/mcp/connection/McpConnectionManager.java
+/Users/dakshgupta/IdeaProjects/uth-ai-platforms/mcp-client/src/main/java/com/paytm/mcpclient/mcp/model/McpMessage.java
+/Users/dakshgupta/IdeaProjects/uth-ai-platforms/mcp-client/src/main/java/com/paytm/mcpclient/mcp/service/McpClientService.java
