@@ -2,117 +2,6 @@
   "index_patterns": [
     "payment-history-*"
   ],
-  "settings": {
-    "number_of_shards": 18,
-    "index":{
-      "codec":"best_compression"
-    },
-    "analysis": {
-      "analyzer": {
-        "3ngram_analyzer": {
-          "filter": [
-            "lowercase",
-            "asciifolding",
-            "stopWords",
-            "unique"
-          ],
-          "tokenizer": "3ngram_tokenizer"
-        },
-        "5ngram_analyzer": {
-          "filter": [
-            "lowercase",
-            "asciifolding",
-            "stopWords",
-            "unique"
-          ],
-          "tokenizer": "5ngram_tokenizer"
-        },
-        "edge_ngram_analyzer_min3_max6": {
-          "type": "custom",
-          "tokenizer": "edge_ngram_tokenizer_min3_max6",
-          "filter": [
-            "lowercase",
-            "asciifolding",
-            "stopWords",
-            "unique"
-          ]
-        },
-        "edge_ngram_analyzer_min4_max6": {
-          "type": "custom",
-          "tokenizer": "edge_ngram_tokenizer_min4_max6",
-          "filter": [
-            "lowercase",
-            "asciifolding",
-            "stopWords",
-            "unique"
-          ]
-        },
-        "edge_ngram_analyzer_min8_max10": {
-          "type": "custom",
-          "tokenizer": "edge_ngram_tokenizer_min8_max10",
-          "filter": [
-            "lowercase",
-            "asciifolding",
-            "stopWords",
-            "unique"
-          ]
-        }
-      },
-      "filter": {
-        "stopWords": {
-          "type": "stop",
-          "stopwords": "_english_"
-        }
-      },
-      "tokenizer": {
-        "3ngram_tokenizer": {
-          "type": "nGram",
-          "min_gram": "3",
-          "max_gram": "3",
-          "token_chars": [
-            "letter",
-            "digit"
-          ]
-        },
-        "5ngram_tokenizer": {
-          "type": "nGram",
-          "min_gram": "5",
-          "max_gram": "5",
-          "token_chars": [
-            "letter",
-            "digit"
-          ]
-        },
-        "edge_ngram_tokenizer_min3_max6": {
-          "type": "edge_ngram",
-          "min_gram": 3,
-          "max_gram": 6,
-          "token_chars": [
-            "letter",
-            "digit"
-          ]
-        },
-        "edge_ngram_tokenizer_min4_max6": {
-          "type": "edge_ngram",
-          "min_gram": 4,
-          "max_gram": 6,
-          "token_chars": [
-            "letter",
-            "digit"
-          ]
-        },
-        "edge_ngram_tokenizer_min8_max10": {
-          "type": "edge_ngram",
-          "min_gram": 8,
-          "max_gram": 10,
-          "token_chars": [
-            "letter",
-            "digit"
-          ]
-        }
-      }
-    }
-  },
   "mappings": {
     "_doc": {
       "_routing": {
@@ -421,10 +310,6 @@
           }
         }
       }
-    }
-  },
-  "aliases": {
-    "payment_history_alias": {
     }
   }
 }
