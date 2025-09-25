@@ -140,6 +140,18 @@ public class McpClientService {
     }
     
     /**
+     * Search for optimal Elasticsearch host based on date range
+     */
+    public Object searchElasticsearchHost(String startDate, String endDate) {
+        Map<String, Object> arguments = Map.of(
+            "startDate", startDate,
+            "endDate", endDate
+        );
+        
+        return callTool("es_host_search", arguments);
+    }
+    
+    /**
      * Check if MCP connection is healthy
      */
     public boolean isConnected() {

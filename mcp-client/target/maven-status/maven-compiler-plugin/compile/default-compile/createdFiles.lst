@@ -1,13 +1,10 @@
 com/paytm/mcpclient/mcp/service/McpClientService.class
-com/paytm/mcpclient/elasticsearch/model/EsQueryRequest.class
 com/paytm/mcpclient/llm/model/QueryIntent$QueryType.class
 com/paytm/mcpclient/config/LangChainConfig.class
-com/paytm/mcpclient/elasticsearch/model/EsQueryRequest$EsQueryRequestBuilder.class
 com/paytm/mcpclient/llm/service/LlmService.class
 com/paytm/mcpclient/mcp/connection/McpConnectionManager.class
 com/paytm/mcpclient/mcp/model/McpMessage$McpError$McpErrorBuilder.class
 com/paytm/mcpclient/McpClientApplication.class
-com/paytm/mcpclient/mcp/connection/McpConnectionManager$2.class
 com/paytm/mcpclient/mcp/model/McpMessage.class
 com/paytm/mcpclient/llm/model/QueryIntent$QueryIntentBuilder.class
 com/paytm/mcpclient/llm/model/QueryIntent.class
@@ -17,12 +14,8 @@ com/paytm/mcpclient/controller/ChatTestController.class
 com/paytm/mcpclient/config/properties/OllamaProperties.class
 com/paytm/mcpclient/config/properties/McpClientProperties.class
 com/paytm/mcpclient/llm/model/QueryIntent$TimeRange$TimeRangeBuilder.class
-com/paytm/mcpclient/controller/EsTestController.class
-com/paytm/mcpclient/controller/McpTestController.class
 com/paytm/mcpclient/mcp/connection/McpConnectionManager$1.class
 com/paytm/mcpclient/mcp/model/McpMessage$McpError.class
 com/paytm/mcpclient/llm/model/QueryIntent$TimeRange.class
-com/paytm/mcpclient/controller/LlmTestController.class
-com/paytm/mcpclient/elasticsearch/service/EsQueryBuilderService.class
 com/paytm/mcpclient/config/properties/McpClientProperties$Server.class
 com/paytm/mcpclient/mcp/model/McpMessage$McpMessageBuilder.class
