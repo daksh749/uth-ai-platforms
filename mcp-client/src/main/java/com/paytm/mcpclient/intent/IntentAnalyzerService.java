@@ -86,33 +86,24 @@ public class IntentAnalyzerService {
 
             USER REQUEST: "%s"
 
-            CRITICAL ANALYSIS FOR THIS SPECIFIC PROMPT:
-
-            If the user prompt contains "transactions", "payments", "data", "recent", "status", "amount" → COMPLEX_SEARCH
-            If the user prompt asks for "schema", "mapping", "fields available" → SCHEMA_ONLY
-            If the user prompt asks for "host", "server", "which host" → HOST_ONLY
-
-            FOR THIS PROMPT "%s":
-            - Contains "transactions"? → COMPLEX_SEARCH
-            - Contains "recent"? → COMPLEX_SEARCH  
-            - Contains "status"? → COMPLEX_SEARCH
-            - Asking for schema? → NO
-            - Asking for host? → NO
-            
-            THEREFORE: COMPLEX_SEARCH
-
             CLASSIFICATION RULES:
             %s
 
+            INSTRUCTIONS:
+            1. Analyze the user request carefully
+            2. Apply the classification rules to determine the appropriate intent
+            3. Provide confidence score between 0.0 and 1.0
+            4. Include reasoning for your classification
+
             MANDATORY RESPONSE FORMAT (JSON only):
             {
-              "intent": "COMPLEX_SEARCH",
-              "confidence": 0.98,
-              "reasoning": "User wants actual transaction data with status filter"
+              "intent": "DETERMINED_INTENT",
+              "confidence": 0.XX,
+              "reasoning": "Your reasoning here"
             }
 
             RESPOND WITH VALID JSON ONLY - NO OTHER TEXT!
-            """, userPrompt, userPrompt, rulesJson);
+            """, userPrompt, rulesJson);
     }
 
     /**

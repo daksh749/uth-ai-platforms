@@ -3,11 +3,13 @@ package com.paytm.mcpclient.strategy;
 import com.paytm.mcpclient.intent.IntentAnalysisResult;
 import com.paytm.mcpclient.intent.UserIntent;
 import com.paytm.mcpclient.mcp.service.McpClientService;
+import com.paytm.mcpclient.elasticsearch.ElasticsearchQueryService;
 import com.paytm.mcpclient.query.ElasticsearchQueryGenerationService;
 import com.paytm.mcpclient.util.DateQueryProcessor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.*;
 
 /**
@@ -31,13 +33,19 @@ public class ComplexSearchStrategy implements IntentExecutionStrategy {
     private final McpClientService mcpClientService;
     private final ElasticsearchQueryGenerationService queryGenerationService;
     private final DateQueryProcessor dateQueryProcessor;
+    private final ElasticsearchQueryService elasticsearchQueryService;
+    
+    // Store schema for index pattern extraction
+    private Object esSchema;
 
     public ComplexSearchStrategy(McpClientService mcpClientService, 
-                               ElasticsearchQueryGenerationService queryGenerationService,
-                               DateQueryProcessor dateQueryProcessor) {
+                                ElasticsearchQueryGenerationService queryGenerationService,
+                                DateQueryProcessor dateQueryProcessor,
+                                ElasticsearchQueryService elasticsearchQueryService) {
         this.mcpClientService = mcpClientService;
         this.queryGenerationService = queryGenerationService;
         this.dateQueryProcessor = dateQueryProcessor;
+        this.elasticsearchQueryService = elasticsearchQueryService;
     }
 
     @Override
@@ -52,13 +60,11 @@ public class ComplexSearchStrategy implements IntentExecutionStrategy {
         long startTime = System.currentTimeMillis();
         
         try {
-            Object esSchema = mcpClientService.getElasticsearchSchema();
+            this.esSchema = mcpClientService.getElasticsearchSchema();
             
             String queryWithDdMmYyyy = queryGenerationService.generateQuery(
                 userPrompt,
-                esSchema,
-                "PRIMARY",
-                null
+                esSchema
             );
             
             DateQueryProcessor.DateRange extractedDates = dateQueryProcessor.extractDatesFromQuery(queryWithDdMmYyyy);
@@ -74,7 +80,7 @@ public class ComplexSearchStrategy implements IntentExecutionStrategy {
             String selectedHost = extractHostFromResult(hostResult);
             
             List<String> indices = determineIndices(startDateForHost, endDateForHost);
-            Object searchResult = mcpClientService.searchElasticsearch(
+            Object searchResult = elasticsearchQueryService.executeSearch(
                 finalQuery,
                 selectedHost, 
                 indices
@@ -113,8 +119,97 @@ public class ComplexSearchStrategy implements IntentExecutionStrategy {
         return "PRIMARY";
     }
 
-    private List<String> determineIndices(String startDate, String endDate) {
-        return Arrays.asList("payment-history-*");
+    /**
+     * Determine indices based on date range and schema pattern
+     * Generates monthly indices like: payment-history-03-2025*, payment-history-04-2025*
+     */
+    private List<String> determineIndices(String startDateForHost, String endDateForHost) {
+        try {
+            List<String> indices = new ArrayList<>();
+            
+            // Parse dates (format: yyyy-MM-dd)
+            LocalDate startDate = LocalDate.parse(startDateForHost);
+            LocalDate endDate = LocalDate.parse(endDateForHost);
+            
+            // Extract base pattern from schema
+            String basePattern = extractIndexPatternFromSchema(this.esSchema);
+            
+            // Generate monthly indices for each month in the date range
+            LocalDate currentMonth = startDate.withDayOfMonth(1); // Start of start month
+            LocalDate lastMonthToInclude = endDate.withDayOfMonth(1); // First day of end month
+            
+            while (!currentMonth.isAfter(lastMonthToInclude)) {
+                String monthlyIndex = String.format("%s%02d-%d*", 
+                    basePattern, 
+                    currentMonth.getMonthValue(), 
+                    currentMonth.getYear()
+                );
+                indices.add(monthlyIndex);
+                currentMonth = currentMonth.plusMonths(1);
+            }
+            
+            log.info("Generated indices for date range {}-{}: {}", 
+                    startDateForHost, endDateForHost, indices);
+            
+            return indices;
+            
+        } catch (Exception e) {
+            log.error("Failed to determine indices, using default pattern", e);
+            return List.of("payment-history-*"); // Fallback
+        }
+    }
+
+    /**
+     * Extract index pattern from Elasticsearch schema
+     * From schema: "index_patterns" : [ "payment-history-*" ]
+     * Returns: "payment-history-"
+     */
+    private String extractIndexPatternFromSchema(Object esSchema) {
+        try {
+            if (esSchema instanceof Map) {
+                @SuppressWarnings("unchecked")
+                Map<String, Object> schemaMap = (Map<String, Object>) esSchema;
+                
+                // Navigate through the schema structure
+                Object content = schemaMap.get("content");
+                if (content instanceof List) {
+                    @SuppressWarnings("unchecked")
+                    List<Object> contentList = (List<Object>) content;
+                    
+                    for (Object item : contentList) {
+                        if (item instanceof Map) {
+                            @SuppressWarnings("unchecked")
+                            Map<String, Object> itemMap = (Map<String, Object>) item;
+                            
+                            Object data = itemMap.get("data");
+                            if (data instanceof Map) {
+                                @SuppressWarnings("unchecked")
+                                Map<String, Object> dataMap = (Map<String, Object>) data;
+                                
+                                Object indexPatterns = dataMap.get("index_patterns");
+                                if (indexPatterns instanceof List) {
+                                    @SuppressWarnings("unchecked")
+                                    List<String> patterns = (List<String>) indexPatterns;
+                                    
+                                    if (!patterns.isEmpty()) {
+                                        String pattern = patterns.get(0); // "payment-history-*"
+                                        // Remove the wildcard and return base pattern
+                                        return pattern.replace("*", "");   // "payment-history-"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            
+            log.warn("Could not extract index pattern from schema, using default");
+            return "payment-history-"; // Default fallback
+            
+        } catch (Exception e) {
+            log.error("Error extracting index pattern from schema", e);
+            return "payment-history-"; // Default fallback
+        }
     }
 
     private Map<String, Object> buildSuccessResponse(String userPrompt, String esHost, String esQuery, Object esResponse, long executionTime) {

@@ -12,15 +12,14 @@ server:
 # Production Elasticsearch Configuration
 elasticsearch:
   hosts:
-    - name: "prod-primary"
-      url: "${ES_PRIMARY_URL:http://elasticsearch-primary:9200}"
-      username: "${ES_USERNAME}"
-      password: "${ES_PASSWORD}"
+    - name: "primary"
+      url: "${ES_PRIMARY_URL:http://uth-es-app-nlb-d4fa226472071754.elb.ap-south-1.amazonaws.com:9200}"
       timeout: 45000
-    - name: "prod-secondary"
-      url: "${ES_SECONDARY_URL:http://elasticsearch-secondary:9200}"
-      username: "${ES_USERNAME_2:${ES_USERNAME}}"
-      password: "${ES_PASSWORD_2:${ES_PASSWORD}}"
+    - name: "secondary"
+      url: "${ES_SECONDARY_URL:http://uth-es-app-nlb-d4fa226472071754.elb.ap-south-1.amazonaws.com:9200}"
+      timeout: 45000
+    - name: "tertiary"
+      url: "${ES_TERTIARY_URL:http://uth-es-app3-nlb-81e82784bb8b158a.elb.ap-south-1.amazonaws.com:9200}"
       timeout: 45000
   
   connection:

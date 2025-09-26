@@ -1,6 +1,7 @@
 package com.paytm.mcpserver.elasticsearch.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.paytm.mcpserver.config.beans.ElasticsearchClientFactory;
 import com.paytm.mcpserver.config.properties.ElasticsearchProperties;
 import com.paytm.shared.elasticsearch.model.EsHostType;
 import com.paytm.shared.mcp.tools.McpTool;
@@ -16,20 +17,17 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 public class EsSearchService implements McpTool {
     
     @Autowired
-    private RestHighLevelClient elasticsearchClient;
+    private ElasticsearchClientFactory clientFactory;
     
     @Autowired
     private ElasticsearchProperties elasticsearchProperties;
-    
-    private final ObjectMapper objectMapper = new ObjectMapper();
-    
+
     @Override
     public String getName() {
         return "es_search";
@@ -121,12 +119,17 @@ public class EsSearchService implements McpTool {
                                        List<String> indices, 
                                        EsHostType esHost) throws IOException {
         
+        // Get the correct client for the selected host
+        RestHighLevelClient client = clientFactory.getClient(esHost);
+        
         // Create search request
         SearchRequest searchRequest = new SearchRequest(indices.toArray(new String[0]));
         searchRequest.source(sourceBuilder);
         
-        // Execute search using high-level client
-        return elasticsearchClient.search(searchRequest, RequestOptions.DEFAULT);
+        log.debug("Executing search on host: {} with client: {}", esHost.getName(), client.getClass().getSimpleName());
+        
+        // Execute search using the dynamically selected client
+        return client.search(searchRequest, RequestOptions.DEFAULT);
     }
     
     private List<String> getAllPaymentHistoryIndices() throws IOException {
@@ -140,12 +143,44 @@ public class EsSearchService implements McpTool {
                                        EsHostType esHost, 
                                        long executionTime) {
         try {
-            // Convert the raw Elasticsearch response to JSON and return as-is
-            String rawJsonResponse = response.toString();
-            return objectMapper.readValue(rawJsonResponse, Object.class);
+            // Build structured response with host information
+            Map<String, Object> result = new HashMap<>();
+            result.put("status", "success");
+            result.put("timestamp", Instant.now().toString());
+            result.put("execution_time_ms", executionTime);
+            
+            // Host information
+            result.put("selected_host", esHost.name());
+            result.put("host_url", clientFactory.getHostConfig(esHost).getUrl());
+            result.put("searched_indices", indices);
+            
+            // Search results
+            Map<String, Object> searchResults = new HashMap<>();
+            searchResults.put("total_hits", response.getHits().getTotalHits().value);
+            searchResults.put("max_score", response.getHits().getMaxScore());
+            searchResults.put("took_ms", response.getTook().millis());
+            
+            // Convert hits to structured format
+            List<Map<String, Object>> hits = new ArrayList<>();
+            response.getHits().forEach(hit -> {
+                Map<String, Object> hitMap = new HashMap<>();
+                hitMap.put("index", hit.getIndex());
+                hitMap.put("id", hit.getId());
+                hitMap.put("score", hit.getScore());
+                hitMap.put("source", hit.getSourceAsMap());
+                hits.add(hitMap);
+            });
+            searchResults.put("hits", hits);
+            
+            result.put("search_results", searchResults);
+            
+            log.info("Search completed successfully on host: {} with {} results", esHost.getName(), response.getHits().getTotalHits().value);
+            
+            return result;
+            
         } catch (Exception e) {
-            log.error("Failed to parse raw Elasticsearch response", e);
-            throw new RuntimeException("Failed to parse Elasticsearch response", e);
+            log.error("Failed to build success response", e);
+            throw new RuntimeException("Failed to build search response", e);
         }
     }
     
@@ -169,16 +204,7 @@ public class EsSearchService implements McpTool {
         error.put("error", errorDetails);
         return error;
     }
-    
-    private String getHostUrl(EsHostType esHost) {
-        try {
-            return esHost.getHostUrl(elasticsearchProperties);
-        } catch (Exception e) {
-            log.warn("Failed to get host URL for {}, using default", esHost, e);
-            return "http://localhost:9200";
-        }
-    }
-    
+
     @Override
     public List<String> getRequiredParameters() {
         return Arrays.asList("searchSourceBuilder", "esHost");

@@ -1,40 +1,25 @@
 package com.paytm.mcpserver.config.beans;
 
-import com.paytm.mcpserver.config.properties.ElasticsearchProperties;
-import org.apache.http.HttpHost;
-import org.elasticsearch.client.RestClient;
-import org.elasticsearch.client.RestHighLevelClient;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
 
-import java.net.URL;
-
+/**
+ * Elasticsearch configuration class.
+ * 
+ * Note: This class previously created a single hardcoded PRIMARY client,
+ * but has been replaced by ElasticsearchClientFactory which creates
+ * dynamic clients based on host selection (PRIMARY/SECONDARY/TERTIARY).
+ * 
+ * Keeping this class for potential future global ES configuration needs.
+ */
 @Configuration
+@Slf4j
 public class ElasticsearchConfig {
     
-    @Autowired
-    private ElasticsearchProperties elasticsearchProperties;
+    // No longer creating a single hardcoded client
+    // Dynamic client creation is now handled by ElasticsearchClientFactory
     
-    @Bean
-    public RestHighLevelClient elasticsearchClient() {
-        // Get primary host configuration
-        ElasticsearchProperties.HostConfig primaryHost = elasticsearchProperties.getHosts().stream()
-            .filter(host -> "primary".equals(host.getName()))
-            .findFirst()
-            .orElseThrow(() -> new IllegalStateException("Primary Elasticsearch host not configured"));
-        
-        try {
-            // Parse URL
-            URL url = new URL(primaryHost.getUrl());
-            
-            // Create high-level client directly
-            return new RestHighLevelClient(
-                RestClient.builder(new HttpHost(url.getHost(), url.getPort(), url.getProtocol()))
-            );
-            
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to create Elasticsearch client", e);
-        }
+    static {
+        log.info("ElasticsearchConfig initialized - using dynamic client factory for host-based routing");
     }
 }

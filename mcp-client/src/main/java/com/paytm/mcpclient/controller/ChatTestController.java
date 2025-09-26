@@ -25,7 +25,6 @@ public class ChatTestController {
         if (userPrompt == null || userPrompt.trim().isEmpty()) {
             Map<String, Object> errorResponse = Map.of(
                 "error", "User prompt is required",
-                "example", Map.of("prompt", "Show me transactions between 1st Sept to 5th Sept with status 2"),
                 "timestamp", System.currentTimeMillis()
             );
             return ResponseEntity.badRequest().body(errorResponse);

@@ -2,8 +2,6 @@
 spring:
   application:
     name: elasticsearch-mcp-server
-  profiles:
-    active: local
   
   # CORS & Web Configuration
   webflux:

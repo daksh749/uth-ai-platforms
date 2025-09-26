@@ -7,7 +7,6 @@ import dev.langchain4j.model.chat.ChatLanguageModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -41,17 +40,15 @@ public class ElasticsearchQueryGenerationService {
      * 
      * @param userPrompt The natural language user request
      * @param esSchema The Elasticsearch schema/mapping
-     * @param esHost The target Elasticsearch host
-     * @param extractedParams Optional pre-extracted parameters (can be null)
      * @return Generated Elasticsearch query as JSON string
      */
-    public String generateQuery(String userPrompt, Object esSchema, String esHost, Map<String, Object> extractedParams) {
+    public String generateQuery(String userPrompt, Object esSchema) {
         log.info("Generating Elasticsearch query for prompt: {}", userPrompt);
         
         long startTime = System.currentTimeMillis();
         
         try {
-            String llmPrompt = buildQueryGenerationPrompt(userPrompt, esSchema, esHost, extractedParams);
+            String llmPrompt = buildQueryGenerationPrompt(userPrompt, esSchema);
             String llmResponse = chatLanguageModel.generate(llmPrompt);
             String cleanedQuery = cleanAndValidateQuery(llmResponse);
             
@@ -71,40 +68,31 @@ public class ElasticsearchQueryGenerationService {
     /**
      * Build dynamic LLM prompt with actual schema and rules
      */
-    private String buildQueryGenerationPrompt(String userPrompt, Object esSchema, String esHost, Map<String, Object> extractedParams) {
+    private String buildQueryGenerationPrompt(String userPrompt, Object esSchema) {
         try {
             // Get the actual schema JSON
             String schemaJson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(esSchema);
             
-            // Get relevant rules from the rules service
+            // Get only essential rules to keep prompt focused
             Map<String, Object> allRules = rulesService.getRulesMap();
-            String rulesJson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(allRules);
+            Map<String, Object> essentialRules = extractEssentialRules(allRules);
+            String rulesJson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(essentialRules);
             
             return String.format("""
-                You are an expert Elasticsearch query generator. Analyze the schema and generate a query.
-
-                USER REQUEST: "%s"
-
-                ELASTICSEARCH SCHEMA:
-                %s
-
-                QUERY GENERATION RULES:
-                %s
-
-                INSTRUCTIONS:
-                1. Analyze the esSchema carefully to find relevant fields for the user request
-                2. Use the rules to determine proper and exact query structure
-                3. For dates: use dd/MM/yyyy format in the query (will be converted to epoch later)
-                4. For nested fields: wrap in nested query with correct path
-                5. For keyword fields: use term/terms query
-                6. For text fields: use match query
-                7. If you don't find any date in user-prompt then put (gte:NOW, lte:NOW)
-                8. Return ONLY valid Elasticsearch query JSON
-
-                RESPONSE FORMAT:
-                {"query":{"bool": ...}}
-
-                Generate the exact elasticsearch query, don;t give me any example:
+                Generate Elasticsearch query for: "%s"
+                
+                Schema: %s
+                
+                Rules: %s
+                
+                CRITICAL DATE FORMAT REQUIREMENT:
+                - Use dd/MM/yyyy format for ALL dates in the query JSON
+                - Use EXACT dates provided by user: "2nd Jan 2025" = "02/01/2025"
+                - Do NOT round to month start: "2nd Jan" stays "02/01", not "01/01"
+                - Never use ISO format (yyyy-MM-ddTHH:mm:ss.sssZ)
+                
+                RESPOND WITH ONLY JSON - NO TEXT BEFORE OR AFTER
+                Format: {"query":{"bool":...}}
                 """, userPrompt, schemaJson, rulesJson);
                 
         } catch (Exception e) {
@@ -114,29 +102,12 @@ public class ElasticsearchQueryGenerationService {
     }
 
     /**
-     * Extract only the relevant rules needed for query generation
+     * Extract only the essential rules needed for query generation
+     * Keep it minimal to focus LLM on user request and schema analysis
      */
-    private Map<String, Object> extractRelevantRules(Map<String, Object> allRules) {
-        Map<String, Object> relevantRules = new HashMap<>();
-        
-        // Add only the most important rules for query generation
-        if (allRules.containsKey("QUERY_TYPE_DETERMINATION_RULES")) {
-            relevantRules.put("QUERY_TYPE_DETERMINATION_RULES", allRules.get("QUERY_TYPE_DETERMINATION_RULES"));
-        }
-        
-        if (allRules.containsKey("NESTED_QUERY_RULES")) {
-            relevantRules.put("NESTED_QUERY_RULES", allRules.get("NESTED_QUERY_RULES"));
-        }
-        
-        if (allRules.containsKey("DATE_HANDLING_BUSINESS_RULES")) {
-            relevantRules.put("DATE_HANDLING_BUSINESS_RULES", allRules.get("DATE_HANDLING_BUSINESS_RULES"));
-        }
-        
-        if (allRules.containsKey("QUERY_COMBINATION_RULES")) {
-            relevantRules.put("QUERY_COMBINATION_RULES", allRules.get("QUERY_COMBINATION_RULES"));
-        }
-        
-        return relevantRules;
+    private Map<String, Object> extractEssentialRules(Map<String, Object> allRules) {
+        // Return the simplified rules directly since we've already simplified the rules file
+        return allRules;
     }
 
     /**
