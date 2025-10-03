@@ -1,7 +1,4 @@
 {
-  "index_patterns": [
-    "payment-history-*"
-  ],
   "mappings": {
     "_doc": {
       "_routing": {
@@ -83,6 +80,9 @@
               "type": "keyword"
             },
             "txnPurpose": {
+              "type": "keyword"
+            },
+            "isCashbackTxn": {
               "type": "keyword"
             }
           }
