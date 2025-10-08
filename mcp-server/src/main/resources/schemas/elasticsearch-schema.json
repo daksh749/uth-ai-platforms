@@ -1,314 +1,754 @@
 {
-  "mappings": {
-    "_doc": {
-      "_routing": {
-        "required": true
-      },
-      "dynamic": "false",
-      "properties": {
-        "entityId": {
-          "type": "keyword"
-        },
-        "otherPartyEntityId": {
-          "type": "keyword"
-        },
-        "groupId": {
-          "type": "keyword"
-        },
-        "orderId": {
-          "type": "keyword"
-        },
-        "streamSource": {
-          "type": "keyword"
-        },
-        "sourceSystem": {
-          "type": "keyword"
-        },
-        "showInListing": {
-          "type": "boolean"
-        },
-        "isVisible": {
-          "type": "boolean"
-        },
-        "amount": {
-          "type": "long"
-        },
-        "umn": {
-          "type": "keyword"
-        },
-        "txnType": {
-          "type": "keyword"
-        },
-        "txnIndicator": {
-          "type": "keyword"
-        },
-        "status": {
-          "type": "keyword"
-        },
-        "originalStatus": {
-          "type": "keyword"
-        },
-        "txnId": {
-          "type": "keyword"
-        },
-        "sourceTxnId": {
-          "type": "keyword"
-        },
-        "isHiddenTxn": {
-          "type": "boolean"
-        },
-        "contextMap": {
-          "type": "object",
-          "dynamic": "false",
-          "properties": {
-            "upiTxnCategory": {
-              "type": "keyword"
-            },
-            "reasonForNotVisible": {
-              "type": "keyword"
-            },
-            "backFillingIdentifier": {
-              "type": "keyword"
-            },
-            "isMergedDocument": {
-              "type": "keyword"
-            },
-            "rrn": {
-              "type": "keyword"
-            },
-            "ifr": {
-              "type": "keyword"
-            },
-            "txnPurpose": {
-              "type": "keyword"
-            },
-            "isCashbackTxn": {
-              "type": "keyword"
-            }
+  "metadata": {
+    "primaryDateField": "txnDate",
+    "primaryIdField": "txnId",
+    "defaultSizeField": 10
+  },
+
+  "fieldCategories": {
+
+    "filterFields": {
+      "description": "Fields for exact match, use in bool.filter with term/range",
+
+      "keywords": [
+        {
+          "fieldName": "entityId",
+          "type": "keyword",
+          "queryType": "term",
+          "clause": "filter",
+          "aliases": ["user id", "customer id", "entity id", "userId", "customerId"],
+          "description": "Primary user/customer identifier",
+          "example": {"term": {"entityId": "1417094886"}},
+          "validation": {
+            "required": false,
+            "pattern": "^\\d+$",
+            "maxLength": 20
           }
         },
-        "spendAnalyticsFields": {
-          "type": "object",
-          "dynamic": "false",
-          "properties": {
-            "txnCategory": {
-              "type": "keyword"
-            },
-            "storeId": {
-              "type": "keyword"
-            },
-            "txnType": {
-              "type": "keyword"
-            }
+        {
+          "fieldName": "status",
+          "type": "keyword",
+          "queryType": "term",
+          "clause": "filter",
+          "aliases": ["status", "txn status", "transaction status", "state"],
+          "description": "Transaction status code",
+          "example": {"term": {"status": "2"}},
+          "validation": {
+            "required": false,
+            "allowedValues": ["0", "1", "2", "3", "4", "5"]
           }
         },
-        "searchFields": {
-          "type": "object",
-          "dynamic": "false",
-          "properties": {
-            "searchPaymentSystem": {
-              "type": "text",
-              "fields": {
-                "keyword": {
-                  "type": "keyword"
-                }
-              }
-            },
-            "searchRemarks": {
-              "type": "text"
-            },
-            "searchSelfAccTyp": {
-              "type": "text"
-            },
-            "searchWalletType": {
-              "type": "text"
-            },
-            "searchOrderId": {
-              "type": "text"
-            },
-            "searchReferenceId": {
-              "type": "text"
-            },
-            "searchOtherName": {
-              "type": "text",
-              "analyzer": "edge_ngram_analyzer_min4_max6",
-              "fields": {
-                "keyword": {
-                  "type": "keyword"
-                }
-              }
-            },
-            "searchOtherMobileNo": {
-              "type": "text",
-              "analyzer": "edge_ngram_analyzer_min8_max10",
-              "fields": {
-                "keyword": {
-                  "type": "keyword"
-                }
-              }
-            },
-            "searchOtherVpa": {
-              "type": "text"
-            },
-            "searchUthMerchantCategory": {
-              "type": "text"
-            },
-            "searchTags": {
-              "type": "text",
-              "analyzer": "edge_ngram_analyzer_min3_max6",
-              "fields": {
-                "keyword": {
-                  "type": "keyword"
-                }
-              }
-            },
-            "bankAcctId": {
-              "type": "keyword"
-            },
-            "searchKeywords": {
-              "type": "text",
-              "fields": {
-                "keyword": {
-                  "type": "keyword"
-                }
-              }
-            },
-            "searchChannelCode": {
-              "type": "keyword"
-            },
-            "emiStatus": {
-              "type": "keyword"
-            },
-            "verticalIds": {
-              "type": "keyword"
-            },
-            "txnIndicator": {
-              "type": "keyword"
-            }
+        {
+          "fieldName": "txnId",
+          "type": "keyword",
+          "queryType": "term",
+          "clause": "filter",
+          "aliases": ["transaction id", "txn id", "txnId"],
+          "description": "Unique transaction identifier",
+          "example": {"term": {"txnId": "TXN123456"}},
+          "validation": {
+            "required": false,
+            "pattern": "^[A-Z0-9]+$"
           }
         },
-        "isNewDoc": {
-          "type": "boolean"
+        {
+          "fieldName": "orderId",
+          "type": "keyword",
+          "queryType": "term",
+          "clause": "filter",
+          "aliases": ["order id", "orderId", "order"],
+          "description": "Order identifier",
+          "example": {"term": {"orderId": "ORD789"}},
+          "validation": {
+            "required": false
+          }
         },
-        "docCreatedDate": {
-          "type": "date"
+        {
+          "fieldName": "txnType",
+          "type": "keyword",
+          "queryType": "term",
+          "clause": "filter",
+          "aliases": ["transaction type", "txn type"],
+          "description": "Transaction type (CREDIT/DEBIT)",
+          "example": {"term": {"txnType": "CREDIT"}},
+          "validation": {
+            "required": false,
+            "allowedValues": ["CREDIT", "DEBIT", "TRANSFER"]
+          }
         },
-        "docUpdatedDate": {
-          "type": "date"
+        {
+          "fieldName": "otherPartyEntityId",
+          "type": "keyword",
+          "queryType": "term",
+          "clause": "filter",
+          "aliases": ["other party id", "other entity id"],
+          "description": "Other party entity identifier"
         },
-        "docEndStatusDate": {
-          "type": "date"
+        {
+          "fieldName": "groupId",
+          "type": "keyword",
+          "queryType": "term",
+          "clause": "filter",
+          "aliases": [
+            "group id",
+            "groupId"
+          ],
+          "description": "Group identifier"
         },
-        "txnDate": {
-          "type": "date"
+        {
+          "fieldName": "txnIndicator",
+          "type": "keyword",
+          "queryType": "term",
+          "clause": "filter",
+          "aliases": ["debit", "credit", "transaction indicator", "direction", "txn direction"],
+          "description": "Transaction indicator (DEBIT/CREDIT)",
+          "example": {"term": {"txnIndicator": "DEBIT"}},
+          "validation": {
+            "required": false,
+            "allowedValues": ["DEBIT", "CREDIT"]
+          }
         },
-        "updatedDate": {
-          "type": "date"
-        },
-        "parentTxnId": {
-          "type": "keyword"
-        },
-        "searchAbleIdentifiers": {
-          "type": "keyword"
-        },
-        "participants": {
-          "type": "nested",
-          "properties": {
-            "entityId": {
-              "type": "keyword"
-            },
-            "entityType": {
-              "type": "keyword"
-            },
-            "amount": {
-              "type": "long"
-            },
-            "status": {
-              "type": "keyword"
-            },
-            "txnIndicator": {
-              "type": "keyword"
-            },
-            "paymentSystem": {
-              "type": "keyword"
-            },
-            "paymentTxnId": {
-              "type": "keyword"
-            },
-            "txnDate": {
-              "type": "long"
-            },
-            "updatedDate": {
-              "type": "long"
-            },
-            "merchantData": {
-              "properties": {
-                "mccCode": {
-                  "type": "keyword"
-                },
-                "merchantType": {
-                  "type": "keyword"
-                },
-                "uthCategory": {
-                  "type": "keyword"
-                }
-              }
-            },
-            "cardData": {
-              "properties": {
-                "cardNum": {
-                  "type": "keyword"
-                }
-              }
-            },
-            "bankData": {
-              "properties": {
-                "accNumber": {
-                  "type": "keyword"
-                },
-                "accRefNum": {
-                  "type": "keyword"
-                },
-                "ifsc": {
-                  "type": "keyword"
-                },
-                "rrn": {
-                  "type": "keyword"
-                },
-                "bankTxnId": {
-                  "type": "keyword"
-                }
-              }
-            },
-            "walletData": {
-              "properties": {
-                "walletType": {
-                  "type": "keyword"
-                },
-                "walletUserId": {
-                  "type": "keyword"
-                },
-                "walletMobileNumber": {
-                  "type": "keyword"
-                }
-              }
-            },
-            "upiData": {
-              "properties": {
-                "vpa": {
-                  "type": "keyword"
-                }
-              }
-            },
-            "mobileData": {
-              "properties": {
-                "mobileNumber": {
-                  "type": "keyword"
-                }
-              }
-            }
+        {
+          "fieldName": "umn",
+          "type": "keyword",
+          "queryType": "term",
+          "clause": "filter",
+          "aliases": ["UMN", "mandate number", "UPI mandate", "mandate"],
+          "description": "UPI Mandate Number",
+          "example": {"term": {"umn": "UMN123456789"}},
+          "validation": {
+            "required": false
           }
         }
+      ],
+
+      "booleans": [
+        {
+          "fieldName": "isVisible",
+          "type": "boolean",
+          "queryType": "term",
+          "clause": "filter",
+          "aliases": ["visible", "is visible", "visibility"],
+          "description": "Transaction visibility flag",
+          "example": {"term": {"isVisible": true}},
+          "validation": {
+            "required": false,
+            "autoAdd": false,
+            "warningIfUsed": "Only add if user explicitly mentions visibility"
+          }
+        },
+        {
+          "fieldName": "isHiddenTxn",
+          "type": "boolean",
+          "queryType": "term",
+          "clause": "filter",
+          "aliases": ["hidden", "is hidden", "hidden transaction"],
+          "description": "Hidden transaction flag",
+          "validation": {
+            "autoAdd": false,
+            "warningIfUsed": "Only add if user explicitly mentions hidden"
+          }
+        },
+        {
+          "fieldName": "showInListing",
+          "type": "boolean",
+          "queryType": "term",
+          "clause": "filter",
+          "aliases": ["show in listing", "listing"],
+          "description": "Show in listing flag",
+          "validation": {
+            "autoAdd": false,
+            "warningIfUsed": "Only add if user explicitly mentions listing"
+          }
+        }
+      ],
+
+      "numerics": [
+        {
+          "fieldName": "amount",
+          "type": "long",
+          "queryType": "term|range",
+          "clause": "filter",
+          "aliases": ["amount", "value", "price", "rupees", "rs"],
+          "description": "Transaction amount",
+          "example": {
+            "exact": {"term": {"amount": 1000}},
+            "range": {"range": {"amount": {"gte": 100, "lte": 1000}}}
+          },
+          "validation": {
+            "required": false,
+            "min": 0,
+            "max": 9999999999,
+            "valueType": "numeric"
+          }
+        }
+      ],
+
+      "dates": [
+        {
+          "fieldName": "txnDate",
+          "type": "date",
+          "queryType": "range",
+          "clause": "filter",
+          "aliases": ["transaction date", "txn date", "date", "when"],
+          "description": "Transaction date (epoch milliseconds)",
+          "example": {"range": {"txnDate": {"gte": "01-10-2024", "lte": "31-10-2024"}}},
+          "validation": {
+            "required": false,
+            "format": "epoch_millis",
+            "inputFormat": "DD-MM-YYYY",
+            "specialValues": ["START_OF_MONTH", "NOW"]
+          },
+          "defaultBehavior": {
+            "ifNotMentioned": "Add default range",
+            "defaultRange": {"gte": "START_OF_MONTH", "lte": "NOW"}
+          }
+        }
+      ],
+
+      "objectFields": {
+        "contextMap": [
+          {
+            "fieldName": "contextMap.upiTxnCategory",
+            "type": "keyword",
+            "queryType": "term",
+            "clause": "filter",
+            "aliases": ["UPI category", "upi txn category"],
+            "description": "UPI transaction category"
+          },
+          {
+            "fieldName": "contextMap.rrn",
+            "type": "keyword",
+            "queryType": "term",
+            "clause": "filter",
+            "aliases": ["RRN", "reference number"],
+            "description": "Retrieval reference number"
+          },
+          {
+            "fieldName": "contextMap.isCashbackTxn",
+            "type": "keyword",
+            "queryType": "term",
+            "clause": "filter",
+            "aliases": ["cashback", "is cashback", "cashback transaction"],
+            "description": "Cashback transaction indicator"
+          },
+          {
+            "fieldName": "contextMap.txnPurpose",
+            "type": "keyword",
+            "queryType": "term",
+            "clause": "filter",
+            "aliases": ["purpose", "transaction purpose", "txn purpose"],
+            "description": "Transaction purpose"
+          },
+          {
+            "fieldName": "contextMap.ifr",
+            "type": "keyword",
+            "queryType": "term",
+            "clause": "filter",
+            "aliases": ["IFR", "ifr code"],
+            "description": "IFR code"
+          }
+        ],
+
+        "searchFields": [
+          {
+            "fieldName": "searchFields.searchOtherName.keyword",
+            "type": "keyword",
+            "queryType": "term",
+            "clause": "filter",
+            "aliases": ["exact name"],
+            "description": "Other party name (exact match)"
+          },
+          {
+            "fieldName": "searchFields.bankAcctId",
+            "type": "keyword",
+            "queryType": "term",
+            "clause": "filter",
+            "aliases": ["bank account id", "account id"],
+            "description": "Bank account identifier"
+          },
+          {
+            "fieldName": "searchFields.searchChannelCode",
+            "type": "keyword",
+            "queryType": "term",
+            "clause": "filter",
+            "aliases": ["channel code", "channel"],
+            "description": "Transaction channel code"
+          },
+          {
+            "fieldName": "searchFields.searchPaymentSystem.keyword",
+            "type": "keyword",
+            "queryType": "term",
+            "clause": "filter",
+            "aliases": ["payment method", "payment system", "payment type", "payment mode"],
+            "description": "Payment system exact match (UPI, CARD, WALLET, NETBANKING)",
+            "example": {"term": {"searchFields.searchPaymentSystem.keyword": "UPI"}},
+            "validation": {
+              "allowedValues": ["UPI", "CARD", "WALLET", "NETBANKING", "BANK"]
+            }
+          },
+          {
+            "fieldName": "searchFields.searchTags.keyword",
+            "type": "keyword",
+            "queryType": "term",
+            "clause": "filter",
+            "aliases": ["tag", "tags", "exact tag"],
+            "description": "Transaction tags (exact match)"
+          },
+          {
+            "fieldName": "searchFields.verticalIds",
+            "type": "keyword",
+            "queryType": "term",
+            "clause": "filter",
+            "aliases": ["vertical id", "vertical"],
+            "description": "Vertical identifier"
+          },
+          {
+            "fieldName": "searchFields.txnIndicator",
+            "type": "keyword",
+            "queryType": "term",
+            "clause": "filter",
+            "aliases": ["search txn indicator"],
+            "description": "Transaction indicator in search fields"
+          }
+        ]
+      }
+    },
+
+    "mustFields": {
+      "description": "Fields for fuzzy/text search, use in bool.must with match",
+
+      "textFields": [
+        {
+          "fieldName": "searchFields.searchOtherMobileNo",
+          "type": "text",
+          "queryType": "match",
+          "clause": "must",
+          "aliases": ["mobile containing", "phone containing"],
+          "description": "Mobile number fuzzy search",
+          "example": {"match": {"searchFields.searchOtherMobileNo": "8462..."}},
+          "validation": {
+            "minLength": 4
+          }
+        },
+        {
+          "fieldName": "searchFields.searchRemarks",
+          "type": "text",
+          "queryType": "match",
+          "clause": "must",
+          "aliases": ["remarks", "remarks containing", "with text", "description"],
+          "description": "Transaction remarks/description text search",
+          "example": {"match": {"searchFields.searchRemarks": "payment for groceries"}}
+        },
+        {
+          "fieldName": "searchFields.searchOtherName",
+          "type": "text",
+          "queryType": "match",
+          "clause": "must",
+          "aliases": ["name", "name containing"],
+          "description": "Other party name fuzzy search",
+          "example": {"match": {"searchFields.searchOtherName": "John"}}
+        },
+        {
+          "fieldName": "searchFields.searchOtherVpa",
+          "type": "text",
+          "queryType": "match",
+          "clause": "must",
+          "aliases": ["vpa", "upi id", "UPI"],
+          "description": "UPI VPA search"
+        },
+        {
+          "fieldName": "searchFields.searchOrderId",
+          "type": "text",
+          "queryType": "match",
+          "clause": "must",
+          "aliases": ["order id containing"],
+          "description": "Order ID text search"
+        },
+        {
+          "fieldName": "searchFields.searchKeywords",
+          "type": "text",
+          "queryType": "match",
+          "clause": "must",
+          "aliases": ["keywords", "search keywords"],
+          "description": "General keyword search"
+        },
+        {
+          "fieldName": "searchFields.searchPaymentSystem",
+          "type": "text",
+          "queryType": "match",
+          "clause": "must",
+          "aliases": ["payment method containing", "payment system containing"],
+          "description": "Payment system fuzzy search"
+        },
+        {
+          "fieldName": "searchFields.searchWalletType",
+          "type": "text",
+          "queryType": "match",
+          "clause": "must",
+          "aliases": ["wallet type containing"],
+          "description": "Wallet type fuzzy search"
+        },
+        {
+          "fieldName": "searchFields.searchReferenceId",
+          "type": "text",
+          "queryType": "match",
+          "clause": "must",
+          "aliases": ["reference id", "ref id", "reference id containing","rrn"],
+          "description": "Reference ID fuzzy search"
+        },
+        {
+          "fieldName": "searchFields.searchUthMerchantCategory",
+          "type": "text",
+          "queryType": "match",
+          "clause": "must",
+          "aliases": ["merchant category containing", "uth merchant category"],
+          "description": "UTH merchant category fuzzy search"
+        },
+        {
+          "fieldName": "searchFields.searchTags",
+          "type": "text",
+          "queryType": "match",
+          "clause": "must",
+          "aliases": ["tags containing", "tag containing"],
+          "description": "Tags fuzzy search"
+        },
+        {
+          "fieldName": "searchFields.searchSelfAccTyp",
+          "type": "text",
+          "queryType": "match",
+          "clause": "must",
+          "aliases": ["self account type", "account type"],
+          "description": "Self account type search"
+        }
+      ]
+    },
+
+    "nestedFields": {
+      "description": "Fields requiring nested query structure",
+      "path": "participants",
+
+      "fields": [
+        {
+          "fieldName": "participants.entityId",
+          "type": "keyword",
+          "queryType": "term",
+          "clause": "filter",
+          "nestedPath": "participants",
+          "aliases": ["participant id", "participant entity id"],
+          "description": "Participant entity ID",
+          "example": {
+            "nested": {
+              "path": "participants",
+              "query": {"term": {"participants.entityId": "123"}}
+            }
+          }
+        },
+        {
+          "fieldName": "participants.entityType",
+          "type": "keyword",
+          "queryType": "term",
+          "clause": "filter",
+          "nestedPath": "participants",
+          "aliases": ["participant type", "entity type"],
+          "description": "Participant entity type"
+        },
+        {
+          "fieldName": "participants.status",
+          "type": "keyword",
+          "queryType": "term",
+          "clause": "filter",
+          "nestedPath": "participants",
+          "aliases": ["participant status"],
+          "description": "Participant transaction status"
+        },
+        {
+          "fieldName": "participants.merchantData.merchantType",
+          "type": "keyword",
+          "queryType": "term",
+          "clause": "filter",
+          "nestedPath": "participants",
+          "aliases": ["merchant type"],
+          "description": "Merchant type",
+          "example": {
+            "nested": {
+              "path": "participants",
+              "query": {"term": {"participants.merchantData.merchantType": "RESTAURANT"}}
+            }
+          }
+        },
+        {
+          "fieldName": "participants.merchantData.uthCategory",
+          "type": "keyword",
+          "queryType": "term",
+          "clause": "filter",
+          "nestedPath": "participants",
+          "aliases": ["merchant category"],
+          "description": "Merchant category"
+        },
+        {
+          "fieldName": "participants.merchantData.mccCode",
+          "type": "keyword",
+          "queryType": "term",
+          "clause": "filter",
+          "nestedPath": "participants",
+          "aliases": ["MCC code", "merchant category code"],
+          "description": "Merchant Category Code"
+        },
+        {
+          "fieldName": "participants.bankData.ifsc",
+          "type": "keyword",
+          "queryType": "term",
+          "clause": "filter",
+          "nestedPath": "participants",
+          "aliases": ["IFSC", "IFSC code", "bank code"],
+          "description": "Bank IFSC code"
+        },
+        {
+          "fieldName": "participants.bankData.accNumber",
+          "type": "keyword",
+          "queryType": "term",
+          "clause": "filter",
+          "nestedPath": "participants",
+          "aliases": ["account number", "bank account number"],
+          "description": "Bank account number"
+        },
+        {
+          "fieldName": "participants.bankData.rrn",
+          "type": "keyword",
+          "queryType": "term",
+          "clause": "filter",
+          "nestedPath": "participants",
+          "aliases": ["bank RRN", "retrieval reference number"],
+          "description": "Bank retrieval reference number"
+        },
+        {
+          "fieldName": "participants.walletData.walletType",
+          "type": "keyword",
+          "queryType": "term",
+          "clause": "filter",
+          "nestedPath": "participants",
+          "aliases": ["wallet type", "wallet"],
+          "description": "Wallet type"
+        },
+        {
+          "fieldName": "participants.walletData.walletUserId",
+          "type": "keyword",
+          "queryType": "term",
+          "clause": "filter",
+          "nestedPath": "participants",
+          "aliases": ["wallet user id"],
+          "description": "Wallet user identifier"
+        },
+        {
+          "fieldName": "participants.cardData.cardNum",
+          "type": "keyword",
+          "queryType": "term",
+          "clause": "filter",
+          "nestedPath": "participants",
+          "aliases": ["card number", "card"],
+          "description": "Card number"
+        },
+        {
+          "fieldName": "participants.upiData.vpa",
+          "type": "keyword",
+          "queryType": "term",
+          "clause": "filter",
+          "nestedPath": "participants",
+          "aliases": ["participant vpa", "participant UPI"],
+          "description": "Participant UPI VPA"
+        },
+        {
+          "fieldName": "participants.mobileData.mobileNumber",
+          "type": "keyword",
+          "queryType": "term",
+          "clause": "filter",
+          "nestedPath": "participants",
+          "aliases": ["participant mobile number", "participant phone", "participant mobile"],
+          "description": "Participant mobile number",
+          "example": {
+            "nested": {
+              "path": "participants",
+              "query": {"term": {"participants.mobileData.mobileNumber": "917827662636"}}
+            }
+          }
+        },
+        {
+          "fieldName": "participants.amount",
+          "type": "long",
+          "queryType": "term|range",
+          "clause": "filter",
+          "nestedPath": "participants",
+          "aliases": ["participant amount"],
+          "description": "Participant-specific transaction amount",
+          "example": {
+            "nested": {
+              "path": "participants",
+              "query": {"range": {"participants.amount": {"gte": 100, "lte": 1000}}}
+            }
+          }
+        },
+        {
+          "fieldName": "participants.txnIndicator",
+          "type": "keyword",
+          "queryType": "term",
+          "clause": "filter",
+          "nestedPath": "participants",
+          "aliases": ["participant direction", "participant indicator", "participant txn indicator"],
+          "description": "Participant transaction indicator (DEBIT/CREDIT)"
+        },
+        {
+          "fieldName": "participants.paymentSystem",
+          "type": "keyword",
+          "queryType": "term",
+          "clause": "filter",
+          "nestedPath": "participants",
+          "aliases": ["participant payment system", "participant payment method"],
+          "description": "Participant payment system"
+        },
+        {
+          "fieldName": "participants.paymentTxnId",
+          "type": "keyword",
+          "queryType": "term",
+          "clause": "filter",
+          "nestedPath": "participants",
+          "aliases": ["participant payment txn id", "participant payment transaction id"],
+          "description": "Participant payment transaction ID"
+        },
+        {
+          "fieldName": "participants.txnDate",
+          "type": "long",
+          "queryType": "range",
+          "clause": "filter",
+          "nestedPath": "participants",
+          "aliases": ["participant txn date", "participant transaction date"],
+          "description": "Participant transaction date (epoch)"
+        },
+        {
+          "fieldName": "participants.updatedDate",
+          "type": "long",
+          "queryType": "range",
+          "clause": "filter",
+          "nestedPath": "participants",
+          "aliases": ["participant updated date"],
+          "description": "Participant updated date (epoch)"
+        },
+        {
+          "fieldName": "participants.bankData.accRefNum",
+          "type": "keyword",
+          "queryType": "term",
+          "clause": "filter",
+          "nestedPath": "participants",
+          "aliases": ["account reference number", "acc ref num"],
+          "description": "Bank account reference number"
+        },
+        {
+          "fieldName": "participants.bankData.bankTxnId",
+          "type": "keyword",
+          "queryType": "term",
+          "clause": "filter",
+          "nestedPath": "participants",
+          "aliases": ["bank transaction id", "bank txn id"],
+          "description": "Bank transaction ID"
+        },
+        {
+          "fieldName": "participants.walletData.walletMobileNumber",
+          "type": "keyword",
+          "queryType": "term",
+          "clause": "filter",
+          "nestedPath": "participants",
+          "aliases": ["wallet mobile", "wallet phone", "wallet mobile number"],
+          "description": "Wallet mobile number"
+        }
+      ]
+    },
+
+    "prohibitedFields": {
+      "description": "Fields that should NEVER be auto-added",
+      "fields": [
+        {
+          "fieldName": "isNewDoc",
+          "reason": "Internal flag, only add if explicitly mentioned"
+        },
+        {
+          "fieldName": "showInListing",
+          "reason": "Internal flag, only add if explicitly mentioned"
+        },
+        {
+          "fieldName": "isVisible",
+          "reason": "Internal flag, only add if explicitly mentioned"
+        },
+        {
+          "fieldName": "streamSource",
+          "reason": "Internal system field"
+        },
+        {
+          "fieldName": "sourceSystem",
+          "reason": "Internal system field"
+        }
+      ]
+    },
+
+    "queryRules": {
+      "recentQuery": {
+        "keywords": ["recent", "latest", "last N", "newest", "last few"],
+        "behavior": "CRITICAL: Do NOT add ANY txnDate range filter. Only extract size and add sort",
+        "correctQueryStructure": {
+          "query": {"bool": {"filter": ["OTHER_FILTERS_ONLY"]}},
+          "size": "N",
+          "sort": [{"txnDate": "desc"}]
+        },
+        "example": {
+          "input": "5 recent transactions for mobile 917827662636",
+          "output": {
+            "query": {
+              "bool": {
+                "filter": [
+                  {
+                    "nested": {
+                      "path": "participants",
+                      "query": {"term": {"participants.mobileData.mobileNumber": "917827662636"}}
+                    }
+                  }
+                ]
+              }
+            },
+            "size": 5,
+            "sort": [{"txnDate": "desc"}]
+          }
+        }
+      },
+      "mobileNumberQuery": {
+        "rule": "ALWAYS use nested query for mobile number",
+        "correctStructure": {
+          "nested": {
+            "path": "participants",
+            "query": {"term": {"participants.mobileData.mobileNumber": "FULL_NUMBER_WITH_COUNTRY_CODE"}}
+          }
+        },
+        "wrongExamples": [
+          {"term": {"mobileNumber": "..."}},
+          {"match": {"mobileNumber": "..."}},
+          {"term": {"participants.mobileData.mobileNumber": "..."}}
+        ]
+      },
+      "defaultDateRange": {
+        "condition": "No dates mentioned AND NOT a recent query",
+        "addFilter": {"range": {"txnDate": {"gte": "START_OF_MONTH", "lte": "NOW_DATE"}}},
+        "note": "If query mentions 'recent', 'latest', 'last N' - DO NOT add this filter"
+      },
+      "sizeExtraction": {
+        "patterns": ["\\d+\\s+(transactions?|records?|results?)", "last \\d+", "recent \\d+"],
+        "default": 10,
+        "placement": "top-level"
+      },
+      "sortHandling": {
+        "default": [{"txnDate": "desc"}],
+        "note": "Always include sort in response, backend expects it"
+      },
+      "prohibitedFields": {
+        "neverUse": ["recent", "mobileNumber (at root level)", "user", "customer"],
+        "reason": "These fields don't exist in Elasticsearch index"
       }
     }
   }

@@ -14,6 +14,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
@@ -54,7 +55,7 @@ public class ElasticsearchQueryBuilderService {
     @Value("${ollama.num-ctx:8192}")
     private int ollamaNumCtx;
     
-    @Value("${ollama.timeout:60000}")
+    @Value("${ollama.timeout:120000}")
     private long ollamaTimeout;
 
     private final RestTemplate restTemplate;
@@ -62,6 +63,18 @@ public class ElasticsearchQueryBuilderService {
     
     public ElasticsearchQueryBuilderService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
+        // Configure timeout specifically for Ollama calls
+        configureOllamaTimeout();
+    }
+    
+    /**
+     * Configure RestTemplate with Ollama-specific timeout
+     */
+    private void configureOllamaTimeout() {
+        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
+        factory.setConnectTimeout((int) ollamaTimeout);
+        factory.setReadTimeout((int) ollamaTimeout);
+        this.restTemplate.setRequestFactory(factory);
     }
 
     /**
@@ -86,12 +99,11 @@ public class ElasticsearchQueryBuilderService {
                 throw new IllegalArgumentException("Schema context is required - call es_schema tool first");
             }
 
-            // Build LLM prompts with provided schema context
-            String systemPrompt = buildSystemPrompt(schemaContext);
-            String userPrompt = buildUserPrompt(prompt, maxResults, includeAggregations, sortBy);
-
+            // Build LLM prompt with provided schema context and user prompt
+            String systemPrompt = buildSystemPrompt(schemaContext, prompt);
+            
             // Call Ollama LLM
-            String llmResponse = callOllamaLLM(systemPrompt, userPrompt);
+            String llmResponse = callOllamaLLM(systemPrompt);
 
             // Extract and validate JSON
             String queryJson = extractJsonFromResponse(llmResponse);
@@ -110,13 +122,13 @@ public class ElasticsearchQueryBuilderService {
     /**
      * Call Ollama LLM API
      */
-    private String callOllamaLLM(String systemPrompt, String userPrompt) {
+    private String callOllamaLLM(String systemPrompt) {
         try {
             String ollamaUrl = ollamaBaseUrl + "/api/generate";
             
             Map<String, Object> request = Map.of(
                     "model", ollamaModel,
-                    "prompt", systemPrompt + "\n\nUSER QUERY:\n" + userPrompt + "\n\nELASTICSEARCH QUERY:",
+                    "prompt", systemPrompt,
                     "stream", false,
                     "options", Map.of(
                             "temperature", ollamaTemperature,
@@ -152,63 +164,55 @@ public class ElasticsearchQueryBuilderService {
     /**
      * Build comprehensive system prompt with provided schema context
      */
-    private String buildSystemPrompt(String schemaContext) {
+    private String buildSystemPrompt(String schemaContext, String userPrompt) {
         return String.format("""
-            You are an Elasticsearch Query DSL generator. Convert natural language queries to valid Elasticsearch JSON using ONLY the provided schema fields.
-
-            ELASTICSEARCH SCHEMA:
-            %s
-
-            FIELD SELECTION RULES:
-            1. ONLY use fields that exist in the provided schema
-            2. For exact value matching, use {"term": {"field": "value"}}
-            3. For text fields with .keyword subfield, use the .keyword version for exact matches
-            4. For nested objects (type: "nested"), use nested query structure
-            5. For object fields, access subfields with dot notation (e.g., searchFields.searchRemarks)
-
-            QUERY STRUCTURE RULES:
-            1. Use "bool" query with "filter" array for exact match conditions
-            2. NEVER use "must" array for "size" - size is a TOP-LEVEL parameter only
-            3. Always include "size" as TOP-LEVEL parameter - extract from user query (e.g., "5 transactions" → "size": 5)
-            4. Results will be sorted by txnDate in descending order by default
-            5. ONLY add fields explicitly mentioned in user query with actual values
-            6. NEVER include "sort" in your response - sorting is handled automatically
-
-            DATE HANDLING RULES:
-            1. If user provides specific dates → Use range query: {"range": {"txnDate": {"gte": "DD-MM-YYYY", "lte": "DD-MM-YYYY"}}}
-            2. Format dates as DD-MM-YYYY (e.g., "01-10-2024")
-            3. If NO dates mentioned AND NOT "recent/latest" query → Use {"gte": "START_OF_MONTH", "lte": "NOW_DATE"}
-            4. If ONLY one date mentioned → Use {"gte": "DD-MM-YYYY", "lte": "NOW_DATE"}
-            5. For "recent" or "latest" transactions → Do NOT add ANY date range filter
-
-            FIELD MAPPING RULES (only use when field is EXPLICITLY mentioned with a VALUE):
-            - If user says "user id 123" or "userId 123" → {"term": {"entityId": "123"}}
-            - If user says "mobile 9178..." → {"term": {"searchFields.searchOtherMobileNo.keyword": "9178..."}}
-            - If user says "status 2" → {"term": {"status": "2"}}
-            - If user says "amount 100" → {"term": {"amount": 100}}
-            - If user says "transaction id abc" → {"term": {"txnId": "abc"}}
+                Generate Elasticsearch Query DSL from user input.
+                
+                USER INPUT / USER PROMPT:
+                %s
+                
+                Follow the below rules strictly:
+                
+                R1: Always first analyze the user prompt to understand what user is asking.
+                R2: As per your knowledge,
+                    - extract the necessary information from user prompt 
+                    - iterate over all the fields in esSchema provided
+                    - match the info extracted with the "description" or "aliases" of each field as given in esSchema format
+                    - if a match is found then take that "fieldName" from schema into account
+                    - example : if user asks "I need an elasticsearch query for user id 75284"
+                                - then extract the info -> user id 75284
+                                - in esSchema "user id" field in aliases maps to fieldName "entityId"
+                                - so make a query on entityId as per the clause and queryType specified in the schema for that fieldName.
+                R2: Follow the elasticsearch-schema/schema to make the query
+                R3: Match the user prompt with appropriate fields in es-schema.
+                R4: Each field in schema has a specific format:
+                    - fieldName: the name of field on which query is built
+                    - type: keyword/text/etc.. what type of field it is
+                    - queryType: if that field supports term/terms/range/etc.. queries
+                    - clause: if query on that field should be done in filter/must/etc. clause
+                    - description: what the field is for
+                    - example: consider the example query on that field for reference
+                R5: After analyzing the user-prompt, these rules and elastic-search schema, make a valid elastic-search query based on that and give me the exact query.
+                
+                DATE RANGE RULES
+                CASE1: User provides two dates in the user prompt
+                       1. make a date range query with smaller/before date as "gte" and larger/after as "lte"
+                       2. write the dates as given STRICTLY is in DD/MM/YYYY format
+                
+                CASE2: User gives a single date in user prompt
+                       1. make a date range query with the single date provides as "gte" in DD/MM/YYYY format STRICTLY
+                       2. for "lte" write the word "NOW" in lte
+                       
+                CASE3: User doesn't provide any date in user prompt
+                       1. make a date range query with "gte" as "NOW" and "lte" as "NOW" STRICTLY don't write anything else
+                
+                FOLLOW THE DATE RANGE RULES STRICTLY, AND IN EVERY QUERY WHETHER DATE IS GIVEN BY USER OR NOT, YOU NEED TO MAKE THE DATE RANGE QUERY AS PER ABOVE RULES.
+                
+                ELASTICSEARCH SCHEMA:
+                %s
             
-            CRITICAL RULES:
-            - If a field is NOT mentioned with a value, DO NOT include it in the query
-            - "recent" or "latest" means NO date filters - just size and sort
-            - NEVER put "size" inside "must" array - it's always top-level
-            - Return ONLY the query JSON without explanations
-
-            """, schemaContext);
-    }
-
-    /**
-     * Build user prompt with query parameters
-     */
-    private String buildUserPrompt(String prompt, Integer maxResults, Boolean includeAggregations, String sortBy) {
-        return String.format("""
-            Query: "%s"
-            Size: %d
-            Return only JSON:
-            """,
-                prompt,
-                maxResults != null ? maxResults : 10
-        );
+                Return ONLY the JSON query in markdown format.
+                """, userPrompt, schemaContext);
     }
 
     /**

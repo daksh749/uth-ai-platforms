@@ -1,6 +1,8 @@
 package com.paytm.mcpclient.controller;
 
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +25,11 @@ public class ElasticsearchController {
         
         try {
             // Process query using ChatClient with MCP tools
-            return chatClient.prompt(request.prompt).call().content();
+            PromptTemplate promptTemplate = new PromptTemplate(request.prompt());
+            Prompt prompt = promptTemplate.create();
+            ChatClient.CallResponseSpec res = chatClient.prompt(prompt).call();
+
+            return res.content();
             
         } catch (Exception e) {
             log.error("Failed to process Elasticsearch prompt", e);
