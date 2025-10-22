@@ -3,6 +3,7 @@ package com.paytm.mcpserver.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.paytm.mcpserver.enums.EsHostEnum;
 import com.paytm.mcpserver.service.ElasticsearchHostSelector.HostCoverage;
 
 import lombok.extern.log4j.Log4j2;
@@ -43,8 +44,8 @@ public class ElasticsearchService {
     }
 
     @Tool(name="es_host", description = "get the es host to search upon based on start and end date")
-    public String selectEsHost(@ToolParam(description = "Start date in DD-MM-YYYY format") String startDate,
-                               @ToolParam(description = "End date in DD-MM-YYYY format") String endDate){
+    public String selectEsHost(@ToolParam(description = "Start date in ISO 8601 format (e.g., 2025-01-15T00:00:00+05:30 or 2025-01-15)") String startDate,
+                               @ToolParam(description = "End date in ISO 8601 format (e.g., 2025-01-15T23:59:59+05:30 or 2025-01-15)") String endDate){
         try {
             List<HostCoverage> hostCoverages = elasticsearchHostSelector.selectHost(startDate, endDate);
             return objectMapper.writeValueAsString(hostCoverages);
@@ -54,8 +55,8 @@ public class ElasticsearchService {
     }
 
     @Tool(name = "es_indices", description = "get list of es indices to search upon")
-    public String fetchEsIndices(@ToolParam(description = "Start date in DD-MM-YYYY format") String startDate,
-                                  @ToolParam(description = "End date in DD-MM-YYYY format") String endDate){
+    public String fetchEsIndices(@ToolParam(description = "Start date in ISO 8601 format (e.g., 2025-01-15T00:00:00+05:30 or 2025-01-15)") String startDate,
+                                  @ToolParam(description = "End date in ISO 8601 format (e.g., 2025-01-15T23:59:59+05:30 or 2025-01-15)") String endDate){
         try {
             List<String> indices = elasticSearchIndexFetcher.findIndicesForDateRange(startDate, endDate);
             return objectMapper.writeValueAsString(indices);
@@ -98,10 +99,16 @@ public class ElasticsearchService {
             @ToolParam(description = "Host coverages JSON from es_host tool") String hostCoveragesJson,
             @ToolParam(description = "Comma-separated index names") String indices) {
         try {
-            log.info("Executing Elasticsearch search with {} indices", indices);
+            log.info("Executing Elasticsearch search with indices: {}", indices);
 
-            // Parse indices
-            List<String> indexList = Arrays.asList(indices.split(","));
+            // Parse indices - handle quoted strings and trim whitespace
+            List<String> indexList = Arrays.stream(indices.split(","))
+                    .map(String::trim)
+                    .map(s -> s.replaceAll("^\"|\"$", ""))
+                    .filter(s -> !s.isEmpty())
+                    .toList();
+            
+            log.debug("Parsed index list: {}", indexList);
 
             // Parse host coverages - it's a direct array!
             JsonNode hostCoveragesArray = objectMapper.readTree(hostCoveragesJson);
@@ -114,8 +121,14 @@ public class ElasticsearchService {
             List<RedashSearchService.HostInfo> hosts = new ArrayList<>();
             for (JsonNode coverage : hostCoveragesArray) {
                 JsonNode hostNode = coverage.get("host");
-                String hostName = hostNode.get("name").asText();
-                Integer dataSourceId = hostNode.get("dataSourceId").asInt();
+                
+                // hostNode is just "PRIMARY" string, not an object
+                // Convert enum string to EsHostEnum to get name and dataSourceId
+                String enumName = hostNode.asText();  // "PRIMARY"
+                EsHostEnum hostEnum = EsHostEnum.valueOf(enumName);  // Get the enum
+                String hostName = hostEnum.getName();  // "UTH_ES_Primary"
+                Integer dataSourceId = hostEnum.getDataSourceId();  // 3
+                
                 hosts.add(new RedashSearchService.HostInfo(hostName, dataSourceId));
             }
 

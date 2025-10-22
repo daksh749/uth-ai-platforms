@@ -205,25 +205,114 @@ public class RedashSearchService {
      */
     private String executeRedashQuery(Integer queryId) {
         try {
-            String url = redashBaseUrl + "/api/queries/" + queryId + "/results";
+            // Step 1: Trigger query execution
+            String executeUrl = redashBaseUrl + "/api/queries/" + queryId + "/results";
             
             HttpHeaders headers = new HttpHeaders();
             headers.set("Authorization", "Key " + apiKey);
             headers.setContentType(MediaType.APPLICATION_JSON);
             
             HttpEntity<Void> entity = new HttpEntity<>(headers);
-            ResponseEntity<String> response = restTemplate.postForEntity(url, entity, String.class);
+            ResponseEntity<String> executeResponse = restTemplate.postForEntity(executeUrl, entity, String.class);
             
-            if (response.getBody() != null) {
-                log.debug("Successfully retrieved results for query ID: {}", queryId);
-                return response.getBody();
+            if (executeResponse.getBody() == null) {
+                throw new RuntimeException("Empty response from query execution");
             }
             
-            throw new RuntimeException("Empty response from Redash query execution");
+            // Step 2: Parse response - could be job or cached results
+            JsonNode response = objectMapper.readTree(executeResponse.getBody());
+            log.debug("Query execution response: {}", response);
+            
+            // Check if response has "job" (async) or "query_result" (cached)
+            if (response.has("job")) {
+                // Async execution - need to poll
+                String jobId = response.get("job").get("id").asText();
+                log.debug("Query execution started with job ID: {}", jobId);
+                
+                // Step 3: Poll for job completion
+                Integer queryResultId = pollForJobCompletion(jobId);
+                
+                // Step 4: Fetch actual results
+                String resultsUrl = redashBaseUrl + "/api/query_results/" + queryResultId;
+                ResponseEntity<String> resultsResponse = restTemplate.exchange(
+                    resultsUrl, 
+                    org.springframework.http.HttpMethod.GET, 
+                    entity, 
+                    String.class
+                );
+                
+                if (resultsResponse.getBody() != null) {
+                    log.debug("Successfully retrieved results for query result ID: {}", queryResultId);
+                    return resultsResponse.getBody();
+                }
+                
+                throw new RuntimeException("Empty response from Redash results fetch");
+                
+            } else if (response.has("query_result")) {
+                // Cached results - return immediately
+                log.debug("Query returned cached results");
+                return executeResponse.getBody();
+                
+            } else {
+                // Unexpected response format
+                log.error("Unexpected Redash response format: {}", response);
+                throw new RuntimeException("Unexpected response format from Redash: " + response);
+            }
             
         } catch (Exception e) {
             throw new RuntimeException("Failed to execute Redash query", e);
         }
+    }
+    
+    /**
+     * Poll Redash job until completion
+     */
+    private Integer pollForJobCompletion(String jobId) {
+        String jobUrl = redashBaseUrl + "/api/jobs/" + jobId;
+        
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Key " + apiKey);
+        HttpEntity<Void> entity = new HttpEntity<>(headers);
+        
+        int attempts = 0;
+        while (attempts < redashMaxPollAttempts) {
+            try {
+                ResponseEntity<String> jobResponse = restTemplate.exchange(
+                    jobUrl, 
+                    org.springframework.http.HttpMethod.GET, 
+                    entity, 
+                    String.class
+                );
+                
+                JsonNode jobStatus = objectMapper.readTree(jobResponse.getBody());
+                int status = jobStatus.get("job").get("status").asInt();
+                
+                // Status 3 = success
+                if (status == 3) {
+                    Integer queryResultId = jobStatus.get("job").get("query_result_id").asInt();
+                    log.debug("Job {} completed successfully with result ID: {}", jobId, queryResultId);
+                    return queryResultId;
+                }
+                
+                // Status 4 = failure
+                if (status == 4) {
+                    String error = jobStatus.get("job").get("error").asText();
+                    throw new RuntimeException("Redash job failed: " + error);
+                }
+                
+                // Still processing (status 1 or 2), wait and retry
+                Thread.sleep(redashPollInterval);
+                attempts++;
+                
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                throw new RuntimeException("Job polling interrupted", e);
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to poll job status", e);
+            }
+        }
+        
+        throw new RuntimeException("Job polling timeout after " + attempts + " attempts");
     }
     
     /**

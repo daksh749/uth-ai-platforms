@@ -1,10 +1,4 @@
 {
-  "metadata": {
-    "primaryDateField": "txnDate",
-    "primaryIdField": "txnId",
-    "defaultSizeField": 10
-  },
-
   "fieldCategories": {
 
     "filterFields": {
@@ -191,17 +185,12 @@
           "queryType": "range",
           "clause": "filter",
           "aliases": ["transaction date", "txn date", "date", "when"],
-          "description": "Transaction date (epoch milliseconds)",
-          "example": {"range": {"txnDate": {"gte": "01-10-2024", "lte": "31-10-2024"}}},
+          "description": "Transaction date in ISO 8601 format",
+          "example": {"range": {"txnDate": {"gte": "2024-01-01T00:00:00+05:30", "lte": "2024-03-31T23:59:59+05:30"}}},
           "validation": {
             "required": false,
-            "format": "epoch_millis",
-            "inputFormat": "DD-MM-YYYY",
-            "specialValues": ["START_OF_MONTH", "NOW"]
-          },
-          "defaultBehavior": {
-            "ifNotMentioned": "Add default range",
-            "defaultRange": {"gte": "START_OF_MONTH", "lte": "NOW"}
+            "format": "iso8601",
+            "inputFormat": "ISO 8601 (e.g., 2025-01-15T00:00:00+05:30)"
           }
         }
       ],
@@ -564,7 +553,7 @@
           "queryType": "term",
           "clause": "filter",
           "nestedPath": "participants",
-          "aliases": ["participant mobile number", "participant phone", "participant mobile"],
+          "aliases": ["mobile number", "phone", "mobile"],
           "description": "Participant mobile number",
           "example": {
             "nested": {
@@ -574,30 +563,6 @@
           }
         },
         {
-          "fieldName": "participants.amount",
-          "type": "long",
-          "queryType": "term|range",
-          "clause": "filter",
-          "nestedPath": "participants",
-          "aliases": ["participant amount"],
-          "description": "Participant-specific transaction amount",
-          "example": {
-            "nested": {
-              "path": "participants",
-              "query": {"range": {"participants.amount": {"gte": 100, "lte": 1000}}}
-            }
-          }
-        },
-        {
-          "fieldName": "participants.txnIndicator",
-          "type": "keyword",
-          "queryType": "term",
-          "clause": "filter",
-          "nestedPath": "participants",
-          "aliases": ["participant direction", "participant indicator", "participant txn indicator"],
-          "description": "Participant transaction indicator (DEBIT/CREDIT)"
-        },
-        {
           "fieldName": "participants.paymentSystem",
           "type": "keyword",
           "queryType": "term",
@@ -605,33 +570,6 @@
           "nestedPath": "participants",
           "aliases": ["participant payment system", "participant payment method"],
           "description": "Participant payment system"
-        },
-        {
-          "fieldName": "participants.paymentTxnId",
-          "type": "keyword",
-          "queryType": "term",
-          "clause": "filter",
-          "nestedPath": "participants",
-          "aliases": ["participant payment txn id", "participant payment transaction id"],
-          "description": "Participant payment transaction ID"
-        },
-        {
-          "fieldName": "participants.txnDate",
-          "type": "long",
-          "queryType": "range",
-          "clause": "filter",
-          "nestedPath": "participants",
-          "aliases": ["participant txn date", "participant transaction date"],
-          "description": "Participant transaction date (epoch)"
-        },
-        {
-          "fieldName": "participants.updatedDate",
-          "type": "long",
-          "queryType": "range",
-          "clause": "filter",
-          "nestedPath": "participants",
-          "aliases": ["participant updated date"],
-          "description": "Participant updated date (epoch)"
         },
         {
           "fieldName": "participants.bankData.accRefNum",
@@ -659,32 +597,6 @@
           "nestedPath": "participants",
           "aliases": ["wallet mobile", "wallet phone", "wallet mobile number"],
           "description": "Wallet mobile number"
-        }
-      ]
-    },
-
-    "prohibitedFields": {
-      "description": "Fields that should NEVER be auto-added",
-      "fields": [
-        {
-          "fieldName": "isNewDoc",
-          "reason": "Internal flag, only add if explicitly mentioned"
-        },
-        {
-          "fieldName": "showInListing",
-          "reason": "Internal flag, only add if explicitly mentioned"
-        },
-        {
-          "fieldName": "isVisible",
-          "reason": "Internal flag, only add if explicitly mentioned"
-        },
-        {
-          "fieldName": "streamSource",
-          "reason": "Internal system field"
-        },
-        {
-          "fieldName": "sourceSystem",
-          "reason": "Internal system field"
         }
       ]
     },

@@ -15,8 +15,8 @@ public class ElasticsearchController {
 
     private final ChatClient chatClient;
 
-    public ElasticsearchController(ChatClient.Builder chatClientBuilder){
-        this.chatClient = chatClientBuilder.build();
+    public ElasticsearchController(ChatClient chatClient){
+        this.chatClient = chatClient;
     }
 
     @PostMapping("/chat")
@@ -25,15 +25,16 @@ public class ElasticsearchController {
         
         try {
             // Process query using ChatClient with MCP tools
-            PromptTemplate promptTemplate = new PromptTemplate(request.prompt());
-            Prompt prompt = promptTemplate.create();
-            ChatClient.CallResponseSpec res = chatClient.prompt(prompt).call();
+            String response = chatClient.prompt()
+                    .user(request.prompt())
+                    .call()
+                    .content();
 
-            return res.content();
+            return response;
             
         } catch (Exception e) {
             log.error("Failed to process Elasticsearch prompt", e);
-            return "failure";
+            return "Error: " + e.getMessage();
         }
     }
 

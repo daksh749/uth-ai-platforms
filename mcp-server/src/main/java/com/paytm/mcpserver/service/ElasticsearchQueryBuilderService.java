@@ -109,10 +109,7 @@ public class ElasticsearchQueryBuilderService {
             String queryJson = extractJsonFromResponse(llmResponse);
 
             // Validate and enhance query
-            String enhancedQuery = validateAndEnhanceQuery(queryJson, maxResults, includeAggregations, sortBy);
-            
-            // Process date fields and convert to epoch millis
-            return processDateFields(enhancedQuery);
+            return validateAndEnhanceQuery(queryJson, maxResults, includeAggregations, sortBy);
 
         } catch (Exception e) {
             throw new RuntimeException("Failed to build ES query: " + e.getMessage(), e);
@@ -175,7 +172,7 @@ public class ElasticsearchQueryBuilderService {
                 
                 R1: Always first analyze the user prompt to understand what user is asking.
                 R2: As per your knowledge,
-                    - extract the necessary information from user prompt 
+                    - extract the necessary information from user prompt
                     - iterate over all the fields in esSchema provided
                     - match the info extracted with the "description" or "aliases" of each field as given in esSchema format
                     - if a match is found then take that "fieldName" from schema into account
@@ -183,30 +180,21 @@ public class ElasticsearchQueryBuilderService {
                                 - then extract the info -> user id 75284
                                 - in esSchema "user id" field in aliases maps to fieldName "entityId"
                                 - so make a query on entityId as per the clause and queryType specified in the schema for that fieldName.
-                R2: Follow the elasticsearch-schema/schema to make the query
-                R3: Match the user prompt with appropriate fields in es-schema.
-                R4: Each field in schema has a specific format:
+                R3: Follow the elasticsearch-schema/schema to make the query
+                R4: Match the user prompt with appropriate fields in es-schema.
+                R5: Each field in schema has a specific format:
                     - fieldName: the name of field on which query is built
                     - type: keyword/text/etc.. what type of field it is
                     - queryType: if that field supports term/terms/range/etc.. queries
                     - clause: if query on that field should be done in filter/must/etc. clause
                     - description: what the field is for
                     - example: consider the example query on that field for reference
-                R5: After analyzing the user-prompt, these rules and elastic-search schema, make a valid elastic-search query based on that and give me the exact query.
+                R6: After analyzing the user-prompt, these rules and elastic-search schema, make a valid elastic-search query based on that and give me the exact query.
                 
                 DATE RANGE RULES
-                CASE1: User provides two dates in the user prompt
-                       1. make a date range query with smaller/before date as "gte" and larger/after as "lte"
-                       2. write the dates as given STRICTLY is in DD/MM/YYYY format
+                While making date range queries use "gte" and "lte" dates in ISO 8601 format only.
                 
-                CASE2: User gives a single date in user prompt
-                       1. make a date range query with the single date provides as "gte" in DD/MM/YYYY format STRICTLY
-                       2. for "lte" write the word "NOW" in lte
-                       
-                CASE3: User doesn't provide any date in user prompt
-                       1. make a date range query with "gte" as "NOW" and "lte" as "NOW" STRICTLY don't write anything else
-                
-                FOLLOW THE DATE RANGE RULES STRICTLY, AND IN EVERY QUERY WHETHER DATE IS GIVEN BY USER OR NOT, YOU NEED TO MAKE THE DATE RANGE QUERY AS PER ABOVE RULES.
+                FOLLOW THE DATE RANGE RULES STRICTLY.
                 
                 ELASTICSEARCH SCHEMA:
                 %s
@@ -266,8 +254,8 @@ public class ElasticsearchQueryBuilderService {
             // Clean up invalid filters (like entityId: "user id")
             cleanInvalidFilters(enhanced);
 
-            // Ensure size is set
-            if (!enhanced.has("size")) {
+            // Ensure size is set and valid (not 0 or negative)
+            if (!enhanced.has("size") || enhanced.get("size").asInt() <= 0) {
                 enhanced.put("size", maxResults != null ? maxResults : 10);
             }
 
@@ -428,92 +416,18 @@ public class ElasticsearchQueryBuilderService {
     }
 
     /**
-     * Process date fields and convert DD-MM-YYYY to epoch millis
-     */
-    private String processDateFields(String queryJson) {
-        try {
-            JsonNode queryNode = objectMapper.readTree(queryJson);
-            ObjectNode enhanced = (ObjectNode) queryNode;
-            
-            // Navigate to filter array in bool query
-            JsonNode queryBoolNode = enhanced.path("query").path("bool");
-            if (queryBoolNode.has("filter")) {
-                ArrayNode filterArray = (ArrayNode) queryBoolNode.get("filter");
-                
-                for (int i = 0; i < filterArray.size(); i++) {
-                    JsonNode filterNode = filterArray.get(i);
-                    if (filterNode.has("range") && filterNode.get("range").has("txnDate")) {
-                        ObjectNode rangeNode = (ObjectNode) filterNode.get("range").get("txnDate");
-                        
-                        // Process gte (start date)
-                        if (rangeNode.has("gte")) {
-                            String gteValue = rangeNode.get("gte").asText();
-                            if ("START_OF_MONTH".equals(gteValue)) {
-                                gteValue = getStartOfMonthDate();
-                            }
-                            long gteEpoch = convertDateToEpochMillis(gteValue, true);
-                            rangeNode.put("gte", gteEpoch);
-                        }
-                        
-                        // Process lte (end date)
-                        if (rangeNode.has("lte")) {
-                            String lteValue = rangeNode.get("lte").asText();
-                            if ("NOW_DATE".equals(lteValue)) {
-                                lteValue = getCurrentDate();
-                            }
-                            long lteEpoch = convertDateToEpochMillis(lteValue, false);
-                            rangeNode.put("lte", lteEpoch);
-                        }
-                    }
-                }
-            }
-            
-            return objectMapper.writeValueAsString(enhanced);
-            
-        } catch (Exception e) {
-            log.error("Failed to process date fields: {}", e.getMessage());
-            return queryJson; // Return original if processing fails
-        }
-    }
-
-    /**
-     * Convert DD-MM-YYYY to epoch milliseconds
-     * @param dateStr Date string in DD-MM-YYYY format
-     * @param startOfDay If true, use 00:00:00; if false, use 23:59:59
-     */
-    private long convertDateToEpochMillis(String dateStr, boolean startOfDay) {
-        try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-            LocalDate date = LocalDate.parse(dateStr, formatter);
-            ZoneId istZone = ZoneId.of("Asia/Kolkata");
-            
-            if (startOfDay) {
-                return date.atStartOfDay(istZone).toInstant().toEpochMilli();
-            } else {
-                return date.atTime(23, 59, 59).atZone(istZone).toInstant().toEpochMilli();
-            }
-        } catch (Exception e) {
-            log.error("Failed to convert date {}: {}", dateStr, e.getMessage());
-            return System.currentTimeMillis();
-        }
-    }
-
-    /**
-     * Get start of current month in DD-MM-YYYY format
+     * Get start of current month in ISO 8601 format
      */
     private String getStartOfMonthDate() {
         LocalDate firstDay = LocalDate.now(ZoneId.of("Asia/Kolkata")).withDayOfMonth(1);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        return firstDay.format(formatter);
+        return firstDay.atStartOfDay(ZoneId.of("Asia/Kolkata")).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
     }
 
     /**
-     * Get current date in DD-MM-YYYY format
+     * Get current date in ISO 8601 format
      */
     private String getCurrentDate() {
-        LocalDate today = LocalDate.now(ZoneId.of("Asia/Kolkata"));
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        return today.format(formatter);
+        return java.time.ZonedDateTime.now(ZoneId.of("Asia/Kolkata")).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
     }
 
     /**

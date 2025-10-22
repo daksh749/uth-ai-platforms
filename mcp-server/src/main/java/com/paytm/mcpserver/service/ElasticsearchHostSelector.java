@@ -50,7 +50,7 @@ public class ElasticsearchHostSelector {
                 endDate = ElasticsearchUtility.getDefaultEndDate();
             }
 
-            // Parse dates in DD-MM-YYYY format
+            // Parse dates in ISO 8601 format
             LocalDateTime start = DateFormatUtility.parseDate(startDate).atStartOfDay();
             LocalDateTime end = DateFormatUtility.parseDate(endDate).atTime(23, 59, 59);
             

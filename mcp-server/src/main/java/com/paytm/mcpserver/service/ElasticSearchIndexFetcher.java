@@ -40,7 +40,7 @@ public class ElasticSearchIndexFetcher{
             if(StringUtils.isEmpty(endDate)){
                 endDate = ElasticsearchUtility.getDefaultEndDate();
             }
-            // Parse dates in DD-MM-YYYY format
+            // Parse dates in ISO 8601 format
             LocalDate start = DateFormatUtility.parseDate(startDate);
             LocalDate end = DateFormatUtility.parseDate(endDate);
 
