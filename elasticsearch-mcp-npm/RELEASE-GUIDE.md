@@ -141,7 +141,7 @@ Update your `~/.cursor/mcp.json`:
       ],
       "env": {
         "REDASH_BASE_URL": "http://10.84.84.143:5000",
-        "REDASH_API_KEY": "c2RIBCEnLsSCf27tztPSS3gVtw5fft5TeSxkxfBx"
+        "REDASH_API_KEY": "your-redash-api-key-here"
       }
     }
   }

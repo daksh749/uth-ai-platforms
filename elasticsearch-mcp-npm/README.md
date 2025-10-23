@@ -59,7 +59,7 @@ The server requires these environment variables:
 | Variable | Description | Example |
 |----------|-------------|---------|
 | `REDASH_BASE_URL` | Base URL of your Redash instance | `http://10.84.84.143:5000` |
-| `REDASH_API_KEY` | Your Redash API key | `c2RIBCEnLsSCf27tztPSS3gVtw5fft5TeSxkxfBx` |
+| `REDASH_API_KEY` | Your Redash API key | `your-redash-api-key-here` |
 
 ## Available MCP Tools
 
