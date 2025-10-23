@@ -1,7 +1,6 @@
 com/paytm/mcpserver/service/ElasticsearchService.class
 com/paytm/mcpserver/service/RedashSearchService.class
 com/paytm/mcpserver/service/ElasticsearchSchemaFetcher.class
-com/paytm/mcpserver/service/ElasticsearchQueryBuilderService$1.class
 com/paytm/mcpserver/utility/ElasticsearchUtility.class
 com/paytm/mcpserver/service/ElasticsearchHostSelector$DateRange.class
 com/paytm/mcpserver/McpServerApplication.class

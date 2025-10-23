@@ -113,6 +113,18 @@
           "validation": {
             "required": false
           }
+        },
+        {
+          "fieldName": "streamSource",
+          "type": "keyword",
+          "queryType": "term",
+          "clause": "filter",
+          "aliases": ["stream source", "source stream", "stream"],
+          "description": "Stream source identifier",
+          "example": {"term": {"streamSource": "STREAM_NAME"}},
+          "validation": {
+            "required": false
+          }
         }
       ],
 
@@ -192,6 +204,57 @@
             "format": "iso8601",
             "inputFormat": "ISO 8601 (e.g., 2025-01-15T00:00:00+05:30)"
           }
+        },
+        {
+          "fieldName": "docCreatedDate",
+          "type": "date",
+          "queryType": "term|range",
+          "clause": "filter",
+          "aliases": ["document created date", "doc created date", "created date", "creation date"],
+          "description": "Document creation date in ISO 8601 format",
+          "example": {
+            "exact": {"term": {"docCreatedDate": "2024-01-15T10:30:00+05:30"}},
+            "range": {"range": {"docCreatedDate": {"gte": "2024-01-01T00:00:00+05:30", "lte": "2024-03-31T23:59:59+05:30"}}}
+          },
+          "validation": {
+            "required": false,
+            "format": "iso8601",
+            "inputFormat": "ISO 8601 (e.g., 2025-01-15T00:00:00+05:30)"
+          }
+        },
+        {
+          "fieldName": "docUpdatedDate",
+          "type": "date",
+          "queryType": "term|range",
+          "clause": "filter",
+          "aliases": ["document updated date", "doc updated date", "doc modification date"],
+          "description": "Document update date in ISO 8601 format",
+          "example": {
+            "exact": {"term": {"docUpdatedDate": "2024-01-15T10:30:00+05:30"}},
+            "range": {"range": {"docUpdatedDate": {"gte": "2024-01-01T00:00:00+05:30", "lte": "2024-03-31T23:59:59+05:30"}}}
+          },
+          "validation": {
+            "required": false,
+            "format": "iso8601",
+            "inputFormat": "ISO 8601 (e.g., 2025-01-15T00:00:00+05:30)"
+          }
+        },
+        {
+          "fieldName": "updatedDate",
+          "type": "date",
+          "queryType": "term|range",
+          "clause": "filter",
+          "aliases": ["updated date", "last updated", "modification date"],
+          "description": "Last updated date in ISO 8601 format",
+          "example": {
+            "exact": {"term": {"updatedDate": "2024-01-15T10:30:00+05:30"}},
+            "range": {"range": {"updatedDate": {"gte": "2024-01-01T00:00:00+05:30", "lte": "2024-03-31T23:59:59+05:30"}}}
+          },
+          "validation": {
+            "required": false,
+            "format": "iso8601",
+            "inputFormat": "ISO 8601 (e.g., 2025-01-15T00:00:00+05:30)"
+          }
         }
       ],
 
@@ -236,6 +299,22 @@
             "clause": "filter",
             "aliases": ["IFR", "ifr code"],
             "description": "IFR code"
+          },
+          {
+            "fieldName": "contextMap.backFillingIdentifier",
+            "type": "keyword",
+            "queryType": "term",
+            "clause": "filter",
+            "aliases": ["backfilling identifier", "backfill id", "back filling identifier"],
+            "description": "Backfilling identifier"
+          },
+          {
+            "fieldName": "contextMap.isMergedDocument",
+            "type": "keyword",
+            "queryType": "term",
+            "clause": "filter",
+            "aliases": ["is merged document", "merged document", "document merged"],
+            "description": "Indicates if document is merged"
           }
         ],
 

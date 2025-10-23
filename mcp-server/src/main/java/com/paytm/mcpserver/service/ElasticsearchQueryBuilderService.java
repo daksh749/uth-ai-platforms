@@ -1,26 +1,16 @@
 package com.paytm.mcpserver.service;
 
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.SimpleClientHttpRequestFactory;
-import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.Map;
 
 /**
  * Service for building Elasticsearch queries using LLM (Ollama Llama3.2)
@@ -34,48 +24,13 @@ import java.util.Map;
 @Log4j2
 public class ElasticsearchQueryBuilderService {
 
-    @Value("${spring.ai.ollama.base-url}")
-    private String ollamaBaseUrl;
-    
-    @Value("${spring.ai.ollama.chat.options.model}")
-    private String ollamaModel;
-    
-    @Value("${ollama.temperature:0.1}")
-    private double ollamaTemperature;
-    
-    @Value("${ollama.top-p:0.9}")
-    private double ollamaTopP;
-    
-    @Value("${ollama.max-tokens:4000}")
-    private int ollamaMaxTokens;
-    
-    @Value("${ollama.context-length:8192}")
-    private int ollamaContextLength;
-    
-    @Value("${ollama.num-ctx:8192}")
-    private int ollamaNumCtx;
-    
-    @Value("${ollama.timeout:120000}")
-    private long ollamaTimeout;
-
-    private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ElasticsearchSchemaFetcher schemaFetcher;
     
-    public ElasticsearchQueryBuilderService(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
-        // Configure timeout specifically for Ollama calls
-        configureOllamaTimeout();
+    public ElasticsearchQueryBuilderService(ElasticsearchSchemaFetcher schemaFetcher) {
+        this.schemaFetcher = schemaFetcher;
     }
     
-    /**
-     * Configure RestTemplate with Ollama-specific timeout
-     */
-    private void configureOllamaTimeout() {
-        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
-        factory.setConnectTimeout((int) ollamaTimeout);
-        factory.setReadTimeout((int) ollamaTimeout);
-        this.restTemplate.setRequestFactory(factory);
-    }
 
     /**
      * Build Elasticsearch query from natural language prompt with schema context
@@ -99,69 +54,25 @@ public class ElasticsearchQueryBuilderService {
                 throw new IllegalArgumentException("Schema context is required - call es_schema tool first");
             }
 
-            // Build LLM prompt with provided schema context and user prompt
-            String systemPrompt = buildSystemPrompt(schemaContext, prompt);
+            // Fetch field value mappings automatically
+            String fieldMappings = schemaFetcher.fetchFieldMappings();
+
+            // Build LLM prompt with provided schema context, field mappings, and user prompt
+            String systemPrompt = buildSystemPrompt(schemaContext, fieldMappings, prompt);
             
             // Call Ollama LLM
-            String llmResponse = callOllamaLLM(systemPrompt);
-
-            // Extract and validate JSON
-            String queryJson = extractJsonFromResponse(llmResponse);
-
-            // Validate and enhance query
-            return validateAndEnhanceQuery(queryJson, maxResults, includeAggregations, sortBy);
+            return systemPrompt;
 
         } catch (Exception e) {
             throw new RuntimeException("Failed to build ES query: " + e.getMessage(), e);
         }
     }
 
-    /**
-     * Call Ollama LLM API
-     */
-    private String callOllamaLLM(String systemPrompt) {
-        try {
-            String ollamaUrl = ollamaBaseUrl + "/api/generate";
-            
-            Map<String, Object> request = Map.of(
-                    "model", ollamaModel,
-                    "prompt", systemPrompt,
-                    "stream", false,
-                    "options", Map.of(
-                            "temperature", ollamaTemperature,
-                            "top_p", ollamaTopP,
-                            "num_predict", ollamaMaxTokens,
-                            "num_ctx", ollamaNumCtx
-                    )
-            );
-            log.info("prompt in the request is : {}", request.get("prompt"));
-
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-            HttpEntity<Map<String, Object>> entity = new HttpEntity<>(request, headers);
-
-            ResponseEntity<Map<String, Object>> response = restTemplate.exchange(
-                ollamaUrl, 
-                HttpMethod.POST, 
-                entity, 
-                new ParameterizedTypeReference<Map<String, Object>>() {}
-            );
-
-            if (response.getBody() != null && response.getBody().containsKey("response")) {
-                return (String) response.getBody().get("response");
-            }
-
-            throw new RuntimeException("Invalid response from Ollama");
-
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to call Ollama LLM: " + e.getMessage(), e);
-        }
-    }
 
     /**
-     * Build comprehensive system prompt with provided schema context
+     * Build comprehensive system prompt with provided schema context and field mappings
      */
-    private String buildSystemPrompt(String schemaContext, String userPrompt) {
+    private String buildSystemPrompt(String schemaContext, String fieldMappings, String userPrompt) {
         return String.format("""
                 Generate Elasticsearch Query DSL from user input.
                 
@@ -190,6 +101,26 @@ public class ElasticsearchQueryBuilderService {
                     - description: what the field is for
                     - example: consider the example query on that field for reference
                 R6: After analyzing the user-prompt, these rules and elastic-search schema, make a valid elastic-search query based on that and give me the exact query.
+                R7: FIELD VALUE MAPPINGS (CRITICAL - HIGHEST PRIORITY):
+                    - Some fields store NUMERIC CODES instead of human-readable text
+                    - Check the FIELD VALUE MAPPINGS section below
+                    - For mapped fields (status, txnType, paymentSystem, txnIndicator):
+                      * Extract the human-readable value from user prompt
+                      * Look up the corresponding numeric code in valueMapping
+                      * ALWAYS use the NUMERIC CODE in the query, NEVER the human-readable text
+                    - Example: "status success" → {"term": {"status": "2"}} NOT {"term": {"status": "success"}}
+                    - Example: "UPI payments" → {"term": {"searchFields.searchPaymentSystem.keyword": "3"}}
+                    - This is MANDATORY - queries with human-readable values will FAIL
+                R8: MOBILE NUMBER FORMATTING (CRITICAL):
+                    - If user provides a mobile number WITHOUT "91" prefix, ALWAYS add "91" at the beginning
+                    - Mobile number length: 10 digits (without prefix) or 12 digits (with 91 prefix)
+                    - Examples:
+                      * User input: "7827662636" → Use: "917827662636" in query
+                      * User input: "917827662636" → Use: "917827662636" (already has prefix)
+                      * User input: "+917827662636" → Use: "917827662636" (remove + sign)
+                    - Apply this to ALL mobile number fields:
+                      * participants.mobileData.mobileNumber (nested query - for exact match)
+                    - Example query: {"nested": {"path": "participants", "query": {"term": {"participants.mobileData.mobileNumber": "917827662636"}}}}
                 
                 DATE RANGE RULES
                 While making date range queries use "gte" and "lte" dates in ISO 8601 format only.
@@ -198,9 +129,12 @@ public class ElasticsearchQueryBuilderService {
                 
                 ELASTICSEARCH SCHEMA:
                 %s
+                
+                FIELD VALUE MAPPINGS:
+                %s
             
                 Return ONLY the JSON query in markdown format.
-                """, userPrompt, schemaContext);
+                """, userPrompt, schemaContext, fieldMappings);
     }
 
     /**

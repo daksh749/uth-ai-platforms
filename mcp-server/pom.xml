@@ -43,16 +43,6 @@
 			<artifactId>spring-ai-starter-mcp-server-webmvc</artifactId>
 		</dependency>
 		
-		<!-- Spring AI Ollama Model -->
-		<dependency>
-			<groupId>org.springframework.ai</groupId>
-			<artifactId>spring-ai-starter-model-ollama</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.ai</groupId>
-			<artifactId>spring-ai-ollama</artifactId>
-		</dependency>
 
 		<dependency>
 			<groupId>com.fasterxml.jackson.datatype</groupId>
