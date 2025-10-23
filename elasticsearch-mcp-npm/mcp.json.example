@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "elasticsearch": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@dakshgupta/elasticsearch-mcp"
+      ],
+      "env": {
+        "REDASH_BASE_URL": "http://10.84.84.143:5000",
+        "REDASH_API_KEY": "c2RIBCEnLsSCf27tztPSS3gVtw5fft5TeSxkxfBx"
+      }
+    }
+  }
+}
+

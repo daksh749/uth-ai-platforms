@@ -1,0 +1,275 @@
+{
+  "description": "Field value mappings for Elasticsearch queries. These fields store numeric codes instead of human-readable values.",
+  "mappings": {
+    "status": {
+      "fieldName": "status",
+      "description": "Transaction status codes stored as numeric strings",
+      "type": "keyword",
+      "valueMapping": {
+        "success": "2",
+        "successful": "2",
+        "completed": "2",
+        "done": "2",
+        "failure": "1",
+        "failed": "1",
+        "error": "1",
+        "unsuccessful": "1",
+        "pending": "3",
+        "in progress": "3",
+        "processing": "3"
+      },
+      "example": {
+        "userInput": "transactions with status success",
+        "correctQuery": {"term": {"status": "2"}},
+        "wrongQuery": {"term": {"status": "success"}},
+        "explanation": "Always use numeric code '2' for success, not the word 'success'"
+      },
+      "rule": "ALWAYS use the numeric code from valueMapping, never use human-readable text"
+    },
+    
+    "txnType": {
+      "fieldName": "txnType",
+      "description": "Transaction type codes stored as numeric strings",
+      "type": "keyword",
+      "valueMapping": {
+        "p2p outward": "1",
+        "p2p outwards": "1",
+        "person to person outward": "1",
+        "send": "1",
+        "sent": "1",
+        "send money": "1",
+        "payment sent": "1",
+        "p2p inward": "3",
+        "p2p inwards": "3",
+        "person to person inward": "3",
+        "receive": "3",
+        "received": "3",
+        "receive money": "3",
+        "payment received": "3",
+        "p2m": "4",
+        "person to merchant": "4",
+        "merchant payment": "4",
+        "pay merchant": "4",
+        "paid to merchant": "4",
+        "p2m refund": "5",
+        "merchant refund": "5",
+        "refund from merchant": "5",
+        "p2p inward 3p app": "65",
+        "p2p inward on 3p app": "65",
+        "third party app": "65",
+        "3p app": "65",
+        "received on other app": "65",
+        "one time mandate": "64",
+        "ot mandate": "64",
+        "one-time mandate": "64",
+        "sbmd mandate": "63",
+        "sbmd": "63",
+        "cashback received": "9",
+        "cashback": "9",
+        "cash back": "9"
+      },
+      "example": {
+        "userInput": "show me transactions where I sent money",
+        "correctQuery": {"term": {"txnType": "1"}},
+        "wrongQuery": {"term": {"txnType": "send"}},
+        "explanation": "For 'send' or 'sent' transactions, use code '1'"
+      },
+      "rule": "ALWAYS use the numeric code from valueMapping, never use human-readable text"
+    },
+    
+    "paymentSystem": {
+      "fieldName": "searchFields.searchPaymentSystem.keyword",
+      "description": "Payment system codes stored as numeric strings. Note: Use the nested field path for exact match queries.",
+      "type": "keyword",
+      "valueMapping": {
+        "wallet": "1",
+        "paytm wallet": "1",
+        "bank": "2",
+        "net banking": "2",
+        "netbanking": "2",
+        "upi": "3",
+        "unified payments interface": "3",
+        "pg": "4",
+        "payment gateway": "4",
+        "paytm postpaid": "5",
+        "postpaid": "5",
+        "mgv": "6",
+        "merchant gift voucher": "6",
+        "gv": "19",
+        "gift voucher": "19",
+        "upi credit card": "12",
+        "upi cc": "12",
+        "credit card via upi": "12",
+        "upi lite": "10",
+        "loyalty point": "14",
+        "loyalty points": "14",
+        "reward points": "14"
+      },
+      "example": {
+        "userInput": "UPI transactions",
+        "correctQuery": {"term": {"searchFields.searchPaymentSystem.keyword": "3"}},
+        "wrongQuery": {"term": {"searchFields.searchPaymentSystem.keyword": "UPI"}},
+        "explanation": "For UPI payment system, use code '3' on the keyword field"
+      },
+      "rule": "ALWAYS use the numeric code from valueMapping, never use human-readable text. Use the full nested field path."
+    },
+    
+    "txnIndicator": {
+      "fieldName": "txnIndicator",
+      "description": "Transaction direction indicator codes stored as numeric strings",
+      "type": "keyword",
+      "valueMapping": {
+        "debit": "2",
+        "debited": "2",
+        "money out": "2",
+        "spent": "2",
+        "outgoing": "2",
+        "credit": "1",
+        "credited": "1",
+        "money in": "1",
+        "received": "1",
+        "incoming": "1"
+      },
+      "example": {
+        "userInput": "show debit transactions",
+        "correctQuery": {"term": {"txnIndicator": "2"}},
+        "wrongQuery": {"term": {"txnIndicator": "debit"}},
+        "explanation": "For debit transactions, use code '2', not the word 'debit'"
+      },
+      "rule": "ALWAYS use the numeric code from valueMapping, never use human-readable text"
+    }
+  },
+  
+  "generalRules": [
+    "Always check if a field mentioned in user query exists in these mappings",
+    "If a field has value mappings, ALWAYS convert human-readable values to numeric codes",
+    "Match user input against all aliases in valueMapping (case-insensitive)",
+    "If no exact match found in aliases, use your best judgment to map to closest code",
+    "Never use human-readable text in queries for mapped fields - only numeric codes",
+    "For paymentSystem, remember to use the full nested field path: searchFields.searchPaymentSystem.keyword"
+  ],
+  
+  "mobileNumberFormatting": {
+    "description": "Mobile number formatting rules for Indian mobile numbers",
+    "rule": "All mobile numbers MUST have country code prefix 91",
+    "formatting": {
+      "inputFormat": "10 digits (e.g., 7827662636) OR 12 digits with 91 prefix (e.g., 917827662636)",
+      "outputFormat": "Always 12 digits starting with 91 (e.g., 917827662636)",
+      "prefixToAdd": "91"
+    },
+    "transformations": [
+      {
+        "input": "7827662636",
+        "output": "917827662636",
+        "explanation": "Add 91 prefix to 10-digit number"
+      },
+      {
+        "input": "917827662636",
+        "output": "917827662636",
+        "explanation": "Already has 91 prefix, no change needed"
+      },
+      {
+        "input": "+917827662636",
+        "output": "917827662636",
+        "explanation": "Remove + sign and keep 91 prefix"
+      }
+    ],
+    "applicableFields": [
+      "participants.mobileData.mobileNumber",
+      "searchFields.searchOtherMobileNo",
+      "participants.walletData.walletMobileNumber"
+    ],
+    "example": {
+      "userInput": "transactions for mobile number 7827662636",
+      "correctQuery": {
+        "nested": {
+          "path": "participants",
+          "query": {
+            "term": {
+              "participants.mobileData.mobileNumber": "917827662636"
+            }
+          }
+        }
+      },
+      "wrongQuery": {
+        "nested": {
+          "path": "participants",
+          "query": {
+            "term": {
+              "participants.mobileData.mobileNumber": "7827662636"
+            }
+          }
+        }
+      },
+      "explanation": "10-digit number 7827662636 must be converted to 917827662636 with country code"
+    }
+  },
+  
+  "examples": [
+    {
+      "userPrompt": "5 recent successful UPI transactions",
+      "fieldsToMap": {
+        "status": "success → 2",
+        "paymentSystem": "UPI → 3"
+      },
+      "correctQuery": {
+        "query": {
+          "bool": {
+            "filter": [
+              {"term": {"status": "2"}},
+              {"term": {"searchFields.searchPaymentSystem.keyword": "3"}}
+            ]
+          }
+        },
+        "size": 5,
+        "sort": [{"txnDate": "desc"}]
+      }
+    },
+    {
+      "userPrompt": "Show me money I sent to merchants last month",
+      "fieldsToMap": {
+        "txnType": "sent to merchants → 4 (p2m)",
+        "txnIndicator": "sent → 2 (debit)"
+      },
+      "correctQuery": {
+        "query": {
+          "bool": {
+            "filter": [
+              {"term": {"txnType": "4"}},
+              {"term": {"txnIndicator": "2"}},
+              {"range": {"txnDate": {"gte": "2025-09-01T00:00:00+05:30", "lte": "2025-09-30T23:59:59+05:30"}}}
+            ]
+          }
+        },
+        "sort": [{"txnDate": "desc"}]
+      }
+    },
+    {
+      "userPrompt": "5 recent transactions for mobile 7827662636",
+      "fieldsToMap": {
+        "mobileNumber": "7827662636 → 917827662636 (add 91 prefix)"
+      },
+      "correctQuery": {
+        "query": {
+          "bool": {
+            "filter": [
+              {
+                "nested": {
+                  "path": "participants",
+                  "query": {
+                    "term": {
+                      "participants.mobileData.mobileNumber": "917827662636"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "size": 5,
+        "sort": [{"txnDate": "desc"}]
+      }
+    }
+  ]
+}
+

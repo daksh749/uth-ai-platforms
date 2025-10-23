@@ -12,8 +12,10 @@
         </processorPath>
         <module name="mcp-server" />
         <module name="mcp-client" />
-        <module name="mcp-commons" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="mcp-commons" target="21" />
+    </bytecodeTargetLevel>
   </component>
 </project>

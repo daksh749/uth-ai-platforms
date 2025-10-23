@@ -47,34 +47,51 @@
 			<artifactId>jackson-databind</artifactId>
 		</dependency>
 		
+		<!-- Spring AI MCP Client - Core starter providing STDIO and HTTP-based SSE support -->
+		<dependency>
+			<groupId>org.springframework.ai</groupId>
+			<artifactId>spring-ai-starter-mcp-client</artifactId>
+		</dependency>
+		
+		<!-- Spring AI Ollama Model -->
+		<dependency>
+			<groupId>org.springframework.ai</groupId>
+			<artifactId>spring-ai-starter-model-ollama</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.ai</groupId>
+			<artifactId>spring-ai-ollama</artifactId>
+		</dependency>
+
 		<!-- SSE Client for MCP connection -->
 		<dependency>
 			<groupId>com.launchdarkly</groupId>
 			<artifactId>okhttp-eventsource</artifactId>
 			<version>4.1.1</version>
 		</dependency>
-		
+
 		<!-- LangChain4j for Ollama -->
 		<dependency>
 			<groupId>dev.langchain4j</groupId>
 			<artifactId>langchain4j-ollama</artifactId>
 			<version>0.25.0</version>
 		</dependency>
-		
+
 		<!-- HTTP Client -->
 		<dependency>
 			<groupId>com.squareup.okhttp3</groupId>
 			<artifactId>okhttp</artifactId>
 			<version>4.12.0</version>
 		</dependency>
-		
+
 		<!-- SSE Support for OkHttp -->
 		<dependency>
 			<groupId>com.squareup.okhttp3</groupId>
 			<artifactId>okhttp-sse</artifactId>
 			<version>4.12.0</version>
 		</dependency>
-		
+
 		<!-- Elasticsearch Query Builder -->
 		<dependency>
 			<groupId>org.elasticsearch.client</groupId>

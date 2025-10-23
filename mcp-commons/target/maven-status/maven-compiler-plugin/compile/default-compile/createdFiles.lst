@@ -1,7 +1,0 @@
-com/paytm/shared/mcp/tools/McpTool.class
-com/paytm/shared/mcp/protocol/McpError.class
-com/paytm/shared/mcp/protocol/McpResponse.class
-com/paytm/shared/mcp/registry/ToolMetadata$ToolMetadataBuilder.class
-com/paytm/shared/mcp/registry/ToolMetadata.class
-com/paytm/shared/mcp/protocol/McpRequest.class
-com/paytm/shared/elasticsearch/model/EsHostType.class

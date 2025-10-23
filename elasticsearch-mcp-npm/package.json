@@ -1,0 +1,46 @@
+{
+  "name": "@dakshgupta/elasticsearch-mcp",
+  "version": "1.0.0",
+  "description": "Elasticsearch MCP Server - Query and analyze Elasticsearch data using natural language",
+  "main": "bin/cli.js",
+  "bin": {
+    "elasticsearch-mcp": "./bin/cli.js"
+  },
+  "scripts": {
+    "postinstall": "chmod +x bin/cli.js",
+    "test": "node bin/cli.js --help"
+  },
+  "keywords": [
+    "mcp",
+    "elasticsearch",
+    "paytm",
+    "model-context-protocol",
+    "ai",
+    "llm",
+    "spring-boot"
+  ],
+  "author": "Daksh Gupta",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dakshgupta/uth-ai-platforms-v2.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dakshgupta/uth-ai-platforms-v2/issues"
+  },
+  "homepage": "https://github.com/dakshgupta/uth-ai-platforms-v2#readme",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "files": [
+    "bin/cli.js",
+    "README.md"
+  ],
+  "preferGlobal": false,
+  "os": [
+    "darwin",
+    "linux",
+    "win32"
+  ]
+}
+
