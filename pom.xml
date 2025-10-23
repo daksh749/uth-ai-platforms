@@ -13,7 +13,6 @@
 	
 	<!-- Child Modules -->
 	<modules>
-		<module>mcp-commons</module>
 		<module>mcp-server</module>
 		<module>mcp-client</module>
 	</modules>
@@ -59,12 +58,6 @@
 				<version>${spring-ai.version}</version>
 			</dependency>
 			
-			<!-- Internal module dependencies -->
-			<dependency>
-				<groupId>com.paytm</groupId>
-				<artifactId>mcp-commons</artifactId>
-				<version>${project.version}</version>
-			</dependency>
 			
 			<!-- Elasticsearch -->
 			<dependency>
