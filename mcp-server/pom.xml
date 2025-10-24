@@ -17,12 +17,6 @@
 	<description>Model Context Protocol Server for Elasticsearch</description>
 	
 	<dependencies>
-		<!-- MCP Commons -->
-		<dependency>
-			<groupId>com.paytm</groupId>
-			<artifactId>mcp-commons</artifactId>
-		</dependency>
-		
 		<!-- Spring Boot -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
