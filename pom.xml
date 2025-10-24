@@ -14,7 +14,6 @@
 	<!-- Child Modules -->
 	<modules>
 		<module>mcp-server</module>
-		<module>mcp-client</module>
 	</modules>
 	
 	<properties>

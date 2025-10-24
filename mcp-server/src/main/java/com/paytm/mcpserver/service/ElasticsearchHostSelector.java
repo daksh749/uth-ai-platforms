@@ -42,12 +42,9 @@ public class ElasticsearchHostSelector {
      */
     public List<HostCoverage> selectHost(String startDate, String endDate) {
         try {
-
-            if(StringUtils.isEmpty(startDate)){
-                startDate = ElasticsearchUtility.getDefaultStartDate();
-            }
-            if(StringUtils.isEmpty(endDate)){
-                endDate = ElasticsearchUtility.getDefaultEndDate();
+            // Validate that dates are provided (should come from es_dates tool)
+            if(StringUtils.isEmpty(startDate) || StringUtils.isEmpty(endDate)){
+                throw new IllegalArgumentException("Start and end dates are required. Use es_dates tool first to get dates.");
             }
 
             // Parse dates in ISO 8601 format

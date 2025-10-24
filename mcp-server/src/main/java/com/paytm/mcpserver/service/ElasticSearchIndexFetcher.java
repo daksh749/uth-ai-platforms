@@ -34,12 +34,11 @@ public class ElasticSearchIndexFetcher{
      */
     public List<String> findIndicesForDateRange(String startDate, String endDate) {
         try {
-            if(StringUtils.isEmpty(startDate)){
-                startDate = ElasticsearchUtility.getDefaultStartDate();
+            // Validate that dates are provided (should come from es_dates tool)
+            if(StringUtils.isEmpty(startDate) || StringUtils.isEmpty(endDate)){
+                throw new IllegalArgumentException("Start and end dates are required. Use es_dates tool first to get dates.");
             }
-            if(StringUtils.isEmpty(endDate)){
-                endDate = ElasticsearchUtility.getDefaultEndDate();
-            }
+            
             // Parse dates in ISO 8601 format
             LocalDate start = DateFormatUtility.parseDate(startDate);
             LocalDate end = DateFormatUtility.parseDate(endDate);

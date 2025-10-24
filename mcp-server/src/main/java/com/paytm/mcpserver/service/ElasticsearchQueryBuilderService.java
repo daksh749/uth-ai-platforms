@@ -58,10 +58,7 @@ public class ElasticsearchQueryBuilderService {
             String fieldMappings = schemaFetcher.fetchFieldMappings();
 
             // Build LLM prompt with provided schema context, field mappings, and user prompt
-            String systemPrompt = buildSystemPrompt(schemaContext, fieldMappings, prompt);
-            
-            // Call Ollama LLM
-            return systemPrompt;
+            return buildSystemPrompt(schemaContext, fieldMappings, prompt);
 
         } catch (Exception e) {
             throw new RuntimeException("Failed to build ES query: " + e.getMessage(), e);

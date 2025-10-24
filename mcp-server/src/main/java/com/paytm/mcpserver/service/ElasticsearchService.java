@@ -38,6 +38,21 @@ public class ElasticsearchService {
     @Autowired
     private RedashSearchService redashSearchService;
 
+    @Autowired
+    private DateParsingService dateParsingService;
+
+    @Tool(name="es_dates", description = "Parse and return start/end dates in ISO 8601 format. If 2 dates provided: return both. If 1 date: treat as start, end=now. If no dates: start=first of month, end=now")
+    public String parseDates(
+            @ToolParam(description = "User prompt containing date information (for future NLP extraction)", required = false) String userPrompt,
+            @ToolParam(description = "Explicit start date in ISO 8601 format (e.g., 2025-10-15 or 2025-10-15T00:00:00+05:30)", required = false) String startDate,
+            @ToolParam(description = "Explicit end date in ISO 8601 format (e.g., 2025-10-22 or 2025-10-22T23:59:59+05:30)", required = false) String endDate) {
+        try {
+            return dateParsingService.parseDates(userPrompt, startDate, endDate);
+        } catch (Exception e) {
+            return String.format("{\"error\": \"Failed to parse dates\", \"message\": \"%s\", \"status\": \"error\"}", e.getMessage());
+        }
+    }
+
     @Tool(name="es_schema", description = "Bring the elastic search schema")
     public String fetchEsSchema(){
         return elasticsearchSchemaFetcher.fetchSchema();

@@ -350,7 +350,7 @@
             "clause": "filter",
             "aliases": ["payment method", "payment system", "payment type", "payment mode"],
             "description": "Payment system exact match (UPI, CARD, WALLET, NETBANKING)",
-            "example": {"term": {"searchFields.searchPaymentSystem.keyword": "UPI"}},
+            "example": {"term": {"searchFields.searchPaymentSystem.keyword": "3"}},
             "validation": {
               "allowedValues": ["UPI", "CARD", "WALLET", "NETBANKING", "BANK"]
             }
