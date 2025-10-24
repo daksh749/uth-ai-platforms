@@ -90,7 +90,7 @@ Edit `~/.cursor/mcp.json` and replace the elasticsearch section:
       "args": ["-y", "@dakshgupta/elasticsearch-mcp"],
       "env": {
         "REDASH_BASE_URL": "http://10.84.84.143:5000",
-        "REDASH_API_KEY": "c2RIBCEnLsSCf27tztPSS3gVtw5fft5TeSxkxfBx"
+        "REDASH_API_KEY": "your-redash-api-key-here"
       }
     }
   }
@@ -107,7 +107,7 @@ Edit `~/.cursor/mcp.json` and replace the elasticsearch section:
       "args": ["/Users/dakshgupta/uth-ai-platforms-v2/elasticsearch-mcp-npm/bin/cli.js"],
       "env": {
         "REDASH_BASE_URL": "http://10.84.84.143:5000",
-        "REDASH_API_KEY": "c2RIBCEnLsSCf27tztPSS3gVtw5fft5TeSxkxfBx"
+        "REDASH_API_KEY": "your-redash-api-key-here"
       }
     }
   }

@@ -58,6 +58,7 @@
 				<version>${spring-ai.version}</version>
 			</dependency>
 			
+			
 			<!-- Elasticsearch -->
 			<dependency>
 				<groupId>org.elasticsearch.client</groupId>

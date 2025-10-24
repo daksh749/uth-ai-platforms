@@ -17,12 +17,6 @@
 	<description>MCP Chat Client with LLM Integration</description>
 	
 	<dependencies>
-		<!-- MCP Commons -->
-		<dependency>
-			<groupId>com.paytm</groupId>
-			<artifactId>mcp-commons</artifactId>
-		</dependency>
-		
 		<!-- Spring Boot -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
