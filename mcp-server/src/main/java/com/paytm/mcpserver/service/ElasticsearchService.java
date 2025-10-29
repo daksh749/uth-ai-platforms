@@ -41,7 +41,7 @@ public class ElasticsearchService {
     @Autowired
     private DateParsingService dateParsingService;
 
-    @Tool(name="es_dates", description = "Parse and return start/end dates in ISO 8601 format. If 2 dates provided: return both. If 1 date: treat as start, end=now. If no dates: start=first of month, end=now")
+    @Tool(name="es_dates", description = "⚠️ CALL THIS FIRST! Parse and return start/end dates in ISO 8601 format. REQUIRED before calling es_host, es_indices, or any date-based queries. If 2 dates provided: return both. If 1 date: treat as start, end=now. If no dates: start=first of month, end=now")
     public String parseDates(
             @ToolParam(description = "User prompt containing date information (for future NLP extraction)", required = false) String userPrompt,
             @ToolParam(description = "Explicit start date in ISO 8601 format (e.g., 2025-10-15 or 2025-10-15T00:00:00+05:30)", required = false) String startDate,
@@ -58,9 +58,9 @@ public class ElasticsearchService {
         return elasticsearchSchemaFetcher.fetchSchema();
     }
 
-    @Tool(name="es_host", description = "get the es host to search upon based on start and end date")
-    public String selectEsHost(@ToolParam(description = "Start date in ISO 8601 format (e.g., 2025-01-15T00:00:00+05:30 or 2025-01-15)") String startDate,
-                               @ToolParam(description = "End date in ISO 8601 format (e.g., 2025-01-15T23:59:59+05:30 or 2025-01-15)") String endDate){
+    @Tool(name="es_host", description = "⚠️ REQUIRES es_dates FIRST! Get the ES host to search upon based on start and end date. Dates MUST be in ISO 8601 format from es_dates tool output. Do NOT call this without calling es_dates first.")
+    public String selectEsHost(@ToolParam(description = "Start date in ISO 8601 format from es_dates tool (e.g., 2025-01-15T00:00:00+05:30 or 2025-01-15)") String startDate,
+                               @ToolParam(description = "End date in ISO 8601 format from es_dates tool (e.g., 2025-01-15T23:59:59+05:30 or 2025-01-15)") String endDate){
         try {
             List<HostCoverage> hostCoverages = elasticsearchHostSelector.selectHost(startDate, endDate);
             return objectMapper.writeValueAsString(hostCoverages);
@@ -69,9 +69,9 @@ public class ElasticsearchService {
         }
     }
 
-    @Tool(name = "es_indices", description = "get list of es indices to search upon")
-    public String fetchEsIndices(@ToolParam(description = "Start date in ISO 8601 format (e.g., 2025-01-15T00:00:00+05:30 or 2025-01-15)") String startDate,
-                                  @ToolParam(description = "End date in ISO 8601 format (e.g., 2025-01-15T23:59:59+05:30 or 2025-01-15)") String endDate){
+    @Tool(name = "es_indices", description = "⚠️ REQUIRES es_dates FIRST! Get list of ES indices to search upon based on date range. Dates MUST be in ISO 8601 format from es_dates tool output. Do NOT call this without calling es_dates first.")
+    public String fetchEsIndices(@ToolParam(description = "Start date in ISO 8601 format from es_dates tool (e.g., 2025-01-15T00:00:00+05:30 or 2025-01-15)") String startDate,
+                                  @ToolParam(description = "End date in ISO 8601 format from es_dates tool (e.g., 2025-01-15T23:59:59+05:30 or 2025-01-15)") String endDate){
         try {
             List<String> indices = elasticSearchIndexFetcher.findIndicesForDateRange(startDate, endDate);
             return objectMapper.writeValueAsString(indices);

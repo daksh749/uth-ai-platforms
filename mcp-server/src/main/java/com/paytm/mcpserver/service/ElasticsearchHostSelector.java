@@ -44,7 +44,22 @@ public class ElasticsearchHostSelector {
         try {
             // Validate that dates are provided (should come from es_dates tool)
             if(StringUtils.isEmpty(startDate) || StringUtils.isEmpty(endDate)){
-                throw new IllegalArgumentException("Start and end dates are required. Use es_dates tool first to get dates.");
+                throw new IllegalArgumentException(
+                    "⚠️ Start and end dates are required. Call es_dates tool FIRST to get properly formatted dates!"
+                );
+            }
+            
+            // Validate ISO 8601 format (ensures es_dates was called)
+            if (!DateFormatUtility.isValidDateFormat(startDate)) {
+                throw new IllegalArgumentException(
+                    String.format("⚠️ Invalid startDate format: '%s'. Must use es_dates tool first! Expected ISO 8601 format (e.g., 2025-01-15 or 2025-01-15T00:00:00+05:30)", startDate)
+                );
+            }
+            
+            if (!DateFormatUtility.isValidDateFormat(endDate)) {
+                throw new IllegalArgumentException(
+                    String.format("⚠️ Invalid endDate format: '%s'. Must use es_dates tool first! Expected ISO 8601 format (e.g., 2025-01-15 or 2025-01-15T23:59:59+05:30)", endDate)
+                );
             }
 
             // Parse dates in ISO 8601 format

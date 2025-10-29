@@ -185,10 +185,14 @@ public class RedashSearchService {
             headers.setContentType(MediaType.APPLICATION_JSON);
             
             HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
+            
+            @SuppressWarnings("rawtypes")
             ResponseEntity<Map> response = restTemplate.postForEntity(url, entity, Map.class);
             
-            if (response.getBody() != null && response.getBody().containsKey("id")) {
-                Integer queryId = (Integer) response.getBody().get("id");
+            @SuppressWarnings("unchecked")
+            Map<String, Object> responseBody = response.getBody();
+            if (responseBody != null && responseBody.containsKey("id")) {
+                Integer queryId = (Integer) responseBody.get("id");
                 log.debug("Created Redash query with ID: {} for host: {}", queryId, hostName);
                 return queryId;
             }
